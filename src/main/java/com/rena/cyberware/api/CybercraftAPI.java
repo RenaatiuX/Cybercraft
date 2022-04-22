@@ -1,5 +1,6 @@
 package com.rena.cyberware.api;
 
+import com.rena.cyberware.api.hud.UpdateHudColorPacket;
 import com.rena.cyberware.api.item.ICybercraft;
 
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.Map;
 import com.rena.cyberware.api.item.ICybercraft.Quality;
 import com.rena.cyberware.api.item.IDeconstructable;
 import com.rena.cyberware.api.item.IMenuItem;
+import com.rena.cyberware.common.config.CybercraftConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -31,22 +33,22 @@ import javax.annotation.Nullable;
 public final class CybercraftAPI {
 
     /**
-     * Store any functional data of your Cyberware in NBT under this tag, which will be cleared when new items are added or removed
+     * Store any functional data of your Cybercraft in NBT under this tag, which will be cleared when new items are added or removed
      * to ensure stacking and such works
      */
-    public static final String DATA_TAG = "cyberwareFunctionData";
+    public static final String DATA_TAG = "cybercraftFunctionData";
 
-    public static final String QUALITY_TAG = "cyberwareQuality";
-
-    /**
-     * Quality for Cyberware scavenged from mobs
-     */
-    public static final Quality QUALITY_SCAVENGED = new ICybercraft.Quality("cyberware.quality.scavenged", "cyberware.quality.scavenged.name_modifier", "scavenged");
+    public static final String QUALITY_TAG = "cybercraftQuality";
 
     /**
-     * Quality for Cyberware built at the Engineering Table
+     * Quality for Cybercraft scavenged from mobs
      */
-    public static final Quality QUALITY_MANUFACTURED = new Quality("cyberware.quality.manufactured");
+    public static final Quality QUALITY_SCAVENGED = new ICybercraft.Quality("cybercraft.quality.scavenged", "cybercraft.quality.scavenged.name_modifier", "scavenged");
+
+    /**
+     * Quality for Cybercraft built at the Engineering Table
+     */
+    public static final Quality QUALITY_MANUFACTURED = new Quality("cybercraft.quality.manufactured");
 
     @CapabilityInject(ICybercraftUserData.class)
     public static final Capability<ICybercraftUserData> CYBERWARE_CAPABILITY = null;
@@ -54,7 +56,7 @@ public final class CybercraftAPI {
     /**
      * Maximum Tolerance, per-player
      */
-    public static final Attribute TOLERANCE_ATTR = new RangedAttribute(null, "cyberware.tolerance", CyberwareConfig.ESSENCE, 0.0F, Double.MAX_VALUE).setDescription("Tolerance").setShouldWatch(true);
+    public static final Attribute TOLERANCE_ATTR = new RangedAttribute( "cybercraft.tolerance", CybercraftConfig.C_ESSENCE.essence.get(), 0.0F, Double.MAX_VALUE).setRegistryName("Tolerance").setSyncable(true);
 
     public static Map<ItemStack, ICybercraft> linkedWare = new HashMap<>();
 
@@ -128,7 +130,7 @@ public final class CybercraftAPI {
     }
 
     /**
-     * Can be used by your ICyberware implementation's setQuality function. Helper method that
+     * Can be used by your ICybercraft implementation's setQuality function. Helper method that
      * writes a quality to an easily accessible NBT tag. See the partner function, readQualityTag
      *
      * @param stack	The stack to write to
@@ -161,8 +163,8 @@ public final class CybercraftAPI {
     }
 
     /**
-     * Clears all NBT data from Cyberware related to its function, things like power storage or oxygen storage
-     * This ensures that removed Cyberware will stack. This should only be called on Cyberware that is being removed
+     * Clears all NBT data from Cybercraft related to its function, things like power storage or oxygen storage
+     * This ensures that removed Cybercraft will stack. This should only be called on Cybercraft that is being removed
      * from the body or otherwise reset - otherwise it may interrupt functionality.
      *
      * @param stack	The ItemStack to sanitize
@@ -187,15 +189,15 @@ public final class CybercraftAPI {
     }
 
     /**
-     * Gets the NBT data for Cyberware related to its function. This data is removed when a piece of Cyberware
-     * is removed, and is not counted when determining whether Cyberware stacks are the same for purposes of merging
+     * Gets the NBT data for Cybercraft related to its function. This data is removed when a piece of Cybercraft
+     * is removed, and is not counted when determining whether Cybercraft stacks are the same for purposes of merging
      * and such. This function will create a data tag if one does not exist.
      *
      * @param stack	The ItemStack for which you want the data
      * @return		The data, in the form of an NBTTagCompound
      */
     @Nonnull
-    public static CompoundNBT getCyberwareNBT(@Nonnull ItemStack stack)
+    public static CompoundNBT getCybercraftNBT(@Nonnull ItemStack stack)
     {
         CompoundNBT tagCompound = stack.getTag();
         if (tagCompound == null)
@@ -211,7 +213,7 @@ public final class CybercraftAPI {
         return tagCompound.getCompound(DATA_TAG);
     }
 
-    public static boolean areCyberwareStacksEqual(@Nonnull ItemStack stack1,@Nonnull  ItemStack stack2)
+    public static boolean areCybercraftStacksEqual(@Nonnull ItemStack stack1,@Nonnull  ItemStack stack2)
     {
         if (stack1.isEmpty() || stack2.isEmpty()) return false;
 
@@ -223,14 +225,14 @@ public final class CybercraftAPI {
     }
 
     /**
-     * Links an ItemStack to an instance of ICyberware. This option is generally worse than
-     * implementing ICyberware in your Item, but if you don't have access to the Item it's the
+     * Links an ItemStack to an instance of ICybercraft. This option is generally worse than
+     * implementing ICybercraft in your Item, but if you don't have access to the Item it's the
      * best option. This version of the method links a specific meta value.
      *
      * @param stack	The ItemStack to link
      * @param link	An instance of ICyberware to link it to
      */
-    public static void linkCyberware(@Nonnull ItemStack stack, ICybercraft link)
+    public static void linkCybercraft(@Nonnull ItemStack stack, ICybercraft link)
     {
         if (stack.isEmpty()) return;
 
@@ -239,14 +241,14 @@ public final class CybercraftAPI {
     }
 
     /**
-     * Links an Item to an instance of ICyberware. This option is generally worse than
-     * implementing ICyberware in your Item, but if you don't have access to the Item it's the
+     * Links an Item to an instance of ICybercraft. This option is generally worse than
+     * implementing ICybercraft in your Item, but if you don't have access to the Item it's the
      * best option. This version of the method links all meta values.
      *
      * @param item	The Item to link
-     * @param link	An instance of ICyberware to link it to
+     * @param link	An instance of ICybercraft to link it to
      */
-    public static void linkCyberware(Item item, ICybercraft link)
+    public static void linkCybercraft(Item item, ICybercraft link)
     {
         if (item == null) return;
 
@@ -255,13 +257,13 @@ public final class CybercraftAPI {
     }
 
     /**
-     * Determines if the inputted item stack is Cyberware. This means its item either
-     * implements ICyberware or is linked to one (in the case of vanilla items)
+     * Determines if the inputted item stack is Cybercraft. This means its item either
+     * implements ICybercraft or is linked to one (in the case of vanilla items)
      *
      * @param stack	The ItemStack to test
-     * @return		If the stack is valid Cyberware
+     * @return		If the stack is valid Cybercraft
      */
-    public static boolean isCyberware(@Nullable ItemStack stack)
+    public static boolean isCybercraft(@Nullable ItemStack stack)
     {
         if (stack != null)
         {
@@ -273,14 +275,14 @@ public final class CybercraftAPI {
     }
 
     /**
-     * Returns an instance of ICyberware linked with an itemstack, usually
-     * the item which extends ICyberware, though it may be a standalone
-     * ICyberware-implementing object
+     * Returns an instance of ICybercraft linked with an itemstack, usually
+     * the item which extends ICybercraft, though it may be a standalone
+     * ICybercraft-implementing object
      *
-     * @param stack	The ItemStack, from which the linked ICyberware is found
-     * @return		The linked instance of ICyberware
+     * @param stack	The ItemStack, from which the linked ICybercraft is found
+     * @return		The linked instance of ICybercraft
      */
-    public static ICybercraft getCyberware(@Nonnull ItemStack stack)
+    public static ICybercraft getCybercraft(@Nonnull ItemStack stack)
     {
         if (!stack.isEmpty())
         {
@@ -294,7 +296,7 @@ public final class CybercraftAPI {
             }
         }
 
-        throw new RuntimeException("Cannot call getCyberware on a non-cyberware item!");
+        throw new RuntimeException("Cannot call getCybercraft on a non-cybercraft item!");
     }
 
     /**
@@ -328,7 +330,7 @@ public final class CybercraftAPI {
             }
         }
 
-        throw new RuntimeException("Cannot call getComponents on a non-cyberware or non deconstructable item!");
+        throw new RuntimeException("Cannot call getComponents on a non-cybercraft or non deconstructable item!");
     }
 
     @Nullable
@@ -355,11 +357,11 @@ public final class CybercraftAPI {
     }
 
     /**
-     * A shortcut method to get you the ICyberwareUserData of a specific entity.
+     * A shortcut method to get you the ICybercraftUserData of a specific entity.
      * This will return null if the entity is null or has no capability.
      *
-     * @param targetEntity	The entity whose ICyberwareUserData you want
-     * @return				The ICyberwareUserData associated with the entity
+     * @param targetEntity	The entity whose ICybercraftUserData you want
+     * @return				The ICybercraftUserData associated with the entity
      */
     @Nullable
     public static ICybercraftUserData getCapabilityOrNull(@Nullable Entity targetEntity)
@@ -370,11 +372,11 @@ public final class CybercraftAPI {
 
     /**
      * A shortcut method to determine if the entity that is inputted
-     * has ICyberwareUserData. Works with null entites.
+     * has ICybercraftUserData. Works with null entites.
      * This is very CPU intensive, consider using getCapabilityOrNull() instead.
      *
      * @param targetEntity	The entity to test
-     * @return				If the entity has ICyberwareUserData
+     * @return				If the entity has ICybercraftUserData
      */
     @Deprecated
     public static boolean hasCapability(@Nullable Entity targetEntity)
@@ -383,12 +385,12 @@ public final class CybercraftAPI {
     }
 
     /**
-     * Assistant method to hasCapability. A shortcut to get you the ICyberwareUserData
+     * Assistant method to hasCapability. A shortcut to get you the ICybercraftUserData
      * of a specific entity. Note that you must verify if it has the capability first.
      * This is very CPU intensive, consider using getCapabilityOrNull() instead.
      *
-     * @param targetEntity	The entity whose ICyberwareUserData you want
-     * @return				The ICyberwareUserData associated with the entity
+     * @param targetEntity	The entity whose ICybercraftUserData you want
+     * @return				The ICybercraftUserData associated with the entity
      */
     @Deprecated
     public static ICybercraftUserData getCapability(@Nonnull Entity targetEntity)
@@ -398,16 +400,16 @@ public final class CybercraftAPI {
 
     /**
      * A shortcut method for event handlers and the like to quickly tell if an entity
-     * has a piece of Cyberware installed. Can handle null entites and entities without
-     * ICyberwareUserData.
+     * has a piece of Cybercraft installed. Can handle null entites and entities without
+     * ICybercraftUserData.
      * This is very CPU intensive, consider using getCapabilityOrNull() instead.
      *
      * @param targetEntity	The entity you want to check
-     * @param stack			The Cyberware you want to check for
-     * @return				If the entity has the Cyberware
+     * @param stack			The Cybercraft you want to check for
+     * @return				If the entity has the Cybercraft
      */
     @Deprecated
-    public static boolean isCyberwareInstalled(@Nullable Entity targetEntity, ItemStack stack)
+    public static boolean isCybercraftInstalled(@Nullable Entity targetEntity, ItemStack stack)
     {
         ICybercraftUserData cyberwareUserData = getCapabilityOrNull(targetEntity);
         return cyberwareUserData != null && cyberwareUserData.isCyberwareInstalled(stack);
@@ -415,16 +417,16 @@ public final class CybercraftAPI {
 
     /**
      * A shortcut method for event handlers and the like to quickly determine what level of
-     * Cyberware is installed. Returns 0 if none. Can handle null entites and entities without
-     * ICyberwareUserData.
+     * Cybercraft is installed. Returns 0 if none. Can handle null entites and entities without
+     * ICybercraftUserData.
      * This is very CPU intensive, consider using getCapabilityOrNull() instead.
      *
      * @param targetEntity	The entity you want to check
      * @param stack			The Cyberware you want to check for
-     * @return				If the entity has the Cyberware, the level, or 0 if not
+     * @return				If the entity has the Cybercraft, the level, or 0 if not
      */
     @Deprecated
-    public static int getCyberwareRank(@Nullable Entity targetEntity, ItemStack stack)
+    public static int getCybercraftRank(@Nullable Entity targetEntity, ItemStack stack)
     {
         ICybercraftUserData cyberwareUserData = getCapabilityOrNull(targetEntity);
         return cyberwareUserData == null ? 0 : cyberwareUserData.getCyberwareRank(stack);
@@ -432,16 +434,16 @@ public final class CybercraftAPI {
 
     /**
      * A shortcut method for event handlers and the like to get the itemstack for a piece
-     * of cyberware. Useful for NBT data. Can handle null entites and entities without
-     * ICyberwareUserData.
+     * of Cybercraft. Useful for NBT data. Can handle null entites and entities without
+     * ICybercraftUserData.
      * This is very CPU intensive, consider using getCapabilityOrNull() instead.
      *
      * @param targetEntity	The entity you want to check
-     * @param stack			The Cyberware you want to check for
+     * @param stack			The Cybercraft you want to check for
      * @return				The ItemStack found, or null if none
      */
     @Deprecated
-    public static ItemStack getCyberware(@Nullable Entity targetEntity, ItemStack stack)
+    public static ItemStack getCybercraft(@Nullable Entity targetEntity, ItemStack stack)
     {
         ICybercraftUserData cyberwareUserData = getCapabilityOrNull(targetEntity);
         return cyberwareUserData == null ? ItemStack.EMPTY : cyberwareUserData.getCyberware(stack);
