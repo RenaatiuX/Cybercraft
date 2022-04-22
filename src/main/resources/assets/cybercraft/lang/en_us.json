@@ -1,0 +1,114 @@
+{
+  "_comment": "Creative Tabs",
+  "itemGroup.cybercraft": "Cybercraft",
+
+  "_comment": "Items",
+  "item.cybercraft.body_part_eyes": "Human Eyes",
+  "item.cybercraft.body_part_brain": "Human Brain",
+  "item.cybercraft.body_part_heart": "Human Heart",
+  "item.cybercraft.body_part_lungs": "Human Lungs",
+  "item.cybercraft.body_part_skin": "Human Skin",
+  "item.cybercraft.body_part_muscles": "Human Muscles",
+  "item.cybercraft.body_part_stomach": "Human Stomach",
+  "item.cybercraft.body_part_arm_left": "Human Left Arm",
+  "item.cybercraft.body_part_arm_right": "Human Right Arm",
+  "item.cybercraft.body_part_bones": "Human Bones",
+  "item.cybercraft.body_part_leg_left": "Human Left Leg",
+  "item.cybercraft.body_part_leg_right": "Human Right Leg",
+  "item.cybercraft.cyberlimbs_cyberleg_left": "Left Cyberleg",
+  "item.cybercraft.cyberlimbs_cyberleg_right": "Right Cyberleg",
+  "item.cybercraft.cyberlimbs_cyberarm_left": "Left Cyberarm",
+  "item.cybercraft.cyberlimbs_cyberarm_right": "Right Cyberarm",
+
+
+  "item.cybercraft.cybereye_upgrades_hudjack": "Hudjack",
+  "item.cybercraft.cybereye_upgrades_hudjack_scavenged": "Hudjack Scavenged",
+  "item.cybercraft.cybereye_upgrades_night_vision": "Enhanced Low-Light Vision",
+  "item.cybercraft.cybereye_upgrades_night_vision_scavenged": "Enhanced Low-Light Vision Scavenged",
+  "item.cybercraft.cybereye_upgrades_targeting": "Targeting Overlay",
+  "item.cybercraft.cybereye_upgrades_targeting_scavenged": "Targeting Overlay Scavenged",
+  "item.cybercraft.cybereye_upgrades_underwater_vision": "Liquid Refraction Calibrator",
+  "item.cybercraft.cybereye_upgrades_underwater_vision_scavenged": "Liquid Refraction Calibrator Scavenged",
+  "item.cybercraft.cybereye_upgrades_zoom": "Distance Enhancer",
+  "item.cybercraft.cybereye_upgrades_zoom_scavenged": "Distance Enhancer Scavenged",
+  "item.cybercraft.eye_upgrades_hudlens": "Hudlens",
+  "item.cybercraft.cybereyes": "Cybereyes",
+  "item.cybercraft.cybereyes_scavenged": "Cybereyes Scavenged",
+
+  "item.cybercraft.exp_capsule": "Experience Capsule",
+
+  "item.cybercraft.brain_upgrades_cortical_stack":"Cortical Stack",
+  "item.cybercraft.brain_upgrades_consciousness_transmitter":"Consciousness Transmitter",
+  "item.cybercraft.brain_upgrades_neural_contextualizer":"Neural Contextualizer",
+  "item.cybercraft.brain_upgrades_matrix":"Threat Matrix Calculator",
+  "item.cybercraft.brain_upgrades_radio":"Cranial Broadcaster",
+
+  "item.cybercraft.cyberheart":"Cardiomechanic Pump",
+  "item.cybercraft.creative_battery":"Creative Capacitor",
+
+  "item.cybercraft.heart_upgrades_defibrillator":"Internal Defibrillator",
+  "item.cybercraft.heart_upgrades_platelets":"Platelet Dispatcher",
+  "item.cybercraft.heart_upgrades_medkit":"Stem Cell Synthesizer",
+  "item.cybercraft.heart_upgrades_coupler":"Cardiovascular Coupler",
+
+  "item.cybercraft.lungs_upgrades_oxygen":"Compressed Oxygen Implant",
+  "item.cybercraft.lungs_upgrades_hyperoxygenation":"Hyperoxygenation Boost",
+
+  "item.cybercraft.lower_organs_upgrades_liver_filter":"Liver Filter",
+  "item.cybercraft.lower_organs_upgrades_metabolic":"Metabolic Generator",
+  "item.cybercraft.lower_organs_upgrades_battery":"Internal Battery",
+  "item.cybercraft.lower_organs_upgrades_adrenaline":"Adrenaline Pump",
+
+  "item.cybercraft.dense_battery":"Ultradense Capacitor",
+
+  "item.cybercraft.skin_upgrades_solar_skin":"Solarskin",
+  "item.cybercraft.skin_upgrades_subdermal_spikes":"Subdermal Spikes",
+  "item.cybercraft.skin_upgrades_fake_skin":"Synthetic Skin",
+  "item.cybercraft.skin_upgrades_immuno":"Targeted Immunosuppressant",
+
+  "item.cybercraft.muscle_upgrades_wired_reflexes":"Wired Reflexes",
+  "item.cybercraft.muscle_upgrades_muscle_replacements":"Myomer Muscle Replacement",
+
+  "item.cybercraft.bone_upgrades_bonelacing":"Bonelacing",
+  "item.cybercraft.bone_upgrades_boneflex":"Citrate Enhancement",
+  "item.cybercraft.bone_upgrades_bonebattery":"Marrow Battery",
+
+  "item.cybercraft.hand_upgrades_craft_hands":"Fine Manipulators",
+  "item.cybercraft.hand_upgrades_claws":"Retractable Claws",
+  "item.cybercraft.hand_upgrades_mining":"Reinforced Fist",
+
+  "item.cybercraft.foot_upgrades_spurs":"Implanted Spurs",
+  "item.cybercraft.foot_upgrades_aqua":"Aquatic Propulsion System",
+  "item.cybercraft.foot_upgrades_wheels":"Deployable Wheels",
+
+  "item.cybercraft.arm_upgrades_bow":"Quickdraw Flywheels",
+
+  "item.cybercraft.leg_upgrades_fall_damage":"Fall Bracers",
+  "item.cybercraft.leg_upgrades_jump_boost":"Linear Actuators",
+
+  "item.cybercraft.neuropozyne":"Neuropozyne",
+  "item.cybercraft.blueprint":"%1$s Blueprint",
+  "item.cybercraft.blueprint_blank":"Blank Blueprint",
+
+  "item.cybercraft.component_actuator":"Actuator",
+  "item.cybercraft.component_reactor":"Bioreactor",
+  "item.cybercraft.component_titanium":"Titanium Mesh",
+  "item.cybercraft.component_ssc":"Solid-State Circuitry",
+  "item.cybercraft.component_plating":"Chrome Plating",
+  "item.cybercraft.component_fiberoptics":"Fiber Optics",
+  "item.cybercraft.component_fullerene":"Fullerene Microstructures",
+  "item.cybercraft.component_synthnerves":"Synthetic Nerves",
+  "item.cybercraft.component_storage":"Storage Cell",
+  "item.cybercraft.component_microelectric":"Microelectric Cells",
+
+  "item.cybercraft.katana":"Katana",
+  "item.cybercraft.jacket":"Biker Jacket",
+  "item.cybercraft.shades":"Mirrorshades",
+  "item.cybercraft.shades2":"Round Mirrorshades",
+  "item.cybercraft.trenchcoat":"Trenchcoat",
+
+  "_comment": "Block",
+  "item.cybercraft.surgery_chamber":"Surgery Chamber",
+  "item.cybercraft.engineering_table":"Cybercraft Engineering Table"
+
+}
