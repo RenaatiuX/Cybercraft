@@ -412,7 +412,7 @@ public final class CybercraftAPI {
     public static boolean isCybercraftInstalled(@Nullable Entity targetEntity, ItemStack stack)
     {
         ICybercraftUserData cyberwareUserData = getCapabilityOrNull(targetEntity);
-        return cyberwareUserData != null && cyberwareUserData.isCyberwareInstalled(stack);
+        return cyberwareUserData != null && cyberwareUserData.isCybercraftInstalled(stack);
     }
 
     /**
@@ -429,7 +429,7 @@ public final class CybercraftAPI {
     public static int getCybercraftRank(@Nullable Entity targetEntity, ItemStack stack)
     {
         ICybercraftUserData cyberwareUserData = getCapabilityOrNull(targetEntity);
-        return cyberwareUserData == null ? 0 : cyberwareUserData.getCyberwareRank(stack);
+        return cyberwareUserData == null ? 0 : cyberwareUserData.getCybercraftRank(stack);
     }
 
     /**
@@ -446,7 +446,7 @@ public final class CybercraftAPI {
     public static ItemStack getCybercraft(@Nullable Entity targetEntity, ItemStack stack)
     {
         ICybercraftUserData cyberwareUserData = getCapabilityOrNull(targetEntity);
-        return cyberwareUserData == null ? ItemStack.EMPTY : cyberwareUserData.getCyberware(stack);
+        return cyberwareUserData == null ? ItemStack.EMPTY : cyberwareUserData.getCybercraft(stack);
     }
 
     public static void updateData(Entity targetEntity)

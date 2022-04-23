@@ -13,11 +13,11 @@ import java.util.List;
 
 public interface ICybercraftUserData {
 
-    NonNullList<ItemStack> getInstalledCyberware(ICybercraft.EnumSlot slot);
-    void setInstalledCyberware(LivingEntity livingEntity, EnumSlot slot, List<ItemStack> cyberware);
-    void setInstalledCyberware(LivingEntity livingEntity, EnumSlot slot, NonNullList<ItemStack> cyberware);
-    boolean isCyberwareInstalled(ItemStack cyberware);
-    int getCyberwareRank(ItemStack cyberware);
+    NonNullList<ItemStack> getInstalledCybercraft(ICybercraft.EnumSlot slot);
+    void setInstalledCybercraft(LivingEntity livingEntity, EnumSlot slot, List<ItemStack> cybercraft);
+    void setInstalledCybercraft(LivingEntity livingEntity, EnumSlot slot, NonNullList<ItemStack> cybercraft);
+    boolean isCybercraftInstalled(ItemStack cybercraft);
+    int getCybercraftRank(ItemStack cybercraft);
 
     CompoundNBT serializeNBT();
     void deserializeNBT(CompoundNBT tagCompound);
@@ -25,7 +25,7 @@ public interface ICybercraftUserData {
 
     boolean hasEssential(EnumSlot slot);
     void setHasEssential(EnumSlot slot, boolean hasLeft, boolean hasRight);
-    ItemStack getCyberware(ItemStack cyberware);
+    ItemStack getCybercraft(ItemStack cybercraft);
     void updateCapacity();
     void resetBuffer();
     void addPower(int amount, ItemStack inputter);
