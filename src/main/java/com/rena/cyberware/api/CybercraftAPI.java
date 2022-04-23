@@ -11,7 +11,7 @@ import com.rena.cyberware.api.item.IMenuItem;
 import com.rena.cyberware.common.config.CybercraftConfig;
 import com.rena.cyberware.common.util.NNLUtil;
 import com.rena.cyberware.core.network.CCNetwork;
-import com.rena.cyberware.core.network.CyberwareSyncPacket;
+import com.rena.cyberware.core.network.CybercraftSyncPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -55,7 +55,7 @@ public final class CybercraftAPI {
     public static final Quality QUALITY_MANUFACTURED = new Quality("cybercraft.quality.manufactured");
 
     @CapabilityInject(ICybercraftUserData.class)
-    public static final Capability<ICybercraftUserData> CYBERWARE_CAPABILITY = null;
+    public static final Capability<ICybercraftUserData> CYBERCRAFT_CAPABILITY = null;
 
     /**
      * Maximum Tolerance, per-player
@@ -370,7 +370,7 @@ public final class CybercraftAPI {
     public static ICybercraftUserData getCapabilityOrNull(@Nullable Entity targetEntity)
     {
         if (targetEntity == null) return null;
-        return targetEntity.getCapability(CYBERWARE_CAPABILITY, Direction.EAST).orElse(null);
+        return targetEntity.getCapability(CYBERCRAFT_CAPABILITY, Direction.EAST).orElse(null);
     }
 
     /**
@@ -464,13 +464,13 @@ public final class CybercraftAPI {
 
             if (targetEntity instanceof PlayerEntity)
             {
-                CCNetwork.sendTo(new CyberwareSyncPacket(tagCompound, targetEntity.getId()), (ServerPlayerEntity) targetEntity);
+                CCNetwork.sendTo(new CybercraftSyncPacket(tagCompound, targetEntity.getId()), (ServerPlayerEntity) targetEntity);
                 // Cyberware.logger.info("Sent data for player " + ((EntityPlayer) targetEntity).getName() + " to that player's client");
             }
 
             for (PlayerEntity trackingPlayer : world.getPlayers(serverPlayerEntity -> true))
             {
-                CCNetwork.sendTo(new CyberwareSyncPacket(tagCompound, targetEntity.getId()), (ServerPlayerEntity) trackingPlayer);
+                CCNetwork.sendTo(new CybercraftSyncPacket(tagCompound, targetEntity.getId()), (ServerPlayerEntity) trackingPlayer);
 				/*
 				if (targetEntity instanceof EntityPlayer)
 				{

@@ -17,7 +17,7 @@ public class CCNetwork {
 
     public static final void init(){
         PACKET_HANDLER.registerMessage(0, UpdateHudColorPacket.class, UpdateHudColorPacket::write, UpdateHudColorPacket::read, UpdateHudColorPacket::handle);
-        PACKET_HANDLER.registerMessage(1, CyberwareSyncPacket.class, CyberwareSyncPacket::write, CyberwareSyncPacket::read, CyberwareSyncPacket::handle);
+        PACKET_HANDLER.registerMessage(1, CybercraftSyncPacket.class, CybercraftSyncPacket::write, CybercraftSyncPacket::read, CybercraftSyncPacket::handle);
     }
 
     public static void sendTo(Object message, ServerPlayerEntity player) {

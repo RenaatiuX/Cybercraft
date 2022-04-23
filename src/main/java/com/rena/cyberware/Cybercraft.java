@@ -1,8 +1,11 @@
 package com.rena.cyberware;
 
 import com.rena.cyberware.common.config.CybercraftConfig;
+import com.rena.cyberware.common.item.CybercraftTab;
 import com.rena.cyberware.core.init.ItemInit;
 import com.rena.cyberware.core.network.CCNetwork;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -28,7 +31,7 @@ public class Cybercraft {
     public static final String NAME = "Cybercraft";
     public static final String MOD_ID = "cybercraft";
     public static final Logger LOGGER = LogManager.getLogger();
-
+    public static final ItemGroup CYBERCRAFTAB = new CybercraftTab("cybercraft");
     //This sub-class below is the start where we'll add registry and stuff later on
     public Cybercraft() {
         instance = this;
