@@ -102,7 +102,7 @@ public interface ICybercraft {
         private final boolean sidedSlot;
         private final boolean hasEssential;
 
-        private EnumSlot(int slot, String name, boolean sidedSlot, boolean hasEssential)
+        EnumSlot(int slot, String name, boolean sidedSlot, boolean hasEssential)
         {
             this.slotNumber = slot;
             this.name = name;

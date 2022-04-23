@@ -5,11 +5,13 @@ import com.rena.cyberware.api.ICybercraftUserData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class UpdateHudColorPacket{
-
-    public UpdateHudColorPacket() {}
 
     private int color;
 
@@ -18,50 +20,25 @@ public class UpdateHudColorPacket{
         this.color = color;
     }
 
-    /*@Override
-    public void toBytes(ByteBuf buf)
+    public static void write(UpdateHudColorPacket packet, PacketBuffer buf)
     {
-        buf.writeInt(color);
+        buf.writeInt(packet.color);
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf)
+    public static UpdateHudColorPacket read(PacketBuffer buf)
     {
-        color = buf.readInt();
+        return new UpdateHudColorPacket(buf.readInt());
     }
 
-    public static class UpdateHudColorPacketHandler implements IMessageHandler<UpdateHudColorPacket, ByteBufUtils>
-    {
-        @Override
-        public ByteBufUtils onMessage(UpdateHudColorPacket message, MessageContext ctx)
-        {
-            ServerPlayerEntity player = ctx.getServerHandler().player;
-            DimensionManager.getWorld(player.level.provider.getDimension()).addScheduledTask(new DoSync(message.color, player));
-
-            return null;
-        }
-    }*/
-
-    private static class DoSync implements Runnable
-    {
-        private int color;
-        private PlayerEntity playerEntity;
-
-        public DoSync(int color, PlayerEntity playerEntity)
-        {
-            this.color = color;
-            this.playerEntity = playerEntity;
-        }
-
-        @Override
-        public void run()
-        {
-            ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(playerEntity);
+    public static void handle(UpdateHudColorPacket packet, Supplier<NetworkEvent.Context> ctx){
+        ServerPlayerEntity player = ctx.get().getSender();
+        ctx.get().enqueueWork(() -> {
+            ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(player);
             if (cyberwareUserData != null)
             {
-                cyberwareUserData.setHudColor(color);
+                cyberwareUserData.setHudColor(packet.color);
             }
-        }
+        });
     }
 
 }

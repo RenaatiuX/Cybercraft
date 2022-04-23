@@ -9,6 +9,9 @@ import com.rena.cyberware.api.item.ICybercraft.Quality;
 import com.rena.cyberware.api.item.IDeconstructable;
 import com.rena.cyberware.api.item.IMenuItem;
 import com.rena.cyberware.common.config.CybercraftConfig;
+import com.rena.cyberware.common.util.NNLUtil;
+import com.rena.cyberware.core.network.CCNetwork;
+import com.rena.cyberware.core.network.CyberwareSyncPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -18,6 +21,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
@@ -60,7 +64,7 @@ public final class CybercraftAPI {
 
     public static Map<ItemStack, ICybercraft> linkedWare = new HashMap<>();
 
-    public static SimpleChannel PACKET_HANDLER;
+    public static SimpleChannel PACKET_HANDLER = CCNetwork.PACKET_HANDLER;
 
     /**
      * Sets the HUD color for the Hudjack, radial menu, and other AR HUD elements
@@ -236,7 +240,8 @@ public final class CybercraftAPI {
     {
         if (stack.isEmpty()) return;
 
-        ItemStack key = new ItemStack(stack.getItem(), 1, stack.getDamageValue());
+        ItemStack key = new ItemStack(stack.getItem(), 1);
+        key.setDamageValue(stack.getDamageValue());
         linkedWare.put(key, link);
     }
 
@@ -252,7 +257,7 @@ public final class CybercraftAPI {
     {
         if (item == null) return;
 
-        ItemStack key = new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE);
+        ItemStack key = new ItemStack(item, 1);
         linkedWare.put(key, link);
     }
 
@@ -347,9 +352,7 @@ public final class CybercraftAPI {
         for (Map.Entry<ItemStack, ICybercraft> entry : linkedWare.entrySet())
         {
             ItemStack entryKey = entry.getKey();
-            if ( key.getItem() == entryKey.getItem()
-                    && ( entryKey.getDamageValue() == OreDictionary.WILDCARD_VALUE
-                    || entryKey.getDamageValue() == key.getDamageValue() ) ) {
+            if ( key.getItem() == entryKey.getItem() && entryKey.getDamageValue() == key.getDamageValue()) {
                 return entry.getValue();
             }
         }
@@ -367,7 +370,7 @@ public final class CybercraftAPI {
     public static ICybercraftUserData getCapabilityOrNull(@Nullable Entity targetEntity)
     {
         if (targetEntity == null) return null;
-        return targetEntity.getCapability(CYBERWARE_CAPABILITY, EnumFacing.EAST);
+        return targetEntity.getCapability(CYBERWARE_CAPABILITY, Direction.EAST).orElse(null);
     }
 
     /**
@@ -461,13 +464,13 @@ public final class CybercraftAPI {
 
             if (targetEntity instanceof PlayerEntity)
             {
-                PACKET_HANDLER.sendTo(new CyberwareSyncPacket(tagCompound, targetEntity.getEntityId()), (ServerPlayerEntity) targetEntity);
+                CCNetwork.sendTo(new CyberwareSyncPacket(tagCompound, targetEntity.getId()), (ServerPlayerEntity) targetEntity);
                 // Cyberware.logger.info("Sent data for player " + ((EntityPlayer) targetEntity).getName() + " to that player's client");
             }
 
-            for (PlayerEntity trackingPlayer : world.getEntityTracker().getTrackingPlayers(targetEntity))
+            for (PlayerEntity trackingPlayer : world.getPlayers(serverPlayerEntity -> true))
             {
-                PACKET_HANDLER.sendTo(new CyberwareSyncPacket(tagCompound, targetEntity.getEntityId()), (ServerPlayerEntity) trackingPlayer);
+                CCNetwork.sendTo(new CyberwareSyncPacket(tagCompound, targetEntity.getId()), (ServerPlayerEntity) trackingPlayer);
 				/*
 				if (targetEntity instanceof EntityPlayer)
 				{

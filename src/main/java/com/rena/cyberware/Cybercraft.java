@@ -2,6 +2,8 @@ package com.rena.cyberware;
 
 import com.rena.cyberware.common.config.CybercraftConfig;
 import com.rena.cyberware.core.init.ItemInit;
+import com.rena.cyberware.core.network.CCNetwork;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -15,6 +17,10 @@ import org.apache.logging.log4j.Logger;
 
 @Mod(Cybercraft.MOD_ID)
 public class Cybercraft {
+
+    public static final ResourceLocation modeLoc(String path){
+        return new ResourceLocation(MOD_ID, path);
+    }
 
     //Our instance, referenced in the below sub-class
     public static Cybercraft instance;
@@ -44,7 +50,7 @@ public class Cybercraft {
     private void setup(final FMLCommonSetupEvent event) {
         //This is for thread-safe operations later on such as world-gen
         event.enqueueWork(() -> {
-
+            CCNetwork.init();
         });
     }
 
