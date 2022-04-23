@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class CybercraftUserDataImpl implements ICybercraftUserData{
 
-    public static final Capability.IStorage<ICybercraftUserData> STORAGE = new CybercraftUserDataStorage();
+    /*public static final Capability.IStorage<ICybercraftUserData> STORAGE = new CybercraftUserDataStorage();*/
 
     private NonNullList<NonNullList<ItemStack>> cyberwaresBySlot = NonNullList.create();
     private boolean[] missingEssentials = new boolean[EnumSlot.values().length * 2];
@@ -42,7 +42,7 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
     private int hudColor = 0x00FFFF;
     private float[] hudColorFloat = new float[] { 0.0F, 1.0F, 1.0F };
 
-    public CybercraftUserDataImpl(){
+   /* public CybercraftUserDataImpl(){
 
         hudData = new CompoundNBT();
         for (EnumSlot slot : EnumSlot.values())
@@ -56,7 +56,7 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
         }
         resetWare(null);
 
-    }
+    }*/
 
     @Override
     public NonNullList<ItemStack> getInstalledCybercraft(ICybercraft.EnumSlot slot) {
@@ -190,6 +190,11 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
 
     @Override
     public void resetWare(LivingEntity livingEntity) {
+
+    }
+
+    /*@Override
+    public void resetWare(LivingEntity livingEntity) {
         for (NonNullList<ItemStack> nnlCyberwaresInSlot : cyberwaresBySlot)
         {
             for (ItemStack item : nnlCyberwaresInSlot)
@@ -213,7 +218,7 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
         }
         missingEssentials = new boolean[EnumSlot.values().length * 2];
         updateCapacity();
-    }
+    }*/
 
     @Override
     public int getNumActiveItems() {

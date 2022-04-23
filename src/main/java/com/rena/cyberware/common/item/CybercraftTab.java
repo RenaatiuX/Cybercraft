@@ -25,7 +25,7 @@ public class CybercraftTab extends ItemGroup{
         return new ItemStack(ItemInit.BRAIN.get());
     }
 
-    @Override
+    /*@Override
     public void fillItemList(NonNullList<ItemStack> list) {
         Map<ICybercraftTabItem.EnumCategory, List<ItemStack>> subLists = new EnumMap<>(ICybercraftTabItem.EnumCategory.class);
         for (ICybercraftTabItem.EnumCategory category : ICybercraftTabItem.EnumCategory.values())
@@ -83,5 +83,5 @@ public class CybercraftTab extends ItemGroup{
         }
 
         list.addAll(unsorted);
-    }
+    }*/
 }

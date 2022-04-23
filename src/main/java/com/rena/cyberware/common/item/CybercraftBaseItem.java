@@ -17,7 +17,7 @@ public class CybercraftBaseItem extends Item {
         itemStackCache = new ItemStack[Math.max(subnames.length, 1)];
     }
 
-    @Override
+    /*@Override
     public void fillItemCategory(ItemGroup itemGroup, NonNullList<ItemStack> itemStack) {
         if (this.allowdedIn(itemGroup)) {
             if (subnames.length == 0) {
@@ -27,9 +27,9 @@ public class CybercraftBaseItem extends Item {
                 itemStack.add(new ItemStack(this,1, metadata));
             }
         }
-    }
+    }*/
 
-    public ItemStack getCachedStack(int damage)
+    /*public ItemStack getCachedStack(int damage)
     {
         ItemStack itemStack = itemStackCache[damage];
         if ( itemStack != null
@@ -48,6 +48,6 @@ public class CybercraftBaseItem extends Item {
             itemStackCache[damage] = itemStack;
         }
         return itemStack;
-    }
+    }*/
 
 }

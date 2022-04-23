@@ -35,7 +35,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
         this(properties, slot, new String[0]);
     }
 
-    public CybercraftItem setWeights(int... weight)
+   /* public CybercraftItem setWeights(int... weight)
     {
         for (int meta = 0; meta < weight.length; meta++)
         {
@@ -46,7 +46,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
             ItemInit.zombieItems.add(new ZombieItem(weight[meta], stack));
         }
         return this;
-    }
+    }*/
 
     @Override
     public EnumSlot getSlot(ItemStack stack) {

@@ -48,7 +48,7 @@ public class CyberZombieEntity extends ZombieEntity {
         entityData.set(CYBER_VARIANT, 0);
     }
 
-    @Override
+   /* @Override
     public void tick() {
         if ( !hasRandomWare
                 && !level.isClientSide )
@@ -73,9 +73,9 @@ public class CyberZombieEntity extends ZombieEntity {
             setSizeNormal(0.6F * 1.2F, 1.95F * 1.2F);
         }
         super.tick();
-    }
+    }*/
 
-    protected void setSizeNormal(float width, float height)
+   /* protected void setSizeNormal(float width, float height)
     {
         if ( width != this.width
                 || height != this.height )
@@ -94,7 +94,7 @@ public class CyberZombieEntity extends ZombieEntity {
                 move(MoverType.SELF, this.getDeltaMovement());
             }
         }
-    }
+    }*/
 
     @Override
     public void addAdditionalSaveData(CompoundNBT tagCompound) {
