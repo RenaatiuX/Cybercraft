@@ -1,13 +1,7 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "cybercraft:scanner",
-        "textures": {
-            "particle": "cybercraft:blocks/surgery_chamber_top"
-        }
-    },
-    "variants": {
-        "normal": [{}],
-        "inventory": [{}]
+  "variants": {
+    "": {
+      "model": "cybercraft:block/scanner"
     }
+  }
 }

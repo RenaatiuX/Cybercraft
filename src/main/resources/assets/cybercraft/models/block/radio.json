@@ -1,14 +1,14 @@
 {
     "parent": "block/block",
     "textures": {
-        "0": "cybercraft:blocks/radio_back",
-        "1": "cybercraft:blocks/radio_side",
-        "2": "cybercraft:blocks/radio_front",
-        "3": "cybercraft:blocks/radio_top",
-        "4": "cybercraft:blocks/radio_antenna_base",
-        "5": "cybercraft:blocks/radio_antenna_pole",
-        "6": "cybercraft:blocks/transparent",
-        "7": "cybercraft:blocks/radio_wire"
+        "0": "cybercraft:block/radio_back",
+        "1": "cybercraft:block/radio_side",
+        "2": "cybercraft:block/radio_front",
+        "3": "cybercraft:block/radio_top",
+        "4": "cybercraft:block/radio_antenna_base",
+        "5": "cybercraft:block/radio_antenna_pole",
+        "6": "cybercraft:block/transparent",
+        "7": "cybercraft:block/radio_wire"
     },
     "elements": [
         {

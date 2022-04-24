@@ -1,12 +1,12 @@
 {
     "parent": "block/block",
     "textures": {
-        "0": "cybercraft:blocks/beacon_pole_side",
-        "1": "cybercraft:blocks/beacon_pole_top",
-        "2": "cybercraft:blocks/beacon_bar_side",
-        "3": "cybercraft:blocks/beacon_bar_top",
-        "4": "cybercraft:blocks/beacon_other_small_side",
-        "5": "cybercraft:blocks/beacon_other_big_side"
+        "0": "cybercraft:block/beacon_pole_side",
+        "1": "cybercraft:block/beacon_pole_top",
+        "2": "cybercraft:block/beacon_bar_side",
+        "3": "cybercraft:block/beacon_bar_top",
+        "4": "cybercraft:block/beacon_other_small_side",
+        "5": "cybercraft:block/beacon_other_big_side"
     },
     "elements": [
         {

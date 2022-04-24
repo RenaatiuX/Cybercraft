@@ -1,8 +1,9 @@
 {
     "parent": "block/block",
     "textures": {
-        "0": "cybercraft:blocks/scanner_side",
-        "1": "cybercraft:blocks/surgery_chamber_top"
+        "0": "cybercraft:block/scanner_side",
+        "1": "cybercraft:block/surgery_chamber_top",
+        "particle": "cybercraft:block/surgery_chamber_top"
     },
     "elements": [
         {

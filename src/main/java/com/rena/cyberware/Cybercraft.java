@@ -1,9 +1,14 @@
 package com.rena.cyberware;
 
+import com.rena.cyberware.client.screens.ScannerScreen;
 import com.rena.cyberware.common.config.CybercraftConfig;
 import com.rena.cyberware.common.item.CybercraftTab;
+import com.rena.cyberware.core.init.BlockInit;
+import com.rena.cyberware.core.init.ContainerInit;
 import com.rena.cyberware.core.init.ItemInit;
+import com.rena.cyberware.core.init.TileEntityTypeInit;
 import com.rena.cyberware.core.network.CCNetwork;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
@@ -40,6 +45,10 @@ public class Cybercraft {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CybercraftConfig.init(new ForgeConfigSpec.Builder()));
 
         ItemInit.ITEMS.register(modEventBus);
+        BlockInit.BLOCKS.register(modEventBus);
+
+        TileEntityTypeInit.TES.register(modEventBus);
+        ContainerInit.CONTAINERS.register(modEventBus);
 
         ModLoadingContext context = ModLoadingContext.get();
         //Our listener for setup, it will pick up on anything put into setup and notify Forge of it
@@ -60,7 +69,7 @@ public class Cybercraft {
     private void ClientSetup(final FMLClientSetupEvent event){
 
         event.enqueueWork(() -> {
-
+            ScreenManager.register(ContainerInit.SCANNER_CONTAINER.get(), ScannerScreen::new);
         });
     }
 

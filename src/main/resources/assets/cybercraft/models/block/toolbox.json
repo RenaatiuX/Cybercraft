@@ -1,11 +1,11 @@
 {
     "parent": "block/block",
     "textures": {
-        "0": "cybercraft:blocks/toolbox_back",
-        "1": "cybercraft:blocks/toolbox_side",
-        "2": "cybercraft:blocks/toolbox_front",
-        "3": "cybercraft:blocks/toolbox_top",
-        "4": "cybercraft:blocks/toolbox_bottom"
+        "0": "cybercraft:block/toolbox_back",
+        "1": "cybercraft:block/toolbox_side",
+        "2": "cybercraft:block/toolbox_front",
+        "3": "cybercraft:block/toolbox_top",
+        "4": "cybercraft:block/toolbox_bottom"
     },
     "elements": [
         {
