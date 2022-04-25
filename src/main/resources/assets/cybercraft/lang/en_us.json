@@ -109,6 +109,17 @@
 
   "_comment": "Block",
   "item.cybercraft.surgery_chamber":"Surgery Chamber",
-  "item.cybercraft.engineering_table":"Cybercraft Engineering Table"
+  "item.cybercraft.engineering_table":"Cybercraft Engineering Table",
 
+
+  "_comment": "Tooltip",
+
+  "tooltip.cybercraft.exp_capsule.before": "",
+  "tooltip.cybercraft.exp_capsule.after": "recorded experiences stored",
+
+  "tooltip.cybercraft.neuropozyne": "Anti-Rejection (20:00)",
+
+  "_comment": "Effect",
+  "effect.cybercraft.neuropozyne": "Anti-Rejection",
+  "effect.cybercraft.rejection": "Aug Rejection"
 }
