@@ -1,8 +1,20 @@
 package com.rena.cybercraft.common.item;
 
+import com.rena.cybercraft.api.CybercraftAPI;
+import com.rena.cybercraft.api.item.ICybercraft;
+import com.rena.cybercraft.api.item.ICybercraftTabItem;
 import com.rena.cybercraft.core.init.ItemInit;
+import com.rena.cybercraft.events.CreativeMenuHandler;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 
 public class CybercraftTab extends ItemGroup{
 
@@ -15,9 +27,9 @@ public class CybercraftTab extends ItemGroup{
         return new ItemStack(ItemInit.BRAIN.get());
     }
 
-   /* @Override
+   @Override
     public void fillItemList(NonNullList<ItemStack> list) {
-        Map<ICybercraftTabItem.EnumCategory, List<ItemStack>> subLists = new EnumMap<>(ICybercraftTabItem.EnumCategory.class);
+        Map<ICybercraftTabItem.EnumCategory, List<ItemStack>> subLists = new EnumMap(ICybercraftTabItem.EnumCategory.class);
         for (ICybercraftTabItem.EnumCategory category : ICybercraftTabItem.EnumCategory.values())
         {
             subLists.put(category, new ArrayList<>());
@@ -26,7 +38,7 @@ public class CybercraftTab extends ItemGroup{
 
         ICybercraft.Quality q = CreativeMenuHandler.pageSelected == 0 ? CybercraftAPI.QUALITY_SCAVENGED : CybercraftAPI.QUALITY_MANUFACTURED;
 
-        for (Item item : Registry.ITEM)
+        for (Item item : ForgeRegistries.ITEMS)
         {
             if (item == null)
             {
@@ -73,5 +85,5 @@ public class CybercraftTab extends ItemGroup{
         }
 
         list.addAll(unsorted);
-    }*/
+    }
 }

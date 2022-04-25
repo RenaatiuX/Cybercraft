@@ -6,6 +6,9 @@ import com.rena.cybercraft.common.item.CybercraftTab;
 import com.rena.cybercraft.core.init.*;
 import com.rena.cybercraft.core.network.CCNetwork;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
@@ -68,6 +71,8 @@ public class Cybercraft {
 
         event.enqueueWork(() -> {
             ScreenManager.register(ContainerInit.SCANNER_CONTAINER.get(), ScannerScreen::new);
+
+            RenderTypeLookup.setRenderLayer(BlockInit.SCANNER_BLOCK.get(), RenderType.translucent());
         });
     }
 

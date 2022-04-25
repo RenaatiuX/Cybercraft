@@ -10,6 +10,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class TileEntityScanner extends LockableLootTileEntity implements ITickableTileEntity {
@@ -37,7 +38,7 @@ public class TileEntityScanner extends LockableLootTileEntity implements ITickab
 
     @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("container." + Cybercraft.MOD_ID + ".scanner");
+        return new TranslationTextComponent("container." + Cybercraft.MOD_ID + ".scanner").withStyle(TextFormatting.AQUA);
     }
 
     @Override

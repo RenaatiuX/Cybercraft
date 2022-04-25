@@ -107,19 +107,14 @@
   "item.cybercraft.shades2":"Round Mirrorshades",
   "item.cybercraft.trenchcoat":"Trenchcoat",
 
-  "_comment": "Block",
   "item.cybercraft.surgery_chamber":"Surgery Chamber",
   "item.cybercraft.engineering_table":"Cybercraft Engineering Table",
 
+  "_comment": "Block",
+  "block.cybercraft.scanner": "Scanner",
+  "block.cybercraft.charger": "Charger",
 
-  "_comment": "Tooltip",
+  "_comment": "Container",
+  "container.cybercraft.scanner" : "Scanner"
 
-  "tooltip.cybercraft.exp_capsule.before": "",
-  "tooltip.cybercraft.exp_capsule.after": "recorded experiences stored",
-
-  "tooltip.cybercraft.neuropozyne": "Anti-Rejection (20:00)",
-
-  "_comment": "Effect",
-  "effect.cybercraft.neuropozyne": "Anti-Rejection",
-  "effect.cybercraft.rejection": "Aug Rejection"
 }

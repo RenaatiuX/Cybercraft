@@ -3,6 +3,7 @@ package com.rena.cybercraft.api.item;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +17,7 @@ public interface ICybercraft {
     public NonNullList<NonNullList<ItemStack>> required(ItemStack stack);
     public boolean isIncompatible(ItemStack stack, ItemStack comparison);
     boolean isEssential(ItemStack stack);
-    public List<String> getInfo(ItemStack stack);
+    public List<ITextComponent> getInfo(ItemStack stack);
     public int getCapacity(ItemStack wareStack);
 
 

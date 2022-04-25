@@ -9,6 +9,7 @@ import com.rena.cybercraft.api.item.ICybercraft.Quality;
 import com.rena.cybercraft.api.item.IDeconstructable;
 import com.rena.cybercraft.api.item.IMenuItem;
 import com.rena.cybercraft.common.config.CybercraftConfig;
+import com.rena.cybercraft.common.item.CybercraftBaseItem;
 import com.rena.cybercraft.common.util.NNLUtil;
 import com.rena.cybercraft.core.network.CCNetwork;
 import com.rena.cybercraft.core.network.CybercraftSyncPacket;
@@ -60,7 +61,7 @@ public final class CybercraftAPI {
     /**
      * Maximum Tolerance, per-player
      */
-    public static final Attribute TOLERANCE_ATTR = new RangedAttribute( "cybercraft.tolerance", CybercraftConfig.C_ESSENCE.essence.get(), 0.0F, Double.MAX_VALUE).setRegistryName("Tolerance").setSyncable(true);
+    public static final Attribute TOLERANCE_ATTR = new RangedAttribute( "cybercraft.tolerance", CybercraftConfig.C_ESSENCE.essence.get(), 0.0F, Double.MAX_VALUE).setRegistryName("tolerance").setSyncable(true);
 
     public static Map<ItemStack, ICybercraft> linkedWare = new HashMap<>();
 
@@ -241,8 +242,7 @@ public final class CybercraftAPI {
         if (stack.isEmpty()) return;
 
         ItemStack key = new ItemStack(stack.getItem(), 1);
-        key.setDamageValue(stack.getDamageValue());
-        linkedWare.put(key, link);
+        linkedWare.put(withMetaData(key, getMetaData(stack)), link);
     }
 
     /**
@@ -479,6 +479,15 @@ public final class CybercraftAPI {
 				*/
             }
         }
+    }
+
+    public static ItemStack withMetaData(ItemStack stack, int metadata){
+        stack.getOrCreateTag().putInt("metadata", metadata);
+        return stack;
+    }
+
+    public static int getMetaData(ItemStack stack){
+        return stack.getOrCreateTag().contains("metadata") ? stack.getTag().getInt("metadata") : 0;
     }
 
     public static void useActiveItem(Entity entity, ItemStack stack)
