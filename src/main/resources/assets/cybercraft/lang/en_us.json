@@ -115,6 +115,14 @@
   "block.cybercraft.charger": "Charger",
 
   "_comment": "Container",
-  "container.cybercraft.scanner" : "Scanner"
+  "container.cybercraft.scanner" : "Scanner",
 
+  "_comment": "Effect",
+  "effect.cybercraft.neuropozyne" : "Neuropozyne",
+  "effect.cybercraft.rejection" : "Rejection",
+
+  "_comment": "Tooltips",
+  "tooltip.cybercraft.exp_capsule.before": "",
+  "tooltip.cybercraft.exp_capsule.after": "recorded experiences stored",
+  "tooltip.cybercraft.neuropozyne":"Anti-Rejection (20:00)"
 }

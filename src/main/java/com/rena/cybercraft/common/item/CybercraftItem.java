@@ -219,7 +219,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
         super.appendHoverText(stack, world, list, flag);
         if (installedStackSize(stack) > 1)
         {
-            list.add(new TranslationTextComponent("cyberware.tooltip.max_install", installedStackSize(stack)).withStyle(TextFormatting.BLUE));
+            list.add(new TranslationTextComponent("cybercraft.tooltip.max_install", installedStackSize(stack)).withStyle(TextFormatting.BLUE));
         }
 
         boolean hasPowerConsumption = false;
@@ -236,7 +236,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
 
             if (i != 0)
             {
-                toAddPowerConsumption.append(new TranslationTextComponent("cyberware.tooltip.joiner", cost));
+                toAddPowerConsumption.append(new TranslationTextComponent("cybercraft.tooltip.joiner", cost));
             }else
                 toAddPowerConsumption.append(" " + cost);
         }
@@ -244,10 +244,10 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
         if (hasPowerConsumption)
         {
             String toTranslate = hasCustomPowerMessage(stack) ?
-                    "cyberware.tooltip." + this.getRegistryName().toString().substring(10)
+                    "cybercraft.tooltip." + this.getRegistryName().toString().substring(10)
                             + (this.subnames.length > 0 ? "." + CybercraftAPI.getMetaData(stack) : "") + ".power_consumption"
                     :
-                    "cyberware.tooltip.power_consumption";
+                    "cybercraft.tooltip.power_consumption";
             list.add(new TranslationTextComponent(toTranslate).append(toAddPowerConsumption).withStyle(TextFormatting.GREEN));
         }
 
@@ -265,7 +265,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
 
             if (i != 0)
             {
-                toAddPowerProduction.append(new TranslationTextComponent("cyberware.tooltip.joiner", cost));
+                toAddPowerProduction.append(new TranslationTextComponent("cybercraft.tooltip.joiner", cost));
             }else
                 toAddPowerProduction.append(new TranslationTextComponent("", cost));
         }
@@ -273,20 +273,20 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
         if (hasPowerProduction)
         {
             String toTranslate = hasCustomPowerMessage(stack) ?
-                    "cyberware.tooltip." + this.getRegistryName().toString().substring(10)
+                    "cybercraft.tooltip." + this.getRegistryName().toString().substring(10)
                             + (this.subnames.length > 0 ? "." + CybercraftAPI.getMetaData(stack) : "") + ".power_production"
                     :
-                    "cyberware.tooltip.power_production";
+                    "cybercraft.tooltip.power_production";
             list.add(new TranslationTextComponent(toTranslate).append(toAddPowerProduction).withStyle(TextFormatting.GREEN));
         }
 
         if (getCapacity(stack) > 0)
         {
             String toTranslate = hasCustomCapacityMessage(stack) ?
-                    "cyberware.tooltip." + this.getRegistryName().toString().substring(10)
+                    "cybercraft.tooltip." + this.getRegistryName().toString().substring(10)
                             + (this.subnames.length > 0 ? "." + CybercraftAPI.getMetaData(stack) : "") + ".capacity"
                     :
-                    "cyberware.tooltip.capacity";
+                    "cybercraft.tooltip.capacity";
             list.add(new TranslationTextComponent(toTranslate, getCapacity(stack)));
         }
 
@@ -310,7 +310,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
 
             if (i != 0)
             {
-                toAddEssence.append(new TranslationTextComponent("cyberware.tooltip.joiner", cost));
+                toAddEssence.append(new TranslationTextComponent("cybercraft.tooltip.joiner", cost));
             }
 
             toAddEssence.append(new TranslationTextComponent("", Math.abs(cost)));
@@ -318,7 +318,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
 
         if (hasEssenceCost)
         {
-            list.add(new TranslationTextComponent(essenceCostNegative ? "cyberware.tooltip.essence" : "cyberware.tooltip.essence_add").append(toAddEssence).withStyle(TextFormatting.DARK_PURPLE));
+            list.add(new TranslationTextComponent(essenceCostNegative ? "cybercraft.tooltip.essence" : "cybercraft.tooltip.essence_add").append(toAddEssence).withStyle(TextFormatting.DARK_PURPLE));
         }
 
     }

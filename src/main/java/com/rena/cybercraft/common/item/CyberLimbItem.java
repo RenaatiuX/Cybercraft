@@ -22,7 +22,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CyberlimbItem extends CybercraftItem implements ICybercraft.ISidedLimb {
+public class CyberLimbItem extends CybercraftItem implements ICybercraft.ISidedLimb {
 
     public static final int META_LEFT_CYBER_ARM         = 0;
     public static final int META_RIGHT_CYBER_ARM        = 1;
@@ -31,7 +31,7 @@ public class CyberlimbItem extends CybercraftItem implements ICybercraft.ISidedL
 
     private Set<Integer> didFall = new HashSet<>();
 
-    public CyberlimbItem(Properties properties, EnumSlot[] slots, String... subnames) {
+    public CyberLimbItem(Properties properties, EnumSlot[] slots, String... subnames) {
         super(properties, slots, subnames);
         MinecraftForge.EVENT_BUS.register(this);
     }

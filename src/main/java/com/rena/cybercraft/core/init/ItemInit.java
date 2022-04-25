@@ -1,20 +1,21 @@
 package com.rena.cybercraft.core.init;
 
 import com.rena.cybercraft.Cybercraft;
-import com.rena.cybercraft.common.item.CybercraftArmorMaterial;
-import com.rena.cybercraft.common.item.CybercraftItemAmor;
-import com.rena.cybercraft.common.item.ExpCapsuleItem;
-import com.rena.cybercraft.common.item.NeuropozyneItem;
+import com.rena.cybercraft.api.item.ICybercraft;
+import com.rena.cybercraft.common.item.*;
+import com.rena.cybercraft.common.util.NNLUtil;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemTier;
-import net.minecraft.item.SwordItem;
+import net.minecraft.item.*;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemInit {
+
+    public static final int RARE = 10;
+    public static final int UNCOMMON = 25;
+    public static final int COMMON = 50;
+    public static final int VERY_COMMON = 100;
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Cybercraft.MOD_ID);
 
@@ -243,16 +244,27 @@ public class ItemInit {
 
 
     //Foot
-    public static final RegistryObject<Item> FOOT_UPGRADES_AQUA = ITEMS.register("foot_upgrades_aqua",
-            () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
+    /*public static final RegistryObject<CybercraftItem> FOOT_UPGRADES_AQUA = ITEMS.register("foot_upgrades_aqua",
+            () -> new FootUpgradeItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
     /*public static final RegistryObject<Item> FOOT_UPGRADES_AQUA_SCAVENGED = ITEMS.register("foot_upgrades_aqua_scavenged",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));*/
-    public static final RegistryObject<Item> FOOT_UPGRADES_SPURS = ITEMS.register("foot_upgrades_spurs",
-            () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
+    /*public static final RegistryObject<CybercraftItem> FOOT_UPGRADES_SPURS = ITEMS.register("foot_upgrades_spurs",
+            () -> new FootUpgradeItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));*/
     /*public static final RegistryObject<Item> FOOT_UPGRADES_SPURS_SCAVENGED = ITEMS.register("foot_upgrades_spurs_scavenged",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));*/
-    public static final RegistryObject<Item> FOOT_UPGRADES_WHEELS = ITEMS.register("foot_upgrades_wheels",
-            () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
+    public static final RegistryObject<CybercraftItem> FOOT_UPGRADES = ITEMS.register("foot_upgrades",
+            () -> new FootUpgradeItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.FOOT, "spurs", "aqua", "wheels")
+                    .setEssenceCost(1, 2 ,3).setWeights(UNCOMMON, RARE, UNCOMMON)
+                    .setComponents(
+                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 0),
+                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 2),
+                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 4) }),
+                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 2, 0),
+                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 2),
+                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 9) }),
+                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 2, 0),
+                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 9) })));
+
     /*public static final RegistryObject<Item> FOOT_UPGRADES_WHEELS_SCAVENGED = ITEMS.register("foot_upgrades_wheels_scavenged",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));*/
 
@@ -283,9 +295,9 @@ public class ItemInit {
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));*/
 
     //Component
-    public static final RegistryObject<Item> COMPONENT_ACTUATOR = ITEMS.register("component_actuator",
-            () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
-    public static final RegistryObject<Item> COMPONENT_FIBER_OPTICS = ITEMS.register("component_fiberoptics",
+    public static final RegistryObject<Item> COMPONENT = ITEMS.register("component",
+            () -> new CybercraftBaseItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), "actuator", "reactor", "titanium", "ssc", "plating", "fiberoptics", "fullerene", "synthnerves", "storage", "microelectric"));
+    /*public static final RegistryObject<Item> COMPONENT_FIBER_OPTICS = ITEMS.register("component_fiberoptics",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
     public static final RegistryObject<Item> COMPONENT_FULLERENE = ITEMS.register("component_fullerene",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
@@ -302,7 +314,7 @@ public class ItemInit {
     public static final RegistryObject<Item> COMPONENT_SYNTHNERVES = ITEMS.register("component_synthnerves",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
     public static final RegistryObject<Item> COMPONENT_TITANIUM = ITEMS.register("component_titanium",
-            () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
+            () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));*/
 
 
     public static final RegistryObject<Item> NEUROPOZYNE = ITEMS.register("neuropozyne",
