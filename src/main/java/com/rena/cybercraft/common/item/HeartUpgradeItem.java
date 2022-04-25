@@ -10,9 +10,11 @@ import com.rena.cybercraft.core.network.CCNetwork;
 import com.rena.cybercraft.core.network.ParticlePacket;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.CombatRules;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.NonNullList;
@@ -27,12 +29,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class HeartUpgradeItem extends CybercraftItem{
+public class HeartUpgradeItem extends CybercraftItem {
 
-    public static final int META_INTERNAL_DEFIBRILLATOR  = 0;
-    public static final int META_PLATELET_DISPATCHER     = 1;
-    public static final int META_STEM_CELL_SYNTHESIZER   = 2;
-    public static final int META_CARDIOVASCULAR_COUPLER  = 3;
+    public static final int META_INTERNAL_DEFIBRILLATOR = 0;
+    public static final int META_PLATELET_DISPATCHER = 1;
+    public static final int META_STEM_CELL_SYNTHESIZER = 2;
+    public static final int META_CARDIOVASCULAR_COUPLER = 3;
 
     private static Map<UUID, Integer> timesPlatelets = new HashMap<>();
 
@@ -43,48 +45,39 @@ public class HeartUpgradeItem extends CybercraftItem{
 
     @Override
     public boolean isIncompatible(ItemStack stack, ItemStack comparison) {
-        return comparison.getItem() == ItemInit.CYBER_HEART.get() && ( stack.getDamageValue() == META_INTERNAL_DEFIBRILLATOR || stack.getDamageValue() == META_CARDIOVASCULAR_COUPLER );
+        return comparison.getItem() == ItemInit.CYBER_HEART.get() && (stack.getDamageValue() == META_INTERNAL_DEFIBRILLATOR || stack.getDamageValue() == META_CARDIOVASCULAR_COUPLER);
     }
 
     @SubscribeEvent
-    public void handleDeath(LivingDeathEvent event)
-    {
+    public void handleDeath(LivingDeathEvent event) {
         if (event.isCanceled()) return;
         LivingEntity entityLivingBase = event.getEntityLiving();
         ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityLivingBase);
         if (cyberwareUserData == null) return;
 
         ItemStack itemStackInternalDefibrillator = cyberwareUserData.getCybercraft(getCachedStack(META_INTERNAL_DEFIBRILLATOR));
-        if (!itemStackInternalDefibrillator.isEmpty())
-        {
-            if ( (!CybercraftAPI.getCybercraftNBT(itemStackInternalDefibrillator).contains("used"))
-                    && cyberwareUserData.usePower(itemStackInternalDefibrillator, getPowerConsumption(itemStackInternalDefibrillator), false) )
-            {
-                if (entityLivingBase instanceof PlayerEntity)
-                {
+        if (!itemStackInternalDefibrillator.isEmpty()) {
+            if ((!CybercraftAPI.getCybercraftNBT(itemStackInternalDefibrillator).contains("used"))
+                    && cyberwareUserData.usePower(itemStackInternalDefibrillator, getPowerConsumption(itemStackInternalDefibrillator), false)) {
+                if (entityLivingBase instanceof PlayerEntity) {
                     NonNullList<ItemStack> items = cyberwareUserData.getInstalledCybercraft(EnumSlot.HEART);
                     NonNullList<ItemStack> itemsNew = NonNullList.create();
                     itemsNew.addAll(items);
-                    for (int index = 0; index < items.size(); index++)
-                    {
+                    for (int index = 0; index < items.size(); index++) {
                         ItemStack item = items.get(index);
-                        if ( !item.isEmpty()
+                        if (!item.isEmpty()
                                 && item.getItem() == this
-                                && CybercraftAPI.getMetaData(item) == META_INTERNAL_DEFIBRILLATOR)
-                        {
+                                && CybercraftAPI.getMetaData(item) == META_INTERNAL_DEFIBRILLATOR) {
                             itemsNew.set(index, ItemStack.EMPTY);
                             break;
                         }
                     }
                     cyberwareUserData.setInstalledCybercraft(entityLivingBase, EnumSlot.HEART, itemsNew);
                     cyberwareUserData.updateCapacity();
-                    if (!entityLivingBase.level.isClientSide)
-                    {
+                    if (!entityLivingBase.level.isClientSide) {
                         CybercraftAPI.updateData(entityLivingBase);
                     }
-                }
-                else
-                {
+                } else {
                     itemStackInternalDefibrillator = cyberwareUserData.getCybercraft(itemStackInternalDefibrillator);
                     CompoundNBT tagCompoundCyberware = CybercraftAPI.getCybercraftNBT(itemStackInternalDefibrillator);
                     tagCompoundCyberware.putBoolean("used", true);
@@ -92,70 +85,54 @@ public class HeartUpgradeItem extends CybercraftItem{
                     CybercraftAPI.updateData(entityLivingBase);
                 }
                 entityLivingBase.setHealth(entityLivingBase.getMaxHealth() / 3F);
-                /*
-                CCNetwork.PACKET_HANDLER.send(new ParticlePacket(1, (float) entityLivingBase.getX(), (float) entityLivingBase.getY() + entityLivingBase.getEyeHeight() / 2F, (float) entityLivingBase.getZ()),
-                        new PacketDistributor.TargetPoint(entityLivingBase.getX(), entityLivingBase.getY(), entityLivingBase.getZ(), 20, entityLivingBase.level.dimension()));
+                CCNetwork.sendToPlayerInTRange(new PacketDistributor.TargetPoint(entityLivingBase.getX(), entityLivingBase.getY(), entityLivingBase.getZ(), 20, entityLivingBase.level.dimension()),
+                        new ParticlePacket(1, (float) entityLivingBase.getX(), (float) entityLivingBase.getY() + entityLivingBase.getEyeHeight() / 2F, (float) entityLivingBase.getZ()));
                 event.setCanceled(true);
-                */
             }
         }
     }
 
     @SubscribeEvent
-    public void handleLivingUpdate(CybercraftUpdateEvent event)
-    {
+    public void handleLivingUpdate(CybercraftUpdateEvent event) {
         LivingEntity entityLivingBase = event.getEntityLiving();
         ICybercraftUserData cyberwareUserData = event.getCybercrafteUserData();
 
         ItemStack itemStackStemCellSynthesizer = cyberwareUserData.getCybercraft(getCachedStack(META_STEM_CELL_SYNTHESIZER));
-        if (entityLivingBase.ticksExisted % 20 == 0)
-        {
-            if (!itemStackStemCellSynthesizer.isEmpty())
-            {
+        if (entityLivingBase.tickCount % 20 == 0) {
+            if (!itemStackStemCellSynthesizer.isEmpty()) {
                 isStemWorking.put(entityLivingBase.getUUID(), cyberwareUserData.usePower(itemStackStemCellSynthesizer, getPowerConsumption(itemStackStemCellSynthesizer)));
             }
         }
 
         ItemStack itemStackPlateletDispatcher = cyberwareUserData.getCybercraft(getCachedStack(META_PLATELET_DISPATCHER));
-        if ( entityLivingBase.ticksExisted % 20 == 0
-                && !itemStackPlateletDispatcher.isEmpty() )
-        {
+        if (entityLivingBase.tickCount % 20 == 0
+                && !itemStackPlateletDispatcher.isEmpty()) {
             isPlateletWorking.put(entityLivingBase.getUUID(), cyberwareUserData.usePower(itemStackPlateletDispatcher, getPowerConsumption(itemStackPlateletDispatcher)));
         }
 
-        if ( isPlateletWorking(entityLivingBase)
-                && !itemStackPlateletDispatcher.isEmpty() )
-        {
-            if ( entityLivingBase.getHealth() >= entityLivingBase.getMaxHealth() * .8F
-                    && entityLivingBase.getHealth() != entityLivingBase.getMaxHealth() )
-            {
+        if (isPlateletWorking(entityLivingBase)
+                && !itemStackPlateletDispatcher.isEmpty()) {
+            if (entityLivingBase.getHealth() >= entityLivingBase.getMaxHealth() * .8F
+                    && entityLivingBase.getHealth() != entityLivingBase.getMaxHealth()) {
                 int t = getPlateletTime(entityLivingBase);
-                if (t >= 40)
-                {
-                    timesPlatelets.put(entityLivingBase.getUUID(), entityLivingBase.ticksExisted);
+                if (t >= 40) {
+                    timesPlatelets.put(entityLivingBase.getUUID(), entityLivingBase.tickCount);
                     entityLivingBase.heal(1);
                 }
+            } else {
+                timesPlatelets.put(entityLivingBase.getUUID(), entityLivingBase.tickCount);
             }
-            else
-            {
-                timesPlatelets.put(entityLivingBase.getUUID(), entityLivingBase.ticksExisted);
-            }
-        }
-        else
-        {
+        } else {
             timesPlatelets.remove(entityLivingBase.getUUID());
         }
 
-        if (!itemStackStemCellSynthesizer.isEmpty())
-        {
-            if (isStemWorking(entityLivingBase))
-            {
+        if (!itemStackStemCellSynthesizer.isEmpty()) {
+            if (isStemWorking(entityLivingBase)) {
                 int t = getMedkitTime(entityLivingBase);
-                if ( t >= 100
-                        && damageMedkit.get(entityLivingBase.getUUID()) > 0F )
-                {
-                    CybercraftPacketHandler.INSTANCE.sendToAllAround(new ParticlePacket(0, (float) entityLivingBase.posX, (float) entityLivingBase.posY + entityLivingBase.height / 2F, (float) entityLivingBase.posZ),
-                            new PacketDistributor.TargetPoint(entityLivingBase.level.provider.getDimension(), entityLivingBase.posX, entityLivingBase.posY, entityLivingBase.posZ, 20));
+                if (t >= 100
+                        && damageMedkit.get(entityLivingBase.getUUID()) > 0F) {
+                    CCNetwork.sendToPlayerInTRange(new PacketDistributor.TargetPoint(entityLivingBase.getX(), entityLivingBase.getY(), entityLivingBase.getZ(), 20, entityLivingBase.level.dimension()),
+                            new ParticlePacket(0, (float) entityLivingBase.getX(), (float) entityLivingBase.getY() + entityLivingBase.getEyeHeight() / 2F, (float) entityLivingBase.getZ()));
 
                     entityLivingBase.heal(damageMedkit.get(entityLivingBase.getUUID()));
                     timesMedkit.put(entityLivingBase.getUUID(), 0);
@@ -163,24 +140,20 @@ public class HeartUpgradeItem extends CybercraftItem{
                 }
             }
         }
-		/*
 		else
 		{
-			if (timesMedkit.containsKey(entityLivingBase.getEntityId()))
+			if (timesMedkit.containsKey(entityLivingBase.getUUID()))
 			{
 				timesMedkit.remove(entityLivingBase);
 				damageMedkit.remove(entityLivingBase);
 			}
 		}
-		*/
     }
 
     private static Map<UUID, Boolean> isPlateletWorking = new HashMap<>();
 
-    private boolean isPlateletWorking(LivingEntity entityLivingBase)
-    {
-        if (!isPlateletWorking.containsKey(entityLivingBase.getUUID()))
-        {
+    private boolean isPlateletWorking(LivingEntity entityLivingBase) {
+        if (!isPlateletWorking.containsKey(entityLivingBase.getUUID())) {
             isPlateletWorking.put(entityLivingBase.getUUID(), false);
             return false;
         }
@@ -190,10 +163,8 @@ public class HeartUpgradeItem extends CybercraftItem{
 
     private static Map<UUID, Boolean> isStemWorking = new HashMap<>();
 
-    private boolean isStemWorking(LivingEntity entityLivingBase)
-    {
-        if (!isStemWorking.containsKey(entityLivingBase.getUUID()))
-        {
+    private boolean isStemWorking(LivingEntity entityLivingBase) {
+        if (!isStemWorking.containsKey(entityLivingBase.getUUID())) {
             isStemWorking.put(entityLivingBase.getUUID(), false);
             return false;
         }
@@ -206,16 +177,14 @@ public class HeartUpgradeItem extends CybercraftItem{
     private static Map<UUID, Float> damageMedkit = new HashMap<>();
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void handleHurt(LivingHurtEvent event)
-    {
+    public void handleHurt(LivingHurtEvent event) {
         if (event.isCanceled()) return;
         LivingEntity entityLivingBase = event.getEntityLiving();
         ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityLivingBase);
         if (cyberwareUserData == null) return;
 
         ItemStack itemStackStemCellSynthesizer = cyberwareUserData.getCybercraft(getCachedStack(META_STEM_CELL_SYNTHESIZER));
-        if (!itemStackStemCellSynthesizer.isEmpty())
-        {
+        if (!itemStackStemCellSynthesizer.isEmpty()) {
             float damageAmount = event.getAmount();
             DamageSource damageSrc = event.getSource();
 
@@ -224,49 +193,38 @@ public class HeartUpgradeItem extends CybercraftItem{
             damageAmount = Math.max(damageAmount - entityLivingBase.getAbsorptionAmount(), 0.0F);
 
             damageMedkit.put(entityLivingBase.getUUID(), damageAmount);
-            timesMedkit.put(entityLivingBase.getUUID(), entityLivingBase.ticksExisted);
+            timesMedkit.put(entityLivingBase.getUUID(), entityLivingBase.tickCount);
         }
     }
 
     // Stolen from EntityLivingBase
-    protected float applyArmorCalculations(LivingEntity entityLivingBase, DamageSource source, float damage)
-    {
-        if (!source.isUnblockable())
-        {
-            damage = CombatRules.getDamageAfterAbsorb(damage, (float)entityLivingBase.getTotalArmorValue(), (float)entityLivingBase.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue());
+    protected float applyArmorCalculations(LivingEntity entityLivingBase, DamageSource source, float damage) {
+        if (!source.isBypassArmor()) {
+            damage = CombatRules.getDamageAfterAbsorb(damage, (float) entityLivingBase.getAbsorptionAmount(), (float) entityLivingBase.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
         }
 
         return damage;
     }
 
     // Stolen from EntityLivingBase
-    protected float applyPotionDamageCalculations(LivingEntity entityLivingBase, DamageSource source, float damage)
-    {
-        if (source.isDamageAbsolute())
-        {
+    protected float applyPotionDamageCalculations(LivingEntity entityLivingBase, DamageSource source, float damage) {
+        if (source.isBypassInvul()) {
             return damage;
-        }
-        else
-        {
-            if (entityLivingBase.isPotionActive(MobEffects.RESISTANCE) && source != DamageSource.OUT_OF_WORLD)
-            {
-                int i = (entityLivingBase.getActivePotionEffect(MobEffects.RESISTANCE).getAmplifier() + 1) * 5;
+        } else {
+            if (entityLivingBase.hasEffect(Effects.DAMAGE_RESISTANCE) && source != DamageSource.OUT_OF_WORLD) {
+                int i = (entityLivingBase.getEffect(Effects.DAMAGE_RESISTANCE).getAmplifier() + 1) * 5;
                 int j = 25 - i;
-                float f = damage * (float)j;
+                float f = damage * (float) j;
                 damage = f / 25.0F;
             }
 
-            if (damage <= 0.0F)
-            {
+            if (damage <= 0.0F) {
                 return 0.0F;
-            }
-            else
-            {
-                int k = EnchantmentHelper.getEnchantmentModifierDamage(entityLivingBase.getArmorInventoryList(), source);
+            } else {
+                int k = EnchantmentHelper.getDamageProtection(entityLivingBase.getArmorSlots(), source);
 
-                if (k > 0)
-                {
-                    damage = CombatRules.getDamageAfterMagicAbsorb(damage, (float)k);
+                if (k > 0) {
+                    damage = CombatRules.getDamageAfterMagicAbsorb(damage, (float) k);
                 }
 
                 return damage;
@@ -274,53 +232,44 @@ public class HeartUpgradeItem extends CybercraftItem{
         }
     }
 
-    private int getPlateletTime(LivingEntity entityLivingBase)
-    {
-        if (entityLivingBase != null)
-        {
-            if (!timesPlatelets.containsKey(entityLivingBase.getUUID()))
-            {
-                timesPlatelets.put(entityLivingBase.getUUID(), entityLivingBase.ticksExisted);
+    private int getPlateletTime(LivingEntity entityLivingBase) {
+        if (entityLivingBase != null) {
+            if (!timesPlatelets.containsKey(entityLivingBase.getUUID())) {
+                timesPlatelets.put(entityLivingBase.getUUID(), entityLivingBase.tickCount);
                 return 0;
             }
-            return entityLivingBase.ticksExisted - timesPlatelets.get(entityLivingBase.getUUID());
+            return entityLivingBase.tickCount - timesPlatelets.get(entityLivingBase.getUUID());
         }
         return 0;
     }
 
-    private int getMedkitTime(LivingEntity entityLivingBase)
-    {
-        if (entityLivingBase != null)
-        {
-            if (!timesMedkit.containsKey(entityLivingBase.getUUID()))
-            {
-                timesMedkit.put(entityLivingBase.getUUID(), entityLivingBase.ticksExisted);
+    private int getMedkitTime(LivingEntity entityLivingBase) {
+        if (entityLivingBase != null) {
+            if (!timesMedkit.containsKey(entityLivingBase.getUUID())) {
+                timesMedkit.put(entityLivingBase.getUUID(), entityLivingBase.tickCount);
                 damageMedkit.put(entityLivingBase.getUUID(), 0F);
                 return 0;
             }
-            return entityLivingBase.ticksExisted - timesMedkit.get(entityLivingBase.getUUID());
+            return entityLivingBase.tickCount - timesMedkit.get(entityLivingBase.getUUID());
         }
         return 0;
     }
 
     @SubscribeEvent
-    public void power(CybercraftUpdateEvent event)
-    {
+    public void power(CybercraftUpdateEvent event) {
         LivingEntity entityLivingBase = event.getEntityLiving();
-        if (entityLivingBase.ticksExisted % 20 != 0) return;
+        if (entityLivingBase.tickCount % 20 != 0) return;
 
         ICybercraftUserData cyberwareUserData = event.getCybercrafteUserData();
 
         ItemStack itemStackCardiovascularCoupler = cyberwareUserData.getCybercraft(getCachedStack(META_CARDIOVASCULAR_COUPLER));
-        if (!itemStackCardiovascularCoupler.isEmpty())
-        {
+        if (!itemStackCardiovascularCoupler.isEmpty()) {
             cyberwareUserData.addPower(getPowerProduction(itemStackCardiovascularCoupler), itemStackCardiovascularCoupler);
         }
     }
 
     @Override
-    public int getPowerConsumption(ItemStack stack)
-    {
+    public int getPowerConsumption(ItemStack stack) {
         return stack.getDamageValue() == META_INTERNAL_DEFIBRILLATOR ? LibConstants.DEFIBRILLATOR_CONSUMPTION
                 : stack.getDamageValue() == META_PLATELET_DISPATCHER ? LibConstants.PLATELET_CONSUMPTION
                 : stack.getDamageValue() == META_STEM_CELL_SYNTHESIZER ? LibConstants.STEMCELL_CONSUMPTION
@@ -328,20 +277,17 @@ public class HeartUpgradeItem extends CybercraftItem{
     }
 
     @Override
-    public int getCapacity(ItemStack stack)
-    {
-        return stack.getDamageValue() == META_INTERNAL_DEFIBRILLATOR ? LibConstants.DEFIBRILLATOR_CONSUMPTION: 0;
+    public int getCapacity(ItemStack stack) {
+        return stack.getDamageValue() == META_INTERNAL_DEFIBRILLATOR ? LibConstants.DEFIBRILLATOR_CONSUMPTION : 0;
     }
 
     @Override
-    public boolean hasCustomPowerMessage(ItemStack stack)
-    {
+    public boolean hasCustomPowerMessage(ItemStack stack) {
         return stack.getDamageValue() == META_INTERNAL_DEFIBRILLATOR;
     }
 
     @Override
-    public int getPowerProduction(ItemStack stack)
-    {
+    public int getPowerProduction(ItemStack stack) {
         return stack.getDamageValue() == META_CARDIOVASCULAR_COUPLER ? LibConstants.COUPLER_PRODUCTION + 1 : 0;
     }
 
