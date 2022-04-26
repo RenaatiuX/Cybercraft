@@ -24,7 +24,7 @@ public class PowerDisplay extends HudElementBase {
 
     public PowerDisplay()
     {
-        super("cyberware:power");
+        super("cybercraft:power");
         setDefaultX(5);
         setDefaultY(5);
         setHeight(25);
@@ -32,7 +32,7 @@ public class PowerDisplay extends HudElementBase {
     }
 
     @Override
-    public void renderElement(int x, int y, PlayerEntity entityPlayer, MatrixStack resolution, boolean isHUDjackAvailable, boolean isConfigOpen, float partialTicks)
+    public void renderElement(int x, int y, PlayerEntity entityPlayer, MatrixStack matrixStack, boolean isHUDjackAvailable, boolean isConfigOpen, float partialTicks)
     {
         if ( isHidden()
                 || !isHUDjackAvailable ) {
@@ -69,15 +69,15 @@ public class PowerDisplay extends HudElementBase {
         float[] colorFloats = isLowPower ? colorLowPowerFloats : cache_hudColor;
         int colorHex = isLowPower ? colorLowPowerHex : cache_hudColorHex;
 
-        GlStateManager.pushMatrix();
+        matrixStack.pushPose();
 
         FontRenderer fontRenderer = Minecraft.getInstance().font;
 
         // battery icon
         Minecraft.getInstance().getTextureManager().bind(HudHandler.HUD_TEXTURE);
-        GlStateManager.disableAlpha();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+        matrixStack.disableAlpha();
+        matrixStack.enableBlend();
+        matrixStack.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 
         int uOffset = isLowPower ? 39 : 0;
         int xOffset = isRightAnchored ? (x + getWidth() - 13) : x;
@@ -102,7 +102,7 @@ public class PowerDisplay extends HudElementBase {
         int xPowerProgression = isRightAnchored ? x + getWidth() - 15 - fontRenderer.getStringWidth(textPowerProgression) : x + 15;
         fontRenderer.drawStringWithShadow(textPowerProgression, xPowerProgression, y + 14, colorHex);
 
-        GlStateManager.popMatrix();
+        matrixStack.popPose();
     }
 
 }

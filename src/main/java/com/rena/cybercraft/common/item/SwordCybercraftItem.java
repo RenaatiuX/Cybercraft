@@ -10,6 +10,8 @@ import net.minecraft.item.Items;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.NonNullList;
 
+import static com.rena.cybercraft.api.CybercraftAPI.withMetaData;
+
 public class SwordCybercraftItem extends SwordItem implements IDeconstructable {
 
     public SwordCybercraftItem(IItemTier p_i48460_1_, int p_i48460_2_, float p_i48460_3_, Properties p_i48460_4_) {
@@ -25,9 +27,9 @@ public class SwordCybercraftItem extends SwordItem implements IDeconstructable {
     public NonNullList<ItemStack> getComponents(ItemStack stack) {
         return NNLUtil.fromArray(new ItemStack[]
                 {
-                        CybercraftAPI.withMetaData(new ItemStack(Items.IRON_INGOT, 2), 0),
-                        CybercraftAPI.withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 2),
-                        CybercraftAPI.withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 4)
+                        withMetaData(new ItemStack(Items.IRON_INGOT, 2), 0),
+                        withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 2),
+                        withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 4)
                 });
     }
 }

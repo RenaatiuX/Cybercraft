@@ -14,6 +14,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import static com.rena.cybercraft.api.CybercraftAPI.withMetaData;
 
+@SuppressWarnings("unchecked")
 public class ItemInit {
 
     public static final int RARE = 10;

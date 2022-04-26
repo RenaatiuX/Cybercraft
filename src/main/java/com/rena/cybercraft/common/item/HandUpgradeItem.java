@@ -43,7 +43,7 @@ public class HandUpgradeItem extends CybercraftItem implements IMenuItem {
 
     static {
         multimapClawsStrengthAttribute = HashMultimap.create();
-        multimapClawsStrengthAttribute.put(Attributes.ATTACK_SPEED.getDescriptionId(), new AttributeModifier(isClawsStrengthAttribute, "Claws damage upgrade", 5.5F, 0));
+        multimapClawsStrengthAttribute.put(Attributes.ATTACK_SPEED, new AttributeModifier(isClawsStrengthAttribute, "Claws damage upgrade", 5.5F, AttributeModifier.Operation.ADDITION));
     }
 
     public HandUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {

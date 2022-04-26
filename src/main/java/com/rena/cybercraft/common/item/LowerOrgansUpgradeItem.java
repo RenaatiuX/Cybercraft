@@ -33,7 +33,7 @@ public class LowerOrgansUpgradeItem extends CybercraftItem implements IMenuItem 
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    private static Map<UUID, Collection<Effect>> mapPotions = new HashMap<>();
+    private static Map<UUID, Collection<EffectInstance>> mapPotions = new HashMap<>();
 
     @SubscribeEvent
     public void handleEatFoodTick(LivingEntityUseItemEvent.Tick event)
@@ -75,16 +75,16 @@ public class LowerOrgansUpgradeItem extends CybercraftItem implements IMenuItem 
                 Collection<EffectInstance> potionEffectsRemoved = new ArrayList<>(entityPlayer.getActiveEffects());
                 for (EffectInstance potionEffect : potionEffectsRemoved)
                 {
-                    if (potionEffect.getEffect().isBadEffect())
+                    if (potionEffect.getEffect().isBeneficial())
                     {
                         entityPlayer.removeEffect(potionEffect.getEffect());
                     }
                 }
 
-                Collection<Effect> potionEffectsToAdd = mapPotions.get(entityPlayer.getUUID());
+                Collection<EffectInstance> potionEffectsToAdd = mapPotions.get(entityPlayer.getUUID());
                 if (potionEffectsToAdd != null)
                 {
-                    for (Effect potionEffectToAdd : potionEffectsToAdd)
+                    for (EffectInstance potionEffectToAdd : potionEffectsToAdd)
                     {
                         for (EffectInstance potionEffectRemoved : potionEffectsRemoved)
                         {

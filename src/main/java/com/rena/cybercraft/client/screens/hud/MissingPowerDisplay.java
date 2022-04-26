@@ -115,7 +115,7 @@ public class MissingPowerDisplay extends HudElementBase {
             timesPowerOutage.remove(indexElapsed);
         }
 
-        GlStateManager.popMatrix();
+        mstack.popPose();
     }
 
 }

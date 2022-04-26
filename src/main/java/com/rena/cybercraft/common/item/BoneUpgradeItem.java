@@ -5,8 +5,10 @@ import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.common.util.LibConstants;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -22,22 +24,22 @@ public class BoneUpgradeItem extends CybercraftItem {
     public static final int META_FLEX = 1;
     public static final int META_BATTERY= 2;
 
-    public static final int MAX_STACK_SIZE_LACING       = 5;
+    public static final int MAX_STACK_SIZE_LACING = 5;
 
     private static final UUID idBoneHealthAttribute = UUID.fromString("8bce997a-4c3a-11e6-beb8-9e71128cae77");
-    private static final HashMap<Integer, HashMultimap<String, AttributeModifier>> multimapBoneHealthAttributes = new HashMap<>(MAX_STACK_SIZE_LACING + 1);
+    private static final HashMap<Integer, HashMultimap<Attribute, AttributeModifier>> multimapBoneHealthAttributes = new HashMap<>(MAX_STACK_SIZE_LACING + 1);
 
     public BoneUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
         super(properties, slots, subnames);
     }
 
-    private static HashMultimap<String, AttributeModifier> getBoneHealthAttribute(int stackSize)
+    private static HashMultimap<Attribute, AttributeModifier> getBoneHealthAttribute(int stackSize)
     {
-        HashMultimap<String, AttributeModifier> multimapBoneHealthAttribute = multimapBoneHealthAttributes.get(stackSize);
+        HashMultimap<Attribute, AttributeModifier> multimapBoneHealthAttribute = multimapBoneHealthAttributes.get(stackSize);
         if (multimapBoneHealthAttribute == null)
         {
             multimapBoneHealthAttribute = HashMultimap.create();
-            multimapBoneHealthAttribute.put(Attributes.MAX_HEALTH.getDescriptionId(), new AttributeModifier(idBoneHealthAttribute, "Bone hp upgrade", 4F * stackSize, 0));
+            multimapBoneHealthAttribute.put(Attributes.MAX_HEALTH, new AttributeModifier(idBoneHealthAttribute, "Bone hp upgrade", 4F * stackSize, AttributeModifier.Operation.ADDITION));
             multimapBoneHealthAttributes.put(stackSize, multimapBoneHealthAttribute);
         }
         return multimapBoneHealthAttribute;
@@ -45,6 +47,7 @@ public class BoneUpgradeItem extends CybercraftItem {
 
     @Override
     public void onAdded(LivingEntity livingEntity, ItemStack stack) {
+
         if (stack.getDamageValue() == META_LACING)
         {
             livingEntity.getAttributes().addTransientAttributeModifiers(getBoneHealthAttribute(stack.getCount()));

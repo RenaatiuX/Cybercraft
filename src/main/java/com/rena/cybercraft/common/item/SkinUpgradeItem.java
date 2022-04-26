@@ -80,7 +80,7 @@ public class SkinUpgradeItem extends CybercraftItem{
     }
 
     private Set<UUID> setIsImmunosuppressantPowered = new HashSet<>();
-    private static Map<UUID, Collection<Effect>> mapPotions = new HashMap<>();
+    private static Map<UUID, Collection<EffectInstance>> mapPotions = new HashMap<>();
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void handleMissingEssentials(CybercraftUpdateEvent event)
@@ -105,15 +105,15 @@ public class SkinUpgradeItem extends CybercraftItem{
 
             if (mapPotions.containsKey(entityLivingBase.getUUID()))
             {
-                Collection<Effect> potionsLastActive = mapPotions.get(entityLivingBase.getUUID());
-                Collection<Effect> currentEffects = entityLivingBase.getActivePotionEffects();
-                for (Effect potionEffectCurrent : currentEffects)
+                Collection<EffectInstance> potionsLastActive = mapPotions.get(entityLivingBase.getUUID());
+                Collection<EffectInstance> currentEffects = entityLivingBase.getActiveEffects();
+                for (EffectInstance potionEffectCurrent : currentEffects)
                 {
                     if ( potionEffectCurrent.getEffect() == Effects.POISON
                             || potionEffectCurrent.getEffect() == Effects.HUNGER )
                     {
                         boolean found = false;
-                        for (Effect potionEffectLast : potionsLastActive)
+                        for (EffectInstance potionEffectLast : potionsLastActive)
                         {
                             if ( potionEffectLast.getEffect() == potionEffectCurrent.getEffect()
                                     && potionEffectLast.getAmplifier() == potionEffectCurrent.getAmplifier() )
@@ -128,8 +128,8 @@ public class SkinUpgradeItem extends CybercraftItem{
                             entityLivingBase.addEffect(new EffectInstance(potionEffectCurrent.getEffect(),
                                     (int) (potionEffectCurrent.getDuration() * 1.8F),
                                     potionEffectCurrent.getAmplifier(),
-                                    potionEffectCurrent.getIsAmbient(),
-                                    potionEffectCurrent.doesShowParticles() ));
+                                    potionEffectCurrent.isAmbient(),
+                                    potionEffectCurrent.isVisible() ));
                         }
                     }
                 }
@@ -144,7 +144,7 @@ public class SkinUpgradeItem extends CybercraftItem{
                 setIsImmunosuppressantPowered.remove(entityLivingBase.getUUID());
             }
 
-            mapPotions.put(entityLivingBase.getUUID(), entityLivingBase.getActivePotionEffects());
+            mapPotions.put(entityLivingBase.getUUID(), entityLivingBase.getActiveEffects());
         }
         else if (entityLivingBase.tickCount % 20 == 0)
         {

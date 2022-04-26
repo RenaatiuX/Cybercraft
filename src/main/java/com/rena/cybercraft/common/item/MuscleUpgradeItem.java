@@ -8,6 +8,7 @@ import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.api.item.EnableDisableHelper;
 import com.rena.cybercraft.api.item.IMenuItem;
 import com.rena.cybercraft.common.util.LibConstants;
+import com.rena.cybercraft.core.network.CCNetwork;
 import com.rena.cybercraft.core.network.SwitchHeldItemAndRotationPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -43,9 +44,9 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
 
     static {
         multimapMuscleSpeedAttribute = HashMultimap.create();
-        multimapMuscleSpeedAttribute.put(Attributes.ATTACK_SPEED.getDescriptionId(), new AttributeModifier(idMuscleSpeedAttribute, "Muscle speed upgrade", 1.5F, 0));
+        multimapMuscleSpeedAttribute.put(Attributes.ATTACK_SPEED, new AttributeModifier(idMuscleSpeedAttribute, "Muscle speed upgrade", 1.5F, AttributeModifier.Operation.ADDITION));
         multimapMuscleDamageAttribute = HashMultimap.create();
-        multimapMuscleDamageAttribute.put(Attributes.ATTACK_DAMAGE.getDescriptionId(), new AttributeModifier(idMuscleDamageAttribute, "Muscle damage upgrade", 3F, 0));
+        multimapMuscleDamageAttribute.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(idMuscleDamageAttribute, "Muscle damage upgrade", 3F, AttributeModifier.Operation.ADDITION));
     }
 
     public MuscleUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
@@ -153,7 +154,7 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
                     {
                         entityPlayer.inventory.selected = indexWeapon;
 
-                        CyberwarePacketHandler.INSTANCE.sendTo(new SwitchHeldItemAndRotationPacket(indexWeapon, entityPlayer.getId(),
+                        CCNetwork.sendTo(new SwitchHeldItemAndRotationPacket(indexWeapon, entityPlayer.getId(),
                                         rank > 2 && attacker != null ? attacker.getId() : -1 ),
                                 (ServerPlayerEntity) entityPlayer);
 
@@ -161,7 +162,7 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
 
                         for (PlayerEntity trackingPlayer : worldServer.getEntityTracker().getTrackingPlayers(entityPlayer))
                         {
-                            CyberwarePacketHandler.INSTANCE.sendTo(new SwitchHeldItemAndRotationPacket(indexWeapon, entityPlayer.getId(),
+                            CCNetwork.sendTo(new SwitchHeldItemAndRotationPacket(indexWeapon, entityPlayer.getId(),
                                             rank > 2 && attacker != null ? attacker.getId() : -1 ),
                                     (ServerPlayerEntity) trackingPlayer);
                         }

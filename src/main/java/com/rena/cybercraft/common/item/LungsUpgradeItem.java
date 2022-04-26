@@ -1,5 +1,6 @@
 package com.rena.cybercraft.common.item;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.CybercraftUpdateEvent;
 import com.rena.cybercraft.api.ICybercraftUserData;
@@ -52,7 +53,7 @@ public class LungsUpgradeItem extends CybercraftItem{
 
                 Minecraft.getInstance().getTextureManager().bind(Gui.ICONS);
 
-                ScaledResolution res = event.getResolution();
+                MatrixStack res = event.getMatrixStack();
                 GlStateManager.enableBlend();
                 int left = res.getScaledWidth() / 2 + 91;
                 int top = res.getScaledHeight() - 49 - 8;
