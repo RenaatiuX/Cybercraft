@@ -9,7 +9,9 @@ import com.rena.cybercraft.api.item.IMenuItem;
 import com.rena.cybercraft.common.ArmorClass;
 import com.rena.cybercraft.common.util.LibConstants;
 import com.rena.cybercraft.core.init.ItemInit;
+import com.rena.cybercraft.core.network.CCNetwork;
 import com.rena.cybercraft.core.network.DodgePacket;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -20,12 +22,16 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.GameRules;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
+import net.minecraftforge.event.entity.living.EntityTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 import javax.annotation.Nullable;
@@ -52,7 +58,7 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
     }
 
     @SubscribeEvent
-    public void handleTeleJam(EnderTeleportEvent event)
+    public void handleTeleJam(EntityTeleportEvent.EnderEntity event)
     {
         LivingEntity livingEntity = event.getEntityLiving();
         if (!isTeleportationAllowed(livingEntity))
@@ -79,8 +85,8 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
         float range = 25F;
         List<LivingEntity> entitiesInRange = livingEntity.level.getEntitiesOfClass(
                 LivingEntity.class,
-                new AxisAlignedBB(livingEntity.posX - range, livingEntity.posY - range, livingEntity.posZ - range,
-                        livingEntity.posX + livingEntity.width + range, livingEntity.posY + livingEntity.height + range, livingEntity.posZ + livingEntity.width + range));
+                new AxisAlignedBB(livingEntity.getX() - range, livingEntity.getY() - range, livingEntity.getZ() - range,
+                        livingEntity.getX() + livingEntity.getBbWidth() + range, livingEntity.getY() + livingEntity.getEyeHeight() + range, livingEntity.getZ() + livingEntity.getBbWidth() + range));
         for (LivingEntity entityInRange : entitiesInRange)
         {
             if (livingEntity.distanceToSqr(entityInRange) <= range * range)
@@ -108,7 +114,7 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
         {
             PlayerEntity entityPlayerOriginal = event.getOriginal();
 
-            if (entityPlayerOriginal.level.getGameRules().getBoolean("keepInventory")) {
+            if (entityPlayerOriginal.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
                 return;
             }
 
@@ -123,7 +129,7 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
                     CompoundNBT tagCompound = new CompoundNBT();
                     tagCompound.putInt("xp", entityPlayerOriginal.totalExperience);
                     stack.setTag(tagCompound);
-                    ItemEntity item = new ItemEntity(entityPlayerOriginal.level, entityPlayerOriginal.pos, entityPlayerOriginal.posY, entityPlayerOriginal.posZ, stack);
+                    ItemEntity item = new ItemEntity(entityPlayerOriginal.level, entityPlayerOriginal.getX(), entityPlayerOriginal.getY(), entityPlayerOriginal.getZ(), stack);
                     entityPlayerOriginal.level.addFreshEntity(item);
                 }
             }
@@ -148,7 +154,7 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
                 && isContextWorking(entityPlayer)
                 && !entityPlayer.isShiftKeyDown() )
         {
-            IBlockState state = event.getState();
+            BlockState state = event.getState();
             ItemStack tool = entityPlayer.getItemInHand(Hand.MAIN_HAND);
 
             if ( !tool.isEmpty()
@@ -240,13 +246,13 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
         return isMatrixWorking.get(entityLivingBase.getUUID());
     }
 
-    public boolean isToolEffective(ItemStack tool, IBlockState state)
+    public boolean isToolEffective(ItemStack tool, BlockState state)
     {
         if (!tool.isEmpty())
         {
-            for (String toolType : tool.getItem().getToolClasses(tool))
+            for (ToolType toolType : tool.getItem().getToolTypes(tool))
             {
-                if (state.getBlock().isToolEffective(toolType, state))
+                if (state.getBlock().isToolEffective(state, toolType))
                 {
                     return true;
                 }
@@ -284,10 +290,10 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
             if ( !entityLivingBase.level.isClientSide
                     && event.getSource() instanceof EntityDamageSource)
             {
-                Entity attacker = event.getSource().getTrueSource();
+                Entity attacker = event.getSource().getDirectEntity();
                 if (entityLivingBase instanceof PlayerEntity)
                 {
-                    String str = entityLivingBase.getEntityId() + " " + entityLivingBase.tickCount + " " + (attacker == null ? -1 : attacker.getEntityId());
+                    String str = entityLivingBase.getId() + " " + entityLivingBase.tickCount + " " + (attacker == null ? -1 : attacker.getId());
                     if (lastHits.contains(str))
                     {
                         return;
@@ -309,9 +315,8 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
                         event.setCanceled(true);
                         entityLivingBase.invulnerableTime = entityLivingBase.invulnerableDuration;
                         entityLivingBase.hurtTime = entityLivingBase.hurtDuration = 10;
-                        ReflectionHelper.setPrivateValue(LivingEntity.class, entityLivingBase, 9999F, "lastDamage", "field_110153_bc");
-                        CyberwarePacketHandler.INSTANCE.sendToAllAround(new DodgePacket(entityLivingBase.getEntityId()),
-                                new PacketDistributor.TargetPoint(entityLivingBase.level.provider.getDimension(), entityLivingBase.posX, entityLivingBase.posY, entityLivingBase.posZ, 50));
+                        ObfuscationReflectionHelper.setPrivateValue(LivingEntity.class, entityLivingBase, 9999F, "field_110153_bc ");
+                        CCNetwork.sendToPlayerInTRange(new PacketDistributor.TargetPoint(entityLivingBase.getX(), entityLivingBase.getY(), entityLivingBase.getZ(), 50, entityLivingBase.level.dimension()), new DodgePacket(entityLivingBase.getId()));
                     }
                 }
             }

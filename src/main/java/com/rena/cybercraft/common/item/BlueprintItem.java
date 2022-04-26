@@ -36,9 +36,8 @@ public class BlueprintItem extends Item implements IBlueprint {
             if (tagCompound.contains("blueprintItem"))
             {
                 GameSettings settings = Minecraft.getInstance().options;
-                if (settings.setKey(settings.keyShift);
-                {
-                    ItemStack blueprintItem = new ItemStack(tagCompound.getCompound("blueprintItem"));
+                if (settings.keyShift.isDown()){
+                    ItemStack blueprintItem = ItemStack.of(tagCompound.getCompound("blueprintItem"));
                     if (!blueprintItem.isEmpty() && CybercraftAPI.canDeconstruct(blueprintItem))
                     {
                         NonNullList<ItemStack> items = NNLUtil.copyList(CybercraftAPI.getComponents(blueprintItem));
@@ -52,9 +51,7 @@ public class BlueprintItem extends Item implements IBlueprint {
                         }
                         return;
                     }
-                }
-                else
-                {
+                }else{
                     tooltip.add(new TranslationTextComponent(I18n.get("tooltip.cybercraft.shift_prompt")).withStyle(TextFormatting.DARK_GRAY));
                     return;
                 }
@@ -104,14 +101,14 @@ public class BlueprintItem extends Item implements IBlueprint {
         {
             if (tagCompound.contains("blueprintItem"))
             {
-                ItemStack blueprintItem = new ItemStack(tagCompound.getCompound("blueprintItem"));
+                ItemStack blueprintItem = ItemStack.of(tagCompound.getCompound("blueprintItem"));
                 if (!blueprintItem.isEmpty())
                 {
-                    return (new TranslationTextComponent(I18n.get("item.cybercraft.blueprint.not_blank.name", blueprintItem.getDisplayName()))).trim();
+                    return (new TranslationTextComponent(I18n.get("item.cybercraft.blueprint.not_blank.name", blueprintItem.getDisplayName())));
                 }
             }
         }
-        return (new TranslationTextComponent("" + I18n.get(this.getDescriptionId(stack) + ".name"))).trim();
+        return (new TranslationTextComponent("" + I18n.get(this.getDescriptionId(stack) + ".name")));
     }
 
     @Override
@@ -121,7 +118,7 @@ public class BlueprintItem extends Item implements IBlueprint {
         {
             if (tagCompound.contains("blueprintItem"))
             {
-                ItemStack blueprintItem = new ItemStack(tagCompound.getCompound("blueprintItem"));
+                ItemStack blueprintItem = ItemStack.of(tagCompound.getCompound("blueprintItem"));
                 if (!blueprintItem.isEmpty() && CybercraftAPI.canDeconstruct(blueprintItem))
                 {
                     NonNullList<ItemStack> requiredItems = NNLUtil.copyList(CybercraftAPI.getComponents(blueprintItem));
@@ -156,7 +153,7 @@ public class BlueprintItem extends Item implements IBlueprint {
         {
             if (tagCompound.contains("blueprintItem"))
             {
-                ItemStack blueprintItem = new ItemStack(tagCompound.getCompound("blueprintItem"));
+                ItemStack blueprintItem = ItemStack.of(tagCompound.getCompound("blueprintItem"));
                 if (!blueprintItem.isEmpty() && CybercraftAPI.canDeconstruct(blueprintItem))
                 {
                     NonNullList<ItemStack> requiredItems = NNLUtil.copyList(CybercraftAPI.getComponents(blueprintItem));
@@ -198,7 +195,7 @@ public class BlueprintItem extends Item implements IBlueprint {
         {
             if (tagCompound.contains("blueprintItem"))
             {
-                ItemStack blueprintItem = new ItemStack(tagCompound.getCompound("blueprintItem"));
+                ItemStack blueprintItem = ItemStack.of(tagCompound.getCompound("blueprintItem"));
                 if (!blueprintItem.isEmpty() && CybercraftAPI.canDeconstruct(blueprintItem))
                 {
                     return CybercraftAPI.getComponents(blueprintItem);
@@ -217,7 +214,7 @@ public class BlueprintItem extends Item implements IBlueprint {
         {
             if (tagCompound.contains("blueprintItem"))
             {
-                return new ItemStack(tagCompound.getCompound("blueprintItem"));
+                return ItemStack.of(tagCompound.getCompound("blueprintItem"));
             }
         }
 

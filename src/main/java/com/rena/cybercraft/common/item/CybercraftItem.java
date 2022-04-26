@@ -63,6 +63,15 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
         return this;
     }
 
+    public CybercraftItem setComponents(NonNullList<ItemStack>... components){
+        NonNullList<NonNullList<ItemStack>> list = NonNullList.create();
+        for (NonNullList<ItemStack> l : components){
+            list.add(l);
+        }
+        this.components = list;
+        return this;
+    }
+
     @Override
     public EnumSlot getSlot(ItemStack stack) {
         return slots[Math.min(slots.length - 1, CybercraftAPI.getMetaData(stack))];

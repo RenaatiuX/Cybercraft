@@ -1,6 +1,7 @@
 package com.rena.cybercraft.api.hud;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 
 public abstract class HudElementBase implements IHudElement{
@@ -25,23 +26,23 @@ public abstract class HudElementBase implements IHudElement{
     }
 
     @Override
-    public void render(PlayerEntity entityPlayer, MatrixStack resolution, boolean isHUDjackAvailable, boolean isConfigOpen, float partialTicks)
+    public void render(PlayerEntity entityPlayer, MatrixStack stack, boolean isHUDjackAvailable, boolean isConfigOpen, float partialTicks)
     {
         int x = getX();
         int y = getY();
         if (getHorizontalAnchor() == EnumAnchorHorizontal.RIGHT)
         {
-            x = resolution.getScaledWidth() - x - getWidth();
+            x = Minecraft.getInstance().screen.width - x - getWidth();
         }
         if (getVerticalAnchor() == EnumAnchorVertical.BOTTOM)
         {
-            y = resolution.getScaledHeight() - y - getHeight();
+            y = Minecraft.getInstance().screen.height - y - getHeight();
         }
 
-        renderElement(x, y, entityPlayer, resolution, isHUDjackAvailable, isConfigOpen, partialTicks);
+        renderElement(x, y, entityPlayer, stack, isHUDjackAvailable, isConfigOpen, partialTicks);
     }
 
-    public abstract void renderElement(int x, int y, PlayerEntity entityPlayer, MatrixStack resolution, boolean hudjackAvailable, boolean isConfigOpen, float partialTicks);
+    public abstract void renderElement(int x, int y, PlayerEntity entityPlayer, MatrixStack stack, boolean hudjackAvailable, boolean isConfigOpen, float partialTicks);
 
     public void setDefaultX(int x)
     {

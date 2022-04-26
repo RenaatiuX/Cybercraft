@@ -7,12 +7,12 @@ import java.io.File;
 
 public class HudConfigData implements IHudSaveData {
 
-    private Configuration config;
+    //private Configuration config;
 
-    public HudConfigData(String name)
+    /*public HudConfigData(String name)
     {
         config = new Configuration(new File(CybercraftConfig.configDirectory, "cybercraft_hud/" + name + ".cfg"));
-    }
+    }*/
 
 
     @Override

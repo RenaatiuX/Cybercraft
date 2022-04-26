@@ -6,6 +6,8 @@ import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.api.hud.HudElementBase;
 import com.rena.cybercraft.core.init.ItemInit;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
@@ -37,7 +39,7 @@ public class MissingPowerDisplay extends HudElementBase {
     }
 
     @Override
-    public void renderElement(int x, int y, PlayerEntity entityPlayer, MatrixStack resolution, boolean isHUDjackAvailable, boolean isConfigOpen, float partialTicks)
+    public void renderElement(int x, int y, PlayerEntity entityPlayer, MatrixStack mstack, boolean isHUDjackAvailable, boolean isConfigOpen, float partialTicks)
     {
         if ( isHidden()
                 || !isHUDjackAvailable ) {
@@ -50,19 +52,18 @@ public class MissingPowerDisplay extends HudElementBase {
         boolean isRightAnchored = getHorizontalAnchor() == EnumAnchorHorizontal.RIGHT;
         float currTime = entityPlayer.tickCount + partialTicks;
 
-        GlStateManager.pushMatrix();
-        GlStateManager.enableBlend();
+        mstack.pushPose();
 
         Minecraft.getInstance().getTextureManager().bind(HudHandler.HUD_TEXTURE);
 
-        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+        FontRenderer fontRenderer = Minecraft.getInstance().font;
 
-        RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+        ItemRenderer renderItem = Minecraft.getInstance().getItemRenderer();
         List<ItemStack> stacksPowerOutage = isConfigOpen ? exampleStacks : cyberwareUserData.getPowerOutages();
         List<Integer> timesPowerOutage = cyberwareUserData.getPowerOutageTimes();
         List<Integer> indexesElapsed = new ArrayList<>();
-        float zLevelSaved = renderItem.zLevel;
-        renderItem.zLevel = -300;
+        float zLevelSaved = renderItem.blitOffset;
+        renderItem.blitOffset = -300;
         int xPosition = x - 1 + (isRightAnchored ? 0 : 20);
         int yPosition = y;
         for (int index = stacksPowerOutage.size() - 1; index >= 0; index--)
@@ -88,10 +89,10 @@ public class MissingPowerDisplay extends HudElementBase {
                     double percentVisible = Math.max(0F, (currTime - time - 20) / 30F);
                     float xOffset = (float) (20F * Math.sin(percentVisible * Math.PI / 2F));
 
-                    GlStateManager.pushMatrix();
-                    GlStateManager.translate(isRightAnchored ? xOffset : -xOffset, 0.0F, 0.0F);
+                    mstack.pushPose();
+                    mstack.translate(isRightAnchored ? xOffset : -xOffset, 0.0F, 0.0F);
 
-                    fontRenderer.drawStringWithShadow("!", xPosition + 14, yPosition + 8, 0xFF0000);
+                    //fontRenderer.draw("!", xPosition + 14, yPosition + 8, 0xFF0000);
 
                     RenderHelper.enableStandardItemLighting();
                     renderItem.renderItemAndEffectIntoGUI(stack, xPosition, yPosition);

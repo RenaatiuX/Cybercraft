@@ -1,7 +1,6 @@
 package com.rena.cybercraft.core.init;
 
 import com.rena.cybercraft.Cybercraft;
-import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.item.ICybercraft;
 import com.rena.cybercraft.common.item.*;
 import com.rena.cybercraft.common.util.CybercraftArmorMaterial;
@@ -13,13 +12,14 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import static com.rena.cybercraft.api.CybercraftAPI.withMetaData;
+
 public class ItemInit {
 
     public static final int RARE = 10;
     public static final int UNCOMMON = 25;
     public static final int COMMON = 50;
     public static final int VERY_COMMON = 100;
-
 
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Cybercraft.MOD_ID);
@@ -40,8 +40,8 @@ public class ItemInit {
 
     //Body Part
     public static final RegistryObject<Item> BODY_PART = ITEMS.register("body_part",
-            ()-> new BodyPartItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB),
-                    new ICybercraft.EnumSlot[] { ICybercraft.EnumSlot.EYES, ICybercraft.EnumSlot.CRANIUM, ICybercraft.EnumSlot.HEART, ICybercraft.EnumSlot.LUNGS, ICybercraft.EnumSlot.LOWER_ORGANS, ICybercraft.EnumSlot.SKIN, ICybercraft.EnumSlot.MUSCLE, ICybercraft.EnumSlot.BONE, ICybercraft.EnumSlot.ARM, ICybercraft.EnumSlot.ARM, ICybercraft.EnumSlot.LEG, ICybercraft.EnumSlot.LEG },
+            () -> new BodyPartItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB),
+                    new ICybercraft.EnumSlot[]{ICybercraft.EnumSlot.EYES, ICybercraft.EnumSlot.CRANIUM, ICybercraft.EnumSlot.HEART, ICybercraft.EnumSlot.LUNGS, ICybercraft.EnumSlot.LOWER_ORGANS, ICybercraft.EnumSlot.SKIN, ICybercraft.EnumSlot.MUSCLE, ICybercraft.EnumSlot.BONE, ICybercraft.EnumSlot.ARM, ICybercraft.EnumSlot.ARM, ICybercraft.EnumSlot.LEG, ICybercraft.EnumSlot.LEG},
                     "eyes", "brain", "heart", "lungs", "stomach", "skin", "muscles", "bones", "arm_left", "arm_right", "leg_left", "leg_right"));
 
 
@@ -52,10 +52,10 @@ public class ItemInit {
             () -> new CybereyesItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.EYES)
                     .setEssenceCost(8) // 0.2.0 Changed from 10
                     .setWeights(UNCOMMON)
-                    .setComponents(NNLUtil.fromArray(new ItemStack[] {
-                            new ItemStack(ItemInit.COMPONENT.get(), 1, 4),
-                            new ItemStack(ItemInit.COMPONENT.get(), 2, 5),
-                            new ItemStack(ItemInit.COMPONENT.get(), 2, 7) })));
+                    .setComponents(NNLUtil.fromArray(new ItemStack[]{
+                            withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 4),
+                            withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 5),
+                            withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 7)})));
 
     /*public static final RegistryObject<Item> EYES_UPGRADES_SCAVENGED = ITEMS.register("eye_upgrades_hudlens_scavenged",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));*/
@@ -72,21 +72,21 @@ public class ItemInit {
                     "night_vision", "underwater_vision", "hudjack", "targeting", "zoom")
                     .setEssenceCost(2, 2, 1, 1, 1)
                     .setWeights(UNCOMMON, UNCOMMON, UNCOMMON, UNCOMMON, UNCOMMON)
-                    .setComponents(NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 4),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 5),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 7) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 2, 5),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 7) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 3),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 5),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 6),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 7) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 2, 3),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 5),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 6),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 7) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 2, 5),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 4, 7) })));
+                    .setComponents(NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 4),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 5),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 7)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 5),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 7)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 3),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 5),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 6),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 7)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 3),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 5),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 6),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 7)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 5),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 4), 7)})));
 
     /*public static final RegistryObject<Item> CYBER_EYE_UPGRADES_TARGETING_SCAVENGED = ITEMS.register("cybereye_upgrades_targeting_scavenged",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));*/
@@ -104,37 +104,37 @@ public class ItemInit {
             () -> new EyeUpgradeItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.EYES, "hudlens")
                     .setEssenceCost(1)
                     .setWeights(VERY_COMMON)
-                    .setComponents(NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 3),
-                            new ItemStack(ItemInit.COMPONENT.get(), 1, 5),
-                            new ItemStack(ItemInit.COMPONENT.get(), 1, 6),
-                            new ItemStack(ItemInit.COMPONENT.get(), 2, 7) })));
+                    .setComponents(NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 3),
+                            withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 5),
+                            withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 6),
+                            withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 7)})));
 
     //Brain
     public static final RegistryObject<CybercraftItem> BRAIN_UPGRADES = ITEMS.register("brain_upgrades",
             () -> new BrainUpgradeItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.CRANIUM,
-            "cortical_stack", "ender_jammer", "consciousness_transmitter", "neural_contextualizer", "matrix", "radio")
+                    "cortical_stack", "ender_jammer", "consciousness_transmitter", "neural_contextualizer", "matrix", "radio")
                     .setEssenceCost(3, 10, 2, 2, 8, 2)
                     .setWeights(RARE, UNCOMMON, UNCOMMON, COMMON, UNCOMMON, UNCOMMON)
-                    .setComponents(NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 2, 1),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 7),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 8) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 2),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 3),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 5),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 9) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 3),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 6),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 3, 7) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 3),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 6),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 3, 7) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 3, 3),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 5),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 9) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 2),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 3),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 5),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 9) })));
+                    .setComponents(NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 1),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 7),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 8)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 2),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 3),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 5),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 9)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 3),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 6),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 3), 7)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 3),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 6),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 3), 7)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 3), 3),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 5),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 9)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 2),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 3),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 5),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 9)})));
 
     /*public static final RegistryObject<Item> BRAIN_UPGRADES_CONSCIOUSNESS_TRANSMITTER = ITEMS.register("brain_upgrades_consciousness_transmitter",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
@@ -166,27 +166,27 @@ public class ItemInit {
             () -> new CyberHeartItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.HEART)
                     .setEssenceCost(5)
                     .setWeights(COMMON)
-                    .setComponents(NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 2, 0),
-                            new ItemStack(ItemInit.COMPONENT.get(), 1, 2),
-                            new ItemStack(ItemInit.COMPONENT.get(), 1, 7) })));
+                    .setComponents(NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 0),
+                            withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 2),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 7)})));
 
     public static final RegistryObject<CybercraftItem> HEART_UPGRADES = ITEMS.register("heart_upgrades",
             () -> new HeartUpgradeItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.HEART,
                     "defibrillator", "platelets", "medkit", "coupler")
                     .setEssenceCost(10, 5, 15, 10)
                     .setWeights(COMMON, UNCOMMON, UNCOMMON, VERY_COMMON)
-                    .setComponents(NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 0),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 6),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 9) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 0),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 1),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 8) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 3, 1),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 6),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 7) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 1),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 7),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 9) })));
+                    .setComponents(NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 0),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 6),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 9)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 0),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 1),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 8)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 3), 1),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 6),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 7)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 1),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 7),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 9)})));
     /*public static final RegistryObject<Item> CYBER_HEART_SCAVENGED = ITEMS.register("cyberheart_scavenged",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));*/
     /*public static final RegistryObject<Item> HEART_UPGRADES_COUPLER = ITEMS.register("heart_upgrades_coupler",
@@ -209,14 +209,14 @@ public class ItemInit {
     //Lungs
     public static final RegistryObject<CybercraftItem> LUNGS_UPGRADES = ITEMS.register("lungs_upgrades",
             () -> new LungsUpgradeItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.LUNGS,
-                    "oxygen","hyperoxygenation")
+                    "oxygen", "hyperoxygenation")
                     .setEssenceCost(15, 2)
                     .setWeights(UNCOMMON, COMMON)
-                    .setComponents(NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 2, 1),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 8) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 1),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 8),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 9) })));
+                    .setComponents(NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 1),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 8)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 1),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 8),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 9)})));
 
     /*public static final RegistryObject<Item> LUNGS_HYPEROXYGENATION = ITEMS.register("lungs_upgrades_hyperoxygenation",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
@@ -232,16 +232,16 @@ public class ItemInit {
                     "liver_filter", "metabolic", "battery", "adrenaline")
                     .setEssenceCost(5, 5, 10, 5)
                     .setWeights(UNCOMMON, COMMON, VERY_COMMON, UNCOMMON)
-                    .setComponents(NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 3, 1),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 8) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 3, 1),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 3),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 9) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 1),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 8),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 3, 9) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 0),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 1) })));
+                    .setComponents(NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 3), 1),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 8)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 3), 1),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 3),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 9)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 1),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 8),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 3), 9)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 0),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 1)})));
 
     /*public static final RegistryObject<Item> LOWER_ORGANS_UPGRADES_ADRENALINE = ITEMS.register("lower_organs_upgrades_adrenaline",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
@@ -268,22 +268,22 @@ public class ItemInit {
                     .setEssenceCost(12, 12, 0, -25)
                     .setWeights(VERY_COMMON, UNCOMMON, UNCOMMON, RARE)
                     .setComponents(
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 1),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 4),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 5),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 9) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 0),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 2),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 4),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 9) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 1),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 3, 4),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 5) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 3, 1),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 2),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 7),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 8),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 9) })));
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 1),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 4),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 5),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 9)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 0),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 2),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 4),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 9)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 1),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 3), 4),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 5)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 3), 1),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 2),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 7),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 8),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 9)})));
 
     /*public static final RegistryObject<Item> SKIN_FAKE = ITEMS.register("skin_upgrades_fake_skin",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
@@ -309,12 +309,12 @@ public class ItemInit {
                     .setEssenceCost(5, 15)
                     .setWeights(UNCOMMON, RARE)
                     .setComponents(
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 3),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 5),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 3, 7) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 3, 0),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 2),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 5) })));
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 3),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 5),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 3), 7)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 3), 0),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 2),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 5)})));
 
     /*public static final RegistryObject<Item> MUSCLE_REPLACEMENTS = ITEMS.register("muscle_upgrades_muscle_replacements",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
@@ -336,8 +336,8 @@ public class ItemInit {
                     .setEssenceCost(3)
                     .setWeights(RARE)
                     .setComponents(
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 4, 0),
-                                                                new ItemStack(ItemInit.COMPONENT.get(), 2, 4) })));
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 4), 0),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 4)})));
 
     /*public static final RegistryObject<Item> ARM_RIGHT = ITEMS.register("body_part_arm_right",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
@@ -350,19 +350,19 @@ public class ItemInit {
     //Bone
     public static final RegistryObject<CybercraftItem> BONE_UPGRADES = ITEMS.register("bone_upgrades",
             () -> new BoneUpgradeItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.BONE,
-            "bonelacing", "boneflex", "bonebattery")
+                    "bonelacing", "boneflex", "bonebattery")
                     .setEssenceCost(3, 5)
                     .setWeights(UNCOMMON, RARE, UNCOMMON)
                     .setComponents(
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 1),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 2),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 6) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 3, 1),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 2),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 8) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 2, 1),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 8),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 9) })));
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 1),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 2),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 6)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 3), 1),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 2),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 8)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 1),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 8),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 9)})));
     /*public static final RegistryObject<Item> BONES_UPGRADES_BATTERY = ITEMS.register("bone_upgrades_bonebattery",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
     /*public static final RegistryObject<Item> BONES_UPGRADES_BATTERY_SCAVENGED = ITEMS.register("bone_upgrades_bonebattery_scavenged",
@@ -384,18 +384,18 @@ public class ItemInit {
                     .setEssenceCost(2, 2, 1)
                     .setWeights(RARE, RARE, RARE)
                     .setComponents(
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 4, 0),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 3),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 4) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 2, 0),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 2),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 4),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 6),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 8) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 2, 0),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 2),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 4),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 6) })));
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 4), 0),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 3),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 4)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 0),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 2),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 4),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 6),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 8)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 0),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 2),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 4),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 6)})));
 
     /*public static final RegistryObject<Item> HAND_UPGRADES_CLAWS_SCAVENGED = ITEMS.register("hand_upgrades_claws_scavenged",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));*/
@@ -415,11 +415,11 @@ public class ItemInit {
                     .setEssenceCost(3, 2)
                     .setWeights(RARE, RARE)
                     .setComponents(
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 2, 0),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 2) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 3, 2),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 4),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 5) })));
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 0),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 2)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 3), 2),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 4),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 5)})));
 
     /*public static final RegistryObject<Item> LEG_RIGHT = ITEMS.register("body_part_leg_right",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
@@ -444,16 +444,16 @@ public class ItemInit {
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));*/
     public static final RegistryObject<CybercraftItem> FOOT_UPGRADES = ITEMS.register("foot_upgrades",
             () -> new FootUpgradeItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.FOOT, "spurs", "aqua", "wheels")
-                    .setEssenceCost(1, 2 ,3).setWeights(UNCOMMON, RARE, UNCOMMON)
+                    .setEssenceCost(1, 2, 3).setWeights(UNCOMMON, RARE, UNCOMMON)
                     .setComponents(
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 1, 0),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 2),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 4) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 2, 0),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 2),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 9) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 2, 0),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 9) })));
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 0),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 2),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 4)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 0),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 2),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 9)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 0),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 9)})));
 
     /*public static final RegistryObject<Item> FOOT_UPGRADES_WHEELS_SCAVENGED = ITEMS.register("foot_upgrades_wheels_scavenged",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));*/
@@ -468,30 +468,30 @@ public class ItemInit {
     /*public static final RegistryObject<Item> CYBER_LEG_RIGHT_SCAVENGED = ITEMS.register("cyberlimbs_cyberleg_right_scavenged",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));*/
     public static final RegistryObject<CybercraftItem> CYBER_LIMBS = ITEMS.register("cyberlimbs",
-            () -> new CyberLimbItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), new ICybercraft.EnumSlot[] { ICybercraft.EnumSlot.ARM, ICybercraft.EnumSlot.ARM, ICybercraft.EnumSlot.LEG, ICybercraft.EnumSlot.LEG },
+            () -> new CyberLimbItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), new ICybercraft.EnumSlot[]{ICybercraft.EnumSlot.ARM, ICybercraft.EnumSlot.ARM, ICybercraft.EnumSlot.LEG, ICybercraft.EnumSlot.LEG},
                     "cyberarm_left", "cyberarm_right", "cyberleg_left", "cyberleg_right")
                     .setEssenceCost(15, 15, 15, 15)
                     .setComponents(
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 4, 0),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 2),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 4),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 5),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 7) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 4, 0),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 2),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 4),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 5),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 7) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 4, 0),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 2),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 4),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 5),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 7) }),
-                            NNLUtil.fromArray(new ItemStack[] { new ItemStack(ItemInit.COMPONENT.get(), 4, 0),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 2),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 2, 4),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 5),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 1, 7) })));
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 4), 0),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 2),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 4),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 5),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 7)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 4), 0),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 2),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 4),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 5),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 7)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 4), 0),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 2),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 4),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 5),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 7)}),
+                            NNLUtil.fromArray(new ItemStack[]{withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 4), 0),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 2),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 4),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 5),
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 7)})));
     /*public static final RegistryObject<Item> LIMB_LEFT_SCAVENGED = ITEMS.register("cyberlimbs_cyberarm_left_scavenged",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));*/
     /*public static final RegistryObject<Item> LIMB_RIGHT = ITEMS.register("cyberlimbs_cyberarm_right",
@@ -509,9 +509,9 @@ public class ItemInit {
                     .setEssenceCost(15)
                     .setWeights(RARE)
                     .setComponents(
-                            NNLUtil.fromArray(new ItemStack[] {
-                                    new ItemStack(ItemInit.COMPONENT.get(), 3, 6),
-                                    new ItemStack(ItemInit.COMPONENT.get(), 4, 9) })));
+                            NNLUtil.fromArray(new ItemStack[]{
+                                    withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 3), 6),
+                                            withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 4), 9)})));
 
     /*public static final RegistryObject<Item> DENSE_BATTERY_SCAVENGED = ITEMS.register("dense_battery_scavenged",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));*/

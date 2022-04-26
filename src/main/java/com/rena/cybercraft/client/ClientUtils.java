@@ -1,5 +1,6 @@
 package com.rena.cybercraft.client;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.core.network.TriggerActiveAbilityPacket;
@@ -12,16 +13,18 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.client.gui.GuiUtils;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class ClientUtils {
 
-    @OnlyIn(Dist.CLIENT)
-    public static final ModelTrenchCoat modelTrenchCoat = new ModelTrenchCoat(0.51F);
+    //@OnlyIn(Dist.CLIENT)
+    //public static final ModelTrenchCoat modelTrenchCoat = new ModelTrenchCoat(0.51F);
 
     private static final float TEXTURE_SCALE = 1.0F / 256;
     public static void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height)
@@ -48,16 +51,16 @@ public class ClientUtils {
         Minecraft.getInstance().getTextureManager().bind(textures.get(string));
     }
 
-    public static void drawHoveringText(Screen gui, List<String> textLines, int x, int y, FontRenderer font)
+    public static void drawHoveringText(MatrixStack stack, Screen gui, List<ITextComponent> textLines, int x, int y, FontRenderer font)
     {
-        net.minecraftforge.fml.client.config.GuiUtils.drawHoveringText(textLines, x, y, gui.width, gui.height, -1, font);
+        GuiUtils.drawHoveringText(stack, textLines, x, y, gui.width, gui.height, -1, font);
     }
 
-
+    /*
     public static void useActiveItemClient(Entity entity, ItemStack stack)
     {
         CyberwarePacketHandler.INSTANCE.sendToServer(new TriggerActiveAbilityPacket(stack));
         CybercraftAPI.useActiveItem(entity, stack);
-    }
+    }*/
 
 }
