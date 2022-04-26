@@ -1,5 +1,6 @@
-package com.rena.cybercraft.api.hud;
+package com.rena.cybercraft.client.screens.hud;
 
+import com.rena.cybercraft.api.hud.IHudSaveData;
 import net.minecraft.nbt.CompoundNBT;
 
 public class HudNBTData implements IHudSaveData {

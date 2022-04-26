@@ -3,7 +3,7 @@ package com.rena.cybercraft.core.network;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.api.hud.CybercraftHudDataEvent;
-import com.rena.cybercraft.api.hud.HudNBTData;
+import com.rena.cybercraft.client.screens.hud.HudNBTData;
 import com.rena.cybercraft.api.hud.IHudElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
