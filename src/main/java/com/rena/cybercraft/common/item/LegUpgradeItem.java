@@ -4,10 +4,12 @@ import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.common.util.LibConstants;
 import com.rena.cybercraft.common.util.NNLUtil;
+import com.rena.cybercraft.core.init.ItemInit;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -18,7 +20,7 @@ public class LegUpgradeItem extends CybercraftItem{
     private static final int META_JUMP_BOOST = 0;
     private static final int META_FALL_DAMAGE = 1;
 
-    public LegUpgradeItem(Properties properties, EnumSlot[] slots, String... subnames) {
+    public LegUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
         super(properties, slots, subnames);
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -26,8 +28,9 @@ public class LegUpgradeItem extends CybercraftItem{
     @Override
     public NonNullList<NonNullList<ItemStack>> required(ItemStack stack) {
         return NNLUtil.fromArray(new ItemStack[][] {
-                new ItemStack[] { CyberwareContent.cyberlimbs.getCachedStack(CyberLimbItem.META_LEFT_CYBER_LEG),
-                        CyberwareContent.cyberlimbs.getCachedStack(CyberLimbItem.META_RIGHT_CYBER_LEG) }});
+                new ItemStack[] {
+                        ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_LEFT_CYBER_LEG),
+                        ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_RIGHT_CYBER_LEG) }});
     }
 
     @SubscribeEvent
@@ -41,11 +44,11 @@ public class LegUpgradeItem extends CybercraftItem{
         if (!itemStackJumpBoost.isEmpty())
         {
             int numLegs = 0;
-            if (cyberwareUserData.isCybercraftInstalled(CyberwareContent.cyberlimbs.getCachedStack(CyberLimbItem.META_LEFT_CYBER_LEG)))
+            if (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_LEFT_CYBER_LEG)))
             {
                 numLegs++;
             }
-            if (cyberwareUserData.isCybercraftInstalled(CyberwareContent.cyberlimbs.getCachedStack(CyberLimbItem.META_RIGHT_CYBER_LEG)))
+            if (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_RIGHT_CYBER_LEG)))
             {
                 numLegs++;
             }
@@ -53,7 +56,7 @@ public class LegUpgradeItem extends CybercraftItem{
             {
                 if (entityLivingBase.isShiftKeyDown())
                 {
-                    Vec3d vector = entityLivingBase.getLook(0.5F);
+                    Vector3d vector = entityLivingBase.getViewVector(0.5F);
                     double total = Math.abs(vector.z + vector.x);
                     double jump = 0;
                     if (jump >= 1)

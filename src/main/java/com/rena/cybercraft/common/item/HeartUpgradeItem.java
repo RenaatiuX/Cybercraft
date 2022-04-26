@@ -1,6 +1,5 @@
 package com.rena.cybercraft.common.item;
 
-import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.CybercraftUpdateEvent;
 import com.rena.cybercraft.api.ICybercraftUserData;
@@ -38,7 +37,7 @@ public class HeartUpgradeItem extends CybercraftItem {
 
     private static Map<UUID, Integer> timesPlatelets = new HashMap<>();
 
-    public HeartUpgradeItem(Properties properties, EnumSlot[] slots, String... subnames) {
+    public HeartUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
         super(properties, slots, subnames);
         MinecraftForge.EVENT_BUS.register(this);
     }

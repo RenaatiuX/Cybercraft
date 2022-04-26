@@ -1,4 +1,4 @@
-package com.rena.cybercraft.common.item;
+package com.rena.cybercraft.common.util;
 
 import com.rena.cybercraft.Cybercraft;
 import net.minecraft.block.Blocks;

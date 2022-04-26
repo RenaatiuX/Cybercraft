@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 
 public class CreativeBatteryItem extends CybercraftItem implements ISpecialBattery {
 
-    public CreativeBatteryItem(Properties properties, EnumSlot[] slots) {
+    public CreativeBatteryItem(Properties properties, EnumSlot slots) {
         super(properties, slots);
     }
 

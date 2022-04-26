@@ -8,14 +8,18 @@ import com.rena.cybercraft.api.item.EnableDisableHelper;
 import com.rena.cybercraft.api.item.IMenuItem;
 import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.util.NNLUtil;
+import com.rena.cybercraft.core.init.ItemInit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -35,14 +39,14 @@ public class HandUpgradeItem extends CybercraftItem implements IMenuItem {
     private final Item tool_level;
 
     private static final UUID isClawsStrengthAttribute = UUID.fromString("63c32801-94fb-40d4-8bd2-89135c1e44b1");
-    private static final HashMultimap<String, AttributeModifier> multimapClawsStrengthAttribute;
+    private static final HashMultimap<Attribute, AttributeModifier> multimapClawsStrengthAttribute;
 
     static {
         multimapClawsStrengthAttribute = HashMultimap.create();
-        multimapClawsStrengthAttribute.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(isClawsStrengthAttribute, "Claws damage upgrade", 5.5F, 0));
+        multimapClawsStrengthAttribute.put(Attributes.ATTACK_SPEED.getDescriptionId(), new AttributeModifier(isClawsStrengthAttribute, "Claws damage upgrade", 5.5F, 0));
     }
 
-    public HandUpgradeItem(Properties properties, EnumSlot[] slots, String... subnames) {
+    public HandUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
         super(properties, slots, subnames);
         this.tool_level = CybercraftConfig.C_OTHER.fistMiningLevel.get() == 3
                 ? Items.DIAMOND_PICKAXE
@@ -54,8 +58,9 @@ public class HandUpgradeItem extends CybercraftItem implements IMenuItem {
     @Override
     public NonNullList<NonNullList<ItemStack>> required(ItemStack stack) {
         return NNLUtil.fromArray(new ItemStack[][] {
-                new ItemStack[] { CyberwareContent.cyberlimbs.getCachedStack(CyberLimbItem.META_LEFT_CYBER_ARM),
-                        CyberwareContent.cyberlimbs.getCachedStack(CyberLimbItem.META_RIGHT_CYBER_ARM) }});
+                new ItemStack[] {
+                        ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_LEFT_CYBER_ARM),
+                        ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_RIGHT_CYBER_ARM) }});
     }
 
     @Override
@@ -76,10 +81,10 @@ public class HandUpgradeItem extends CybercraftItem implements IMenuItem {
         if (!itemStackClaws.isEmpty())
         {
             boolean wasEquipped = getLastClaws(entityLivingBase);
-            boolean isEquipped = entityLivingBase.getHeldItemMainhand().isEmpty()
-                    && ( entityLivingBase.getPrimaryHand() == EnumHandSide.RIGHT
-                    ? (cyberwareUserData.isCybercraftInstalled(CyberwareContent.cyberlimbs.getCachedStack(CyberLimbItem.META_RIGHT_CYBER_ARM)))
-                    : (cyberwareUserData.isCybercraftInstalled(CyberwareContent.cyberlimbs.getCachedStack(CyberLimbItem.META_LEFT_CYBER_ARM))) );
+            boolean isEquipped = entityLivingBase.getMainHandItem().isEmpty()
+                    && ( entityLivingBase.getMainArm() == HandSide.RIGHT
+                    ? (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_RIGHT_CYBER_ARM)))
+                    : (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_LEFT_CYBER_ARM))) );
             if ( isEquipped
                     && EnableDisableHelper.isEnabled(itemStackClaws) )
             {
@@ -100,7 +105,7 @@ public class HandUpgradeItem extends CybercraftItem implements IMenuItem {
                 lastClaws.put(entityLivingBase.getUUID(), false);
             }
         }
-        else if (entityLivingBase.ticksExisted % 20 == 0)
+        else if (entityLivingBase.tickCount % 20 == 0)
         {
             removeUnarmedDamage(entityLivingBase, itemStackClaws);
             lastClaws.put(entityLivingBase.getUUID(), false);
@@ -114,7 +119,7 @@ public class HandUpgradeItem extends CybercraftItem implements IMenuItem {
         {
             if (entityLivingBase == Minecraft.getInstance().player)
             {
-                clawsTime = Minecraft.getInstance().getRenderPartialTicks() + entityLivingBase.ticksExisted + (delay ? 5 : 0);
+                clawsTime = Minecraft.getInstance().getFrameTime() + entityLivingBase.tickCount + (delay ? 5 : 0);
             }
         }
     }
@@ -132,7 +137,7 @@ public class HandUpgradeItem extends CybercraftItem implements IMenuItem {
     {
         if (stack.getDamageValue() == META_CLAWS)
         {
-            entityLivingBase.getAttributeMap().applyAttributeModifiers(multimapClawsStrengthAttribute);
+            entityLivingBase.getAttributes().addTransientAttributeModifiers(multimapClawsStrengthAttribute);
         }
     }
 
@@ -140,7 +145,7 @@ public class HandUpgradeItem extends CybercraftItem implements IMenuItem {
     {
         if (stack.getDamageValue() == META_CLAWS)
         {
-            entityLivingBase.getAttributeMap().removeAttributeModifiers(multimapClawsStrengthAttribute);
+            entityLivingBase.getAttributes().removeAttributeModifiers(multimapClawsStrengthAttribute);
         }
     }
 
@@ -160,15 +165,15 @@ public class HandUpgradeItem extends CybercraftItem implements IMenuItem {
         if (cyberwareUserData == null) return;
 
         ItemStack itemStackMining = cyberwareUserData.getCybercraft(getCachedStack(META_MINING));
-        boolean rightArm = ( entityPlayer.getPrimaryHand() == EnumHandSide.RIGHT
-                ? (cyberwareUserData.isCybercraftInstalled(CyberwareContent.cyberlimbs.getCachedStack(CyberLimbItem.META_RIGHT_CYBER_ARM)))
-                : (cyberwareUserData.isCybercraftInstalled(CyberwareContent.cyberlimbs.getCachedStack(CyberLimbItem.META_LEFT_CYBER_ARM))) );
+        boolean rightArm = ( entityPlayer.getMainArm() == HandSide.RIGHT
+                ? (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_RIGHT_CYBER_ARM)))
+                : (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_LEFT_CYBER_ARM))) );
         if ( rightArm
                 && !itemStackMining.isEmpty()
-                && entityPlayer.getHeldItemMainhand().isEmpty() )
+                && entityPlayer.getMainHandItem().isEmpty() )
         {
             ItemStack pick = new ItemStack(tool_level);
-            if (pick.canHarvestBlock(event.getTargetBlock()))
+            if (pick.isCorrectToolForDrops(event.getTargetBlock()))
             {
                 event.setCanHarvest(true);
             }
@@ -183,12 +188,12 @@ public class HandUpgradeItem extends CybercraftItem implements IMenuItem {
         if (cyberwareUserData == null) return;
 
         ItemStack itemStackMining = cyberwareUserData.getCybercraft(getCachedStack(META_MINING));
-        boolean rightArm = ( entityPlayer.getPrimaryHand() == EnumHandSide.RIGHT
-                ? (cyberwareUserData.isCybercraftInstalled(CyberwareContent.cyberlimbs.getCachedStack(CyberLimbItem.META_RIGHT_CYBER_ARM)))
-                : (cyberwareUserData.isCybercraftInstalled(CyberwareContent.cyberlimbs.getCachedStack(CyberLimbItem.META_LEFT_CYBER_ARM))) );
+        boolean rightArm = ( entityPlayer.getMainArm() == HandSide.RIGHT
+                ? (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_RIGHT_CYBER_ARM)))
+                : (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_LEFT_CYBER_ARM))) );
         if ( rightArm
                 && !itemStackMining.isEmpty()
-                && entityPlayer.getHeldItemMainhand().isEmpty() )
+                && entityPlayer.getMainHandItem().isEmpty() )
         {
             ItemStack pick = new ItemStack(tool_level);
             event.setNewSpeed(event.getNewSpeed() * pick.getDestroySpeed(entityPlayer.level.getBlockState(event.getPos())));

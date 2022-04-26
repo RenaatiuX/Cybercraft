@@ -3,18 +3,19 @@ package com.rena.cybercraft.common.item;
 import com.rena.cybercraft.api.item.EnableDisableHelper;
 import com.rena.cybercraft.api.item.IHudjack;
 import com.rena.cybercraft.api.item.IMenuItem;
+import com.rena.cybercraft.core.init.ItemInit;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 
 public class EyeUpgradeItem extends CybercraftItem implements IMenuItem, IHudjack {
 
-    public EyeUpgradeItem(Properties properties, EnumSlot[] slots, String... subnames) {
+    public EyeUpgradeItem(Properties properties, EnumSlot slots, String ... subnames) {
         super(properties, slots, subnames);
     }
 
     @Override
     public boolean isIncompatible(ItemStack stack, ItemStack other) {
-        return other.getItem() == CyberwareContent.cybereyes;
+        return other.getItem() == ItemInit.CYBER_EYES.get();
     }
 
     @Override

@@ -27,7 +27,7 @@ public class BoneUpgradeItem extends CybercraftItem {
     private static final UUID idBoneHealthAttribute = UUID.fromString("8bce997a-4c3a-11e6-beb8-9e71128cae77");
     private static final HashMap<Integer, HashMultimap<String, AttributeModifier>> multimapBoneHealthAttributes = new HashMap<>(MAX_STACK_SIZE_LACING + 1);
 
-    public BoneUpgradeItem(Properties properties, EnumSlot[] slots, String... subnames) {
+    public BoneUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
         super(properties, slots, subnames);
     }
 
@@ -64,7 +64,7 @@ public class BoneUpgradeItem extends CybercraftItem {
     {
         if (!(event.getEntity() instanceof LivingEntity)) return;
         LivingEntity livingEntity = (LivingEntity) event.getEntity();
-        if (LivingEntity.tickCount % 20 != 0) return;
+        if (livingEntity.tickCount % 20 != 0) return;
 
         ICybercraftUserData cybercraftUserData = CybercraftAPI.getCapabilityOrNull(livingEntity);
         if (cybercraftUserData != null)

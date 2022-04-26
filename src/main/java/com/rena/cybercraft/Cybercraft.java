@@ -2,15 +2,13 @@ package com.rena.cybercraft;
 
 import com.rena.cybercraft.client.screens.ScannerScreen;
 import com.rena.cybercraft.common.config.CybercraftConfig;
-import com.rena.cybercraft.common.item.CybercraftTab;
+import com.rena.cybercraft.common.util.CybercraftTab;
 import com.rena.cybercraft.core.init.*;
 import com.rena.cybercraft.core.network.CCNetwork;
 import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.IEventBus;

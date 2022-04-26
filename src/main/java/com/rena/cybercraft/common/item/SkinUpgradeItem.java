@@ -3,14 +3,18 @@ package com.rena.cybercraft.common.item;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.CybercraftUpdateEvent;
 import com.rena.cybercraft.api.ICybercraftUserData;
+import com.rena.cybercraft.common.ArmorClass;
+import com.rena.cybercraft.common.util.CybercraftDamageSource;
 import com.rena.cybercraft.common.util.LibConstants;
 import com.rena.cybercraft.core.init.EffectInit;
+import net.minecraft.enchantment.ThornsEnchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -30,7 +34,7 @@ public class SkinUpgradeItem extends CybercraftItem{
     public static final int META_SYNTHETIC_SKIN = 2;
     public static final int META_IMMUNOSUPPRESSANT = 3;
 
-    public SkinUpgradeItem(Properties properties, EnumSlot[] slots, String... subnames) {
+    public SkinUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
         super(properties, slots, subnames);
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -39,7 +43,7 @@ public class SkinUpgradeItem extends CybercraftItem{
     public void handleLivingUpdate(CybercraftUpdateEvent event)
     {
         LivingEntity entityLivingBase = event.getEntityLiving();
-        if (entityLivingBase.ticksExisted % 20 != 0) return;
+        if (entityLivingBase.tickCount % 20 != 0) return;
 
         float lightFactor = getLightFactor(entityLivingBase);
         if (lightFactor <= 0.0F) return;
@@ -87,31 +91,31 @@ public class SkinUpgradeItem extends CybercraftItem{
         ItemStack itemStackImmunosuppressant = cyberwareUserData.getCybercraft(getCachedStack(META_IMMUNOSUPPRESSANT));
         if (!itemStackImmunosuppressant.isEmpty())
         {
-            boolean isPowered = entityLivingBase.ticksExisted % 20 == 0
+            boolean isPowered = entityLivingBase.tickCount % 20 == 0
                     ? cyberwareUserData.usePower(itemStackImmunosuppressant, getPowerConsumption(itemStackImmunosuppressant))
                     : setIsImmunosuppressantPowered.contains(entityLivingBase.getUUID());
 
             if ( !isPowered
                     && entityLivingBase instanceof PlayerEntity
-                    && entityLivingBase.ticksExisted % 100 == 0
-                    && !entityLivingBase.isPotionActive(EffectInit.NEUROPOZYNE.get()) )
+                    && entityLivingBase.tickCount % 100 == 0
+                    && !entityLivingBase.hasEffect(EffectInit.NEUROPOZYNE.get()) )
             {
-                entityLivingBase.attackEntityFrom(EssentialsMissingHandler.lowessence, 2F);
+                entityLivingBase.hurt(CybercraftDamageSource.lowessence, 2F);
             }
 
             if (mapPotions.containsKey(entityLivingBase.getUUID()))
             {
                 Collection<Effect> potionsLastActive = mapPotions.get(entityLivingBase.getUUID());
                 Collection<Effect> currentEffects = entityLivingBase.getActivePotionEffects();
-                for (PotionEffect potionEffectCurrent : currentEffects)
+                for (Effect potionEffectCurrent : currentEffects)
                 {
-                    if ( potionEffectCurrent.getPotion() == MobEffects.POISON
-                            || potionEffectCurrent.getPotion() == MobEffects.HUNGER )
+                    if ( potionEffectCurrent.getEffect() == Effects.POISON
+                            || potionEffectCurrent.getEffect() == Effects.HUNGER )
                     {
                         boolean found = false;
-                        for (PotionEffect potionEffectLast : potionsLastActive)
+                        for (Effect potionEffectLast : potionsLastActive)
                         {
-                            if ( potionEffectLast.getPotion() == potionEffectCurrent.getPotion()
+                            if ( potionEffectLast.getEffect() == potionEffectCurrent.getEffect()
                                     && potionEffectLast.getAmplifier() == potionEffectCurrent.getAmplifier() )
                             {
                                 found = true;
@@ -121,7 +125,7 @@ public class SkinUpgradeItem extends CybercraftItem{
 
                         if (!found)
                         {
-                            entityLivingBase.addEffect(new EffectInstance(potionEffectCurrent.getPotion(),
+                            entityLivingBase.addEffect(new EffectInstance(potionEffectCurrent.getEffect(),
                                     (int) (potionEffectCurrent.getDuration() * 1.8F),
                                     potionEffectCurrent.getAmplifier(),
                                     potionEffectCurrent.getIsAmbient(),
@@ -142,7 +146,7 @@ public class SkinUpgradeItem extends CybercraftItem{
 
             mapPotions.put(entityLivingBase.getUUID(), entityLivingBase.getActivePotionEffects());
         }
-        else if (entityLivingBase.ticksExisted % 20 == 0)
+        else if (entityLivingBase.tickCount % 20 == 0)
         {
             setIsImmunosuppressantPowered.remove(entityLivingBase.getUUID());
             mapPotions.remove(entityLivingBase.getUUID());
@@ -170,13 +174,13 @@ public class SkinUpgradeItem extends CybercraftItem{
                 ArmorClass armorClass = ArmorClass.get(entityLivingBase);
                 if (armorClass == ArmorClass.HEAVY) return;
 
-                Random random = entityLivingBase.getRNG();
+                Random random = entityLivingBase.getRandom();
                 Entity attacker = event.getSource().getTrueSource();
-                if (EnchantmentThorns.shouldHit(3, random))
+                if (ThornsEnchantment.shouldHit(3, random))
                 {
                     if (attacker != null)
                     {
-                        attacker.attackEntityFrom(DamageSource.causeThornsDamage(entityLivingBase), (float) EnchantmentThorns.getDamage(2, random));
+                        attacker.hurt(DamageSource.thorns(entityLivingBase), (float) ThornsEnchantment.getDamage(2, random));
                     }
                 }
             }

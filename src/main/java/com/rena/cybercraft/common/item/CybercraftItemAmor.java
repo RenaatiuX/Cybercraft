@@ -1,6 +1,7 @@
 package com.rena.cybercraft.common.item;
 
 import com.rena.cybercraft.api.item.IDeconstructable;
+import com.rena.cybercraft.common.util.CybercraftArmorMaterial;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;

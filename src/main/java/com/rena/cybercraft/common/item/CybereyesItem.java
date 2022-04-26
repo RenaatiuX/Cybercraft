@@ -21,7 +21,7 @@ public class CybereyesItem extends CybercraftItem{
 
     private static boolean isBlind;
 
-    public CybereyesItem(Properties properties, EnumSlot[] slots) {
+    public CybereyesItem(Properties properties, EnumSlot slots) {
         super(properties, slots);
     }
 
@@ -55,7 +55,7 @@ public class CybereyesItem extends CybercraftItem{
     public void handleMissingEssentials(CybercraftUpdateEvent event)
     {
         LivingEntity entityLivingBase = event.getEntityLiving();
-        if (entityLivingBase.ticksExisted % 20 != 0) return;
+        if (entityLivingBase.tickCount % 20 != 0) return;
 
         ICybercraftUserData cyberwareUserData = event.getCybercrafteUserData();
 

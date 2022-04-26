@@ -3,19 +3,20 @@ package com.rena.cybercraft.common.item;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.ISpecialBattery;
 import com.rena.cybercraft.common.util.LibConstants;
+import com.rena.cybercraft.core.init.ItemInit;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
 public class DenseBatteryItem extends CybercraftItem implements ISpecialBattery {
 
-    public DenseBatteryItem(Properties properties, EnumSlot[] slots) {
+    public DenseBatteryItem(Properties properties, EnumSlot slots) {
         super(properties, slots);
     }
 
     @Override
     public boolean isIncompatible(ItemStack stack, ItemStack other)
     {
-        return other.getItem() == CyberwareContent.lowerOrgansUpgrades
+        return other.getItem() == ItemInit.LOWER_ORGANS_UPGRADES.get()
                 && stack.getDamageValue() == LowerOrgansUpgradeItem.META_BATTERY;
     }
 

@@ -1,4 +1,4 @@
-package com.rena.cybercraft.common.item;
+package com.rena.cybercraft.common.util;
 
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.item.ICybercraft;
@@ -24,7 +24,7 @@ public class CybercraftTab extends ItemGroup{
 
     @Override
     public ItemStack makeIcon() {
-        return new ItemStack(ItemInit.BRAIN.get());
+        return new ItemStack(ItemInit.BRAIN_UPGRADES.get());
     }
 
    @Override

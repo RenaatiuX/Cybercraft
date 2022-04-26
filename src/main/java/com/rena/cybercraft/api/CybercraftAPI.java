@@ -235,7 +235,7 @@ public final class CybercraftAPI {
      * best option. This version of the method links a specific meta value.
      *
      * @param stack	The ItemStack to link
-     * @param link	An instance of ICyberware to link it to
+     * @param link	An instance of ICybercraft to link it to
      */
     public static void linkCybercraft(@Nonnull ItemStack stack, ICybercraft link)
     {

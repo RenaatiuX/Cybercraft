@@ -38,8 +38,9 @@ public class FootUpgradeItem extends CybercraftItem implements IMenuItem {
         if (stack.getDamageValue() != META_AQUA) return NonNullList.create();
 
         return NNLUtil.fromArray(new ItemStack[][] {
-                new ItemStack[] { ItemInit.CYBER_LEG_LEFT.get().getCachedStack(CyberLimbItem.META_LEFT_CYBER_LEG),
-                        ItemInit.CYBER_LEG_LEFT.get().getCachedStack(CyberLimbItem.META_RIGHT_CYBER_LEG) }});
+                new ItemStack[] {
+                        ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_LEFT_CYBER_LEG),
+                        ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_RIGHT_CYBER_LEG) }});
     }
 
     @SubscribeEvent
@@ -83,22 +84,22 @@ public class FootUpgradeItem extends CybercraftItem implements IMenuItem {
             if (!itemStackAqua.isEmpty())
             {
                 int numLegs = 0;
-                if (cyberwareUserData.isCybercraftInstalled(CyberwareContent.cyberlimbs.getCachedStack(CyberLimbItem.META_LEFT_CYBER_LEG)))
+                if (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_LEFT_CYBER_LEG)))
                 {
                     numLegs++;
                 }
-                if (cyberwareUserData.isCybercraftInstalled(CyberwareContent.cyberlimbs.getCachedStack(CyberLimbItem.META_RIGHT_CYBER_LEG)))
+                if (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_RIGHT_CYBER_LEG)))
                 {
                     numLegs++;
                 }
                 boolean wasPowered = mapIsAquaPowered.computeIfAbsent(entityLivingBase.getUUID(), k -> Boolean.TRUE);
 
-                boolean isPowered = entityLivingBase.ticksExisted % 20 == 0
+                boolean isPowered = entityLivingBase.tickCount % 20 == 0
                         ? cyberwareUserData.usePower(itemStackAqua, getPowerConsumption(itemStackAqua))
                         : wasPowered;
                 if (isPowered)
                 {
-                    if (entityLivingBase.moveForward > 0)
+                    if (entityLivingBase.zza > 0)
                     {
                         entityLivingBase.moveRelative(0F, 0F, numLegs * 0.4F, 0.075F);
                     }
@@ -107,7 +108,7 @@ public class FootUpgradeItem extends CybercraftItem implements IMenuItem {
                 mapIsAquaPowered.put(entityLivingBase.getUUID(), isPowered);
             }
         }
-        else if (entityLivingBase.ticksExisted % 20 == 0)
+        else if (entityLivingBase.tickCount % 20 == 0)
         {
             mapIsAquaPowered.remove(entityLivingBase.getUUID());
         }
@@ -118,22 +119,22 @@ public class FootUpgradeItem extends CybercraftItem implements IMenuItem {
             boolean wasPowered = getCountdownWheelsPowered(entityLivingBase) > 0;
 
             boolean isPowered = EnableDisableHelper.isEnabled(itemStackWheels)
-                    && ( entityLivingBase.ticksExisted % 20 == 0
+                    && ( entityLivingBase.tickCount % 20 == 0
                     ? cyberwareUserData.usePower(itemStackWheels, getPowerConsumption(itemStackWheels))
                     : wasPowered );
             if (isPowered)
             {
                 if (!mapStepHeight.containsKey(entityLivingBase.getUUID()))
                 {
-                    mapStepHeight.put(entityLivingBase.getUUID(), Math.max(entityLivingBase.stepHeight, .6F));
+                    mapStepHeight.put(entityLivingBase.getUUID(), Math.max(entityLivingBase.maxUpStep, .6F));
                 }
-                entityLivingBase.stepHeight = 1F;
+                entityLivingBase.maxUpStep = 1F;
 
                 mapCountdownWheelsPowered.put(entityLivingBase.getUUID(), 10);
             }
             else if (mapStepHeight.containsKey(entityLivingBase.getUUID()) && wasPowered)
             {
-                entityLivingBase.stepHeight = mapStepHeight.get(entityLivingBase.getUUID());
+                entityLivingBase.maxUpStep = mapStepHeight.get(entityLivingBase.getUUID());
 
                 mapCountdownWheelsPowered.put(entityLivingBase.getUUID(), getCountdownWheelsPowered(entityLivingBase) - 1);
             }
@@ -144,7 +145,7 @@ public class FootUpgradeItem extends CybercraftItem implements IMenuItem {
         }
         else if (mapStepHeight.containsKey(entityLivingBase.getUUID()))
         {
-            entityLivingBase.stepHeight = mapStepHeight.get(entityLivingBase.getUUID());
+            entityLivingBase.maxUpStep = mapStepHeight.get(entityLivingBase.getUUID());
 
             int countdownWheelsPowered = getCountdownWheelsPowered(entityLivingBase) - 1;
             if (countdownWheelsPowered == 0)

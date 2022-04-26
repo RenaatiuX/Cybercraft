@@ -1,5 +1,6 @@
 package com.rena.cybercraft.common.item;
 
+import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.item.IDeconstructable;
 import com.rena.cybercraft.common.util.NNLUtil;
 import com.rena.cybercraft.core.init.ItemInit;
@@ -24,9 +25,9 @@ public class SwordCybercraftItem extends SwordItem implements IDeconstructable {
     public NonNullList<ItemStack> getComponents(ItemStack stack) {
         return NNLUtil.fromArray(new ItemStack[]
                 {
-                        new ItemStack(Items.IRON_INGOT, 2, 0),
-                        new ItemStack(ItemInit.COMPONENT.get(), 1, 2),
-                        new ItemStack(ItemInit.COMPONENT.get(), 1, 4)
+                        CybercraftAPI.withMetaData(new ItemStack(Items.IRON_INGOT, 2), 0),
+                        CybercraftAPI.withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 2),
+                        CybercraftAPI.withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 4)
                 });
     }
 }

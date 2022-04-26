@@ -10,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
@@ -27,7 +28,7 @@ public class LowerOrgansUpgradeItem extends CybercraftItem implements IMenuItem 
     public static final int META_BATTERY = 2;
     public static final int META_ADRENALINE_PUMP = 3;
 
-    public LowerOrgansUpgradeItem(Properties properties, EnumSlot[] slots, String... subnames) {
+    public LowerOrgansUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
         super(properties, slots, subnames);
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -43,14 +44,14 @@ public class LowerOrgansUpgradeItem extends CybercraftItem implements IMenuItem 
         ItemStack stack = event.getItem();
 
         if ( !stack.isEmpty()
-                && ( stack.getItem().getItemUseAction(stack) == EnumAction.EAT
-                || stack.getItem().getItemUseAction(stack) == EnumAction.DRINK ) )
+                && ( stack.getItem().getUseAnimation(stack) == UseAction.EAT
+                || stack.getItem().getUseAnimation(stack) == UseAction.DRINK ) )
         {
             ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityPlayer);
             if ( cyberwareUserData != null
                     && cyberwareUserData.isCybercraftInstalled(getCachedStack(META_LIVER_FILTER)))
             {
-                mapPotions.put(entityPlayer.getUUID(), new ArrayList<>(entityPlayer.getActivePotionEffects()));
+                mapPotions.put(entityPlayer.getUUID(), new ArrayList<>(entityPlayer.getActiveEffects()));
             }
         }
     }
@@ -64,15 +65,15 @@ public class LowerOrgansUpgradeItem extends CybercraftItem implements IMenuItem 
         ItemStack stack = event.getItem();
 
         if ( !stack.isEmpty()
-                && ( stack.getItem().getItemUseAction(stack) == EnumAction.EAT
-                || stack.getItem().getItemUseAction(stack) == EnumAction.DRINK ) )
+                && ( stack.getItem().getUseAnimation(stack) == UseAction.EAT
+                || stack.getItem().getUseAnimation(stack) == UseAction.DRINK ) )
         {
             ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityPlayer);
             if ( cyberwareUserData != null
                     && cyberwareUserData.isCybercraftInstalled(getCachedStack(META_LIVER_FILTER)))
             {
-                Collection<Effect> potionEffectsRemoved = new ArrayList<>(entityPlayer.getActivePotionEffects());
-                for (Effect potionEffect : potionEffectsRemoved)
+                Collection<EffectInstance> potionEffectsRemoved = new ArrayList<>(entityPlayer.getActiveEffects());
+                for (EffectInstance potionEffect : potionEffectsRemoved)
                 {
                     if (potionEffect.getEffect().isBadEffect())
                     {
@@ -85,7 +86,7 @@ public class LowerOrgansUpgradeItem extends CybercraftItem implements IMenuItem 
                 {
                     for (Effect potionEffectToAdd : potionEffectsToAdd)
                     {
-                        for (Effect potionEffectRemoved : potionEffectsRemoved)
+                        for (EffectInstance potionEffectRemoved : potionEffectsRemoved)
                         {
                             if (potionEffectRemoved.getEffect() == potionEffectToAdd.getEffect())
                             {
@@ -103,7 +104,7 @@ public class LowerOrgansUpgradeItem extends CybercraftItem implements IMenuItem 
     public void power(CybercraftUpdateEvent event)
     {
         LivingEntity entityLivingBase = event.getEntityLiving();
-        if (entityLivingBase.ticksExisted % 20 != 0) return;
+        if (entityLivingBase.tickCount % 20 != 0) return;
 
         ICybercraftUserData cyberwareUserData = event.getCybercrafteUserData();
 

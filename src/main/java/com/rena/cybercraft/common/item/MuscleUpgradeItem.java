@@ -11,9 +11,12 @@ import com.rena.cybercraft.common.util.LibConstants;
 import com.rena.cybercraft.core.network.SwitchHeldItemAndRotationPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.CombatTracker;
@@ -35,17 +38,17 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
 
     private static final UUID idMuscleSpeedAttribute = UUID.fromString("f0ab4766-4be1-11e6-beb8-9e71128cae77");
     private static final UUID idMuscleDamageAttribute = UUID.fromString("f63d6916-4be1-11e6-beb8-9e71128cae77");
-    private static final HashMultimap<String, AttributeModifier> multimapMuscleSpeedAttribute;
-    private static final HashMultimap<String, AttributeModifier> multimapMuscleDamageAttribute;
+    private static final HashMultimap<Attribute, AttributeModifier> multimapMuscleSpeedAttribute;
+    private static final HashMultimap<Attribute, AttributeModifier> multimapMuscleDamageAttribute;
 
     static {
         multimapMuscleSpeedAttribute = HashMultimap.create();
-        multimapMuscleSpeedAttribute.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(idMuscleSpeedAttribute, "Muscle speed upgrade", 1.5F, 0));
+        multimapMuscleSpeedAttribute.put(Attributes.ATTACK_SPEED.getDescriptionId(), new AttributeModifier(idMuscleSpeedAttribute, "Muscle speed upgrade", 1.5F, 0));
         multimapMuscleDamageAttribute = HashMultimap.create();
-        multimapMuscleDamageAttribute.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(idMuscleDamageAttribute, "Muscle damage upgrade", 3F, 0));
+        multimapMuscleDamageAttribute.put(Attributes.ATTACK_DAMAGE.getDescriptionId(), new AttributeModifier(idMuscleDamageAttribute, "Muscle damage upgrade", 3F, 0));
     }
 
-    public MuscleUpgradeItem(Properties properties, EnumSlot[] slots, String... subnames) {
+    public MuscleUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
         super(properties, slots, subnames);
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -55,11 +58,11 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
     {
         if (stack.getDamageValue() == META_WIRED_REFLEXES)
         {
-            entityLivingBase.getAttributeMap().applyAttributeModifiers(multimapMuscleSpeedAttribute);
+            entityLivingBase.getAttributes().addTransientAttributeModifiers(multimapMuscleSpeedAttribute);
         }
         else if (stack.getDamageValue() == META_MUSCLE_REPLACEMENTS)
         {
-            entityLivingBase.getAttributeMap().applyAttributeModifiers(multimapMuscleDamageAttribute);
+            entityLivingBase.getAttributes().addTransientAttributeModifiers(multimapMuscleDamageAttribute);
         }
     }
 
@@ -68,11 +71,11 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
     {
         if (stack.getDamageValue() == META_WIRED_REFLEXES)
         {
-            entityLivingBase.getAttributeMap().removeAttributeModifiers(multimapMuscleSpeedAttribute);
+            entityLivingBase.getAttributes().removeAttributeModifiers(multimapMuscleSpeedAttribute);
         }
         else if (stack.getDamageValue() == META_MUSCLE_REPLACEMENTS)
         {
-            entityLivingBase.getAttributeMap().removeAttributeModifiers(multimapMuscleDamageAttribute);
+            entityLivingBase.getAttributes().removeAttributeModifiers(multimapMuscleDamageAttribute);
         }
     }
 
@@ -105,17 +108,17 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
                 Entity attacker = source.getTrueSource();
                 int lastAttacked = ReflectionHelper.getPrivateValue(CombatTracker.class, entityPlayer.getCombatTracker(), 2);
 
-                if (entityPlayer.ticksExisted - lastAttacked > 120)
+                if (entityPlayer.tickCount - lastAttacked > 120)
                 {
                     int indexWeapon = -1;
-                    ItemStack itemMainhand = entityPlayer.getHeldItemMainhand();
+                    ItemStack itemMainhand = entityPlayer.getMainHandItem();
                     if (!itemMainhand.isEmpty())
                     {
-                        if ( entityPlayer.getItemInUseCount() > 0
+                        if ( entityPlayer.getUseItemRemainingTicks() > 0
                                 || itemMainhand.getItem() instanceof SwordItem
-                                || itemMainhand.getItem().getAttributeModifiers(EntityEquipmentSlot.MAINHAND, itemMainhand).containsKey(SharedMonsterAttributes.ATTACK_DAMAGE.getName()) )
+                                || itemMainhand.getItem().getAttributeModifiers(EquipmentSlotType.MAINHAND, itemMainhand).containsKey(Attributes.ATTACK_DAMAGE) )
                         {
-                            indexWeapon = entityPlayer.inventory.currentItem;
+                            indexWeapon = entityPlayer.inventory.selected;
                         }
                     }
 
@@ -125,15 +128,15 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
 
                         for (int indexHotbar = 0; indexHotbar < 10; indexHotbar++)
                         {
-                            if (indexHotbar != entityPlayer.inventory.currentItem)
+                            if (indexHotbar != entityPlayer.inventory.selected)
                             {
-                                ItemStack potentialWeapon = entityPlayer.inventory.mainInventory.get(indexHotbar);
+                                ItemStack potentialWeapon = entityPlayer.inventory.items.get(indexHotbar);
                                 if (!potentialWeapon.isEmpty())
                                 {
-                                    Multimap<String, AttributeModifier> modifiers = potentialWeapon.getItem().getAttributeModifiers(EntityEquipmentSlot.MAINHAND, potentialWeapon);
-                                    if (modifiers.containsKey(SharedMonsterAttributes.ATTACK_DAMAGE.getName()))
+                                    Multimap<Attribute, AttributeModifier> modifiers = potentialWeapon.getItem().getAttributeModifiers(EquipmentSlotType.MAINHAND, potentialWeapon);
+                                    if (modifiers.containsKey(Attributes.ATTACK_DAMAGE))
                                     {
-                                        double damage = modifiers.get(SharedMonsterAttributes.ATTACK_DAMAGE.getName()).iterator().next().getAmount();
+                                        double damage = modifiers.get(Attributes.ATTACK_DAMAGE).iterator().next().getAmount();
 
                                         if (damage > mostDamage || indexWeapon == -1)
                                         {
@@ -148,18 +151,18 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
 
                     if (indexWeapon != -1)
                     {
-                        entityPlayer.inventory.currentItem = indexWeapon;
+                        entityPlayer.inventory.selected = indexWeapon;
 
-                        CyberwarePacketHandler.INSTANCE.sendTo(new SwitchHeldItemAndRotationPacket(indexWeapon, entityPlayer.getEntityId(),
-                                        rank > 2 && attacker != null ? attacker.getEntityId() : -1 ),
+                        CyberwarePacketHandler.INSTANCE.sendTo(new SwitchHeldItemAndRotationPacket(indexWeapon, entityPlayer.getId(),
+                                        rank > 2 && attacker != null ? attacker.getId() : -1 ),
                                 (ServerPlayerEntity) entityPlayer);
 
                         ServerWorld worldServer = (ServerWorld) entityPlayer.level;
 
                         for (PlayerEntity trackingPlayer : worldServer.getEntityTracker().getTrackingPlayers(entityPlayer))
                         {
-                            CyberwarePacketHandler.INSTANCE.sendTo(new SwitchHeldItemAndRotationPacket(indexWeapon, entityPlayer.getEntityId(),
-                                            rank > 2 && attacker != null ? attacker.getEntityId() : -1 ),
+                            CyberwarePacketHandler.INSTANCE.sendTo(new SwitchHeldItemAndRotationPacket(indexWeapon, entityPlayer.getId(),
+                                            rank > 2 && attacker != null ? attacker.getId() : -1 ),
                                     (ServerPlayerEntity) trackingPlayer);
                         }
                     }
@@ -181,7 +184,7 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
         if (!itemStackMuscleReplacement.isEmpty())
         {
             boolean wasPowered = setIsStrengthPowered.contains(entityLivingBase.getUUID());
-            boolean isPowered = entityLivingBase.ticksExisted % 20 == 0
+            boolean isPowered = entityLivingBase.tickCount % 20 == 0
                     ? cyberwareUserData.usePower(itemStackMuscleReplacement, getPowerConsumption(itemStackMuscleReplacement))
                     : wasPowered;
             if (isPowered)
@@ -205,13 +208,13 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
                 setIsStrengthPowered.remove(entityLivingBase.getUUID());
             }
         }
-        else if (entityLivingBase.ticksExisted % 20 == 0)
+        else if (entityLivingBase.tickCount % 20 == 0)
         {
             onRemoved(entityLivingBase, itemStackMuscleReplacement);
             setIsStrengthPowered.remove(entityLivingBase.getUUID());
         }
 
-        if (entityLivingBase.ticksExisted % 20 == 0)
+        if (entityLivingBase.tickCount % 20 == 0)
         {
             ItemStack itemStackWiredReflexes = cyberwareUserData.getCybercraft(getCachedStack(META_WIRED_REFLEXES));
             if ( !itemStackWiredReflexes.isEmpty()

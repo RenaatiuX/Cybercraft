@@ -26,7 +26,7 @@ public class LungsUpgradeItem extends CybercraftItem{
     private static final int META_COMPRESSED_OXYGEN       = 0;
     private static final int META_HYPEROXYGENATION_BOOST  = 1;
 
-    public LungsUpgradeItem(Properties properties, EnumSlot[] slots, String... subnames) {
+    public LungsUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
         super(properties, slots, subnames);
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -119,7 +119,7 @@ public class LungsUpgradeItem extends CybercraftItem{
             {
                 boolean wasPowered = getIsOxygenPowered(entityLivingBase);
                 int ranks = itemStackHyperoxygenationBoost.getCount();
-                boolean isPowered = entityLivingBase.ticksExisted % 20 == 0
+                boolean isPowered = entityLivingBase.tickCount % 20 == 0
                         ? cyberwareUserData.usePower(itemStackHyperoxygenationBoost, getPowerConsumption(itemStackHyperoxygenationBoost))
                         : wasPowered;
                 if (isPowered)

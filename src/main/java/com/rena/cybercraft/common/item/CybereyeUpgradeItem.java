@@ -8,6 +8,7 @@ import com.rena.cybercraft.api.item.ICybercraft;
 import com.rena.cybercraft.api.item.IHudjack;
 import com.rena.cybercraft.api.item.IMenuItem;
 import com.rena.cybercraft.common.util.NNLUtil;
+import com.rena.cybercraft.core.init.ItemInit;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -17,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.potion.Potions;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -38,7 +40,7 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
     public static final int META_TARGETING = 3;
     public static final int META_ZOOM = 4;
 
-    public CybereyeUpgradeItem(Properties properties, EnumSlot[] slots, String... subnames) {
+    public CybereyeUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
         super(properties, slots, subnames);
     }
 
@@ -47,12 +49,12 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
         if (stack.getDamageValue() == META_TARGETING)
         {
             return NNLUtil.fromArray(new ItemStack[][] {
-                    new ItemStack[] { CyberwareContent.cybereyes.getCachedStack(0) },
+                    new ItemStack[] { ItemInit.CYBER_EYES.get().getCachedStack(0) },
                     new ItemStack[] { getCachedStack(META_HUDJACK) }});
         }
 
         return NNLUtil.fromArray(new ItemStack[][] {
-                new ItemStack[] { CyberwareContent.cybereyes.getCachedStack(0) }});
+                new ItemStack[] { ItemInit.CYBER_EYES.get().getCachedStack(0) }});
     }
 
     private static int cache_tickExisted = -1;
@@ -68,9 +70,9 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
         PlayerEntity entityPlayer = Minecraft.getInstance().player;
         if (entityPlayer == null) return;
 
-        if (entityPlayer.ticksExisted != cache_tickExisted)
+        if (entityPlayer.tickCount != cache_tickExisted)
         {
-            cache_tickExisted = entityPlayer.ticksExisted;
+            cache_tickExisted = entityPlayer.tickCount;
 
             ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityPlayer);
             if (cyberwareUserData == null) return;
@@ -89,11 +91,11 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
             if (event.phase == TickEvent.Phase.START)
             {
                 entitiesInRange.clear();
-                List<LivingEntity> entityLivingBases = entityPlayer.level.getEntitiesWithinAABB(LivingEntity.class, cache_aabbHighlight);
+                List<LivingEntity> entityLivingBases = entityPlayer.level.getEntitiesOfClass(LivingEntity.class, cache_aabbHighlight);
                 double rangeSq = HIGHLIGHT_RANGE * HIGHLIGHT_RANGE;
                 for (LivingEntity entityLivingBase : entityLivingBases)
                 {
-                    if ( entityPlayer.getDistanceSq(entityLivingBase) <= rangeSq
+                    if ( entityPlayer.distanceToSqr(entityLivingBase) <= rangeSq
                             && entityLivingBase != entityPlayer
                             && !entityLivingBase.isGlowing() )
                     {
@@ -149,7 +151,7 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
         }
         else
         {
-            Effect effect = entityLivingBase.getActivePotionEffect(MobEffects.NIGHT_VISION);
+            EffectInstance effect = entityLivingBase.getEffect(Effects.NIGHT_VISION);
             if (effect != null && effect.getAmplifier() == 53)
             {
                 entityLivingBase.removeEffect(Effects.NIGHT_VISION);

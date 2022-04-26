@@ -110,6 +110,8 @@
   "item.cybercraft.surgery_chamber":"Surgery Chamber",
   "item.cybercraft.engineering_table":"Cybercraft Engineering Table",
 
+  "item.cybercraft.blueprint.not_blank.name":"%1$s Blueprint",
+
   "_comment": "Block",
   "block.cybercraft.scanner": "Scanner",
   "block.cybercraft.charger": "Charger",
@@ -124,5 +126,9 @@
   "_comment": "Tooltips",
   "tooltip.cybercraft.exp_capsule.before": "",
   "tooltip.cybercraft.exp_capsule.after": "recorded experiences stored",
-  "tooltip.cybercraft.neuropozyne":"Anti-Rejection (20:00)"
+  "tooltip.cybercraft.neuropozyne":"Anti-Rejection (20:00)",
+
+  "tooltip.cybercraft.blueprint": "Creates %1$s",
+  "tooltip.cybercraft.craft_blueprint": "Craft with a piece of Cyberware",
+  "tooltip.cybercraft.shift_prompt": "Hold SNEAK for more info"
 }
