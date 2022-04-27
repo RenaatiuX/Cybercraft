@@ -1,16 +1,30 @@
 package com.rena.cybercraft.client.events;
 
 import com.rena.cybercraft.Cybercraft;
+import com.rena.cybercraft.api.CybercraftAPI;
+import com.rena.cybercraft.api.item.ICybercraft;
 import com.rena.cybercraft.common.config.CybercraftConfig;
+import com.rena.cybercraft.common.item.BlueprintItem;
 import com.rena.cybercraft.common.item.CybercraftArmorItem;
+import com.rena.cybercraft.common.item.CybercraftBaseItem;
+import com.rena.cybercraft.common.item.CybercraftItem;
 import com.rena.cybercraft.core.init.ItemInit;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.rena.cybercraft.api.CybercraftAPI.withMetaData;
 
 @Mod.EventBusSubscriber(modid = Cybercraft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientEvents {
@@ -31,7 +45,7 @@ public class ClientEvents {
 
     }
 
-    /*private void registerRenders(Item item)
+    /*private static void registerRenders(Item item)
     {
         if (item instanceof CybercraftItem)
         {
@@ -45,7 +59,7 @@ public class ClientEvents {
                     for (ICybercraft.Quality quality : ICybercraft.Quality.qualities)
                     {
                         if ( quality.getSpriteSuffix() != null
-                                && ware.canHoldQuality(new ItemStack(ware, 1, indexSubname), quality) )
+                                && ware.canHoldQuality(withMetaData(new ItemStack(ware, 1), indexSubname), quality) )
                         {
                             models.add(new ModelResourceLocation(name + "_" + quality.getSpriteSuffix(), "inventory"));
                         }
@@ -99,7 +113,7 @@ public class ClientEvents {
         else
         {
             ModelLoader.setCustomModelResourceLocation(item,
-                    0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+                    0, new ModelResourceLocation(item, "inventory"));
         }
     }*/
 
