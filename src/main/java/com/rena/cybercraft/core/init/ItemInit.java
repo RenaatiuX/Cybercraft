@@ -35,6 +35,10 @@ public class ItemInit {
     public static final RegistryObject<CybercraftItemAmor> TRENCHCOAT = ITEMS.register("trenchcoat",
             () -> new CybercraftItemAmor(CybercraftArmorMaterial.TRENCHCOAT, EquipmentSlotType.CHEST, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
 
+    //Component
+    public static final RegistryObject<Item> COMPONENT = ITEMS.register("component",
+            () -> new CybercraftBaseItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), "actuator", "reactor", "titanium", "ssc", "plating", "fiberoptics", "fullerene", "synthnerves", "storage", "microelectric"));
+
     //Weapon
     public static final RegistryObject<Item> KATANA = ITEMS.register("katana",
             () -> new SwordCybercraftItem(CybercraftItemTier.KATANA, 4, -2.5F, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
@@ -517,9 +521,6 @@ public class ItemInit {
     /*public static final RegistryObject<Item> DENSE_BATTERY_SCAVENGED = ITEMS.register("dense_battery_scavenged",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));*/
 
-    //Component
-    public static final RegistryObject<Item> COMPONENT = ITEMS.register("component",
-            () -> new CybercraftBaseItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), "actuator", "reactor", "titanium", "ssc", "plating", "fiberoptics", "fullerene", "synthnerves", "storage", "microelectric"));
     /*public static final RegistryObject<Item> COMPONENT_FIBER_OPTICS = ITEMS.register("component_fiberoptics",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
     public static final RegistryObject<Item> COMPONENT_FULLERENE = ITEMS.register("component_fullerene",
