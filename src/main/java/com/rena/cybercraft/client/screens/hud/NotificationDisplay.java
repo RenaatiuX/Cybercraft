@@ -22,7 +22,7 @@ public class NotificationDisplay extends HudElementBase {
 
     public NotificationDisplay()
     {
-        super("cyberware:notification");
+        super("cybercraft:notification");
         setDefaultX(5);
         setDefaultY(5 - 20);
         setWidth(5 * 18);

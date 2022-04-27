@@ -27,13 +27,13 @@ public class ItemInit {
 
     //Armor
     public static final RegistryObject<Item> JACKET = ITEMS.register("jacket",
-            () -> new ArmorItem(CybercraftArmorMaterial.JACKET, EquipmentSlotType.CHEST, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
+            () -> new CybercraftArmorItem(CybercraftArmorMaterial.JACKET, EquipmentSlotType.CHEST, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
     public static final RegistryObject<Item> SHADES = ITEMS.register("shades",
-            () -> new ArmorItem(CybercraftArmorMaterial.SHADES, EquipmentSlotType.HEAD, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
+            () -> new CybercraftArmorItem(CybercraftArmorMaterial.SHADES, EquipmentSlotType.HEAD, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
     public static final RegistryObject<Item> SHADES2 = ITEMS.register("shades2",
-            () -> new ArmorItem(CybercraftArmorMaterial.SHADES2, EquipmentSlotType.HEAD, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
-    public static final RegistryObject<CybercraftItemAmor> TRENCHCOAT = ITEMS.register("trenchcoat",
-            () -> new CybercraftItemAmor(CybercraftArmorMaterial.TRENCHCOAT, EquipmentSlotType.CHEST, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
+            () -> new CybercraftArmorItem(CybercraftArmorMaterial.SHADES2, EquipmentSlotType.HEAD, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
+    public static final RegistryObject<CybercraftArmorItem> TRENCHCOAT = ITEMS.register("trenchcoat",
+            () -> new CybercraftArmorItem(CybercraftArmorMaterial.TRENCHCOAT, EquipmentSlotType.CHEST, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
 
     //Component
     public static final RegistryObject<Item> COMPONENT = ITEMS.register("component",

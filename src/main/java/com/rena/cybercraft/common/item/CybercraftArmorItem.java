@@ -10,9 +10,9 @@ import net.minecraft.util.NonNullList;
 import javax.annotation.Nonnull;
 
 
-public class CybercraftItemAmor extends ArmorItem implements IDeconstructable, IDyeableArmorItem {
+public class CybercraftArmorItem extends ArmorItem implements IDeconstructable, IDyeableArmorItem {
 
-    public CybercraftItemAmor(IArmorMaterial material, EquipmentSlotType equipment, Properties properties) {
+    public CybercraftArmorItem(IArmorMaterial material, EquipmentSlotType equipment, Properties properties) {
         super(material, equipment, properties);
     }
 
