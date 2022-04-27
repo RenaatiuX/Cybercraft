@@ -69,6 +69,11 @@ public class VanillaWares {
             return true;
         }
 
+        @Override
+        public List<ITextComponent> getInfo(ItemStack stack) {
+            return null;
+        }
+
         @SubscribeEvent
         public void handleSpiderNightVision(CybercraftUpdateEvent event)
         {
@@ -90,7 +95,7 @@ public class VanillaWares {
             }
         }
 
-        @OnlyIn(Dist.CLIENT)
+        /*@OnlyIn(Dist.CLIENT)
         @SubscribeEvent
         public void onDrawScreenPost(RenderGameOverlayEvent.Pre event)
         {
@@ -104,10 +109,10 @@ public class VanillaWares {
                     GlStateManager.translate(0, event.getResolution().getScaledHeight() / 5, 0);
                 }
             }
-        }
+        }*/
 
 
-        @OnlyIn(Dist.CLIENT)
+        /*@OnlyIn(Dist.CLIENT)
         @SubscribeEvent
         public void onDrawScreenPost(RenderGameOverlayEvent.Post event)
         {
@@ -121,9 +126,9 @@ public class VanillaWares {
                     GlStateManager.translate(0, -event.getResolution().getScaledHeight() / 5, 0);
                 }
             }
-        }
+        }*/
 
-        @SubscribeEvent
+        /*@SubscribeEvent
         @OnlyIn(Dist.CLIENT)
         public void handleSpiderVision(TickEvent.ClientTickEvent event)
         {
@@ -148,9 +153,9 @@ public class VanillaWares {
                     Minecraft.getInstance().entityRenderer.stopUseShader();
                 }
             }
-        }
+        }*/
 
-        @Override
+        /*@Override
         public List<String> getInfo(ItemStack stack)
         {
             List<String> ret = new ArrayList<>();
@@ -164,7 +169,7 @@ public class VanillaWares {
                 }
             }
             return ret;
-        }
+        }*/
 
         private String[] getDesciption(ItemStack stack)
         {

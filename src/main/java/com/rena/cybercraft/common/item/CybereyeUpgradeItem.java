@@ -63,7 +63,7 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
     private static List<LivingEntity> entitiesInRange = new ArrayList<>(16);
     private static final float HIGHLIGHT_RANGE = 25F;
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public void handleHighlight(TickEvent.RenderTickEvent event)
     {
@@ -112,7 +112,7 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
                 }
             }
         }
-    }
+    }*/
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
@@ -186,7 +186,7 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
     private static double sensitivity = 0D;
     private static PlayerEntity player = null;
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public void tickStart(TickEvent.ClientTickEvent event)
     {
@@ -270,7 +270,7 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
             }
 
         }
-    }
+    }*/
 
 
     @Override

@@ -1,10 +1,12 @@
 package com.rena.cybercraft.client.screens.hud;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.api.hud.HudElementBase;
 import com.rena.cybercraft.client.ClientUtils;
+import com.rena.cybercraft.events.HudHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.PlayerEntity;
@@ -32,6 +34,11 @@ public class PowerDisplay extends HudElementBase {
     }
 
     @Override
+    public void renderElement(int x, int y, PlayerEntity entityPlayer, MatrixStack stack, boolean hudjackAvailable, boolean isConfigOpen, float partialTicks) {
+
+    }
+
+    /*@Override
     public void renderElement(int x, int y, PlayerEntity entityPlayer, MatrixStack matrixStack, boolean isHUDjackAvailable, boolean isConfigOpen, float partialTicks)
     {
         if ( isHidden()
@@ -77,7 +84,7 @@ public class PowerDisplay extends HudElementBase {
         Minecraft.getInstance().getTextureManager().bind(HudHandler.HUD_TEXTURE);
         matrixStack.disableAlpha();
         matrixStack.enableBlend();
-        matrixStack.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+        matrixStack.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
         int uOffset = isLowPower ? 39 : 0;
         int xOffset = isRightAnchored ? (x + getWidth() - 13) : x;
@@ -94,15 +101,15 @@ public class PowerDisplay extends HudElementBase {
 
         // storage stats
         String textPowerStorage = cache_power_stored + " / " + cache_power_capacity;
-        int xPowerStorage = isRightAnchored ? x + getWidth() - 15 - fontRenderer.getStringWidth(textPowerStorage) : x + 15;
+        int xPowerStorage = isRightAnchored ? x + getWidth() - 15 - fontRenderer.width(textPowerStorage) : x + 15;
         fontRenderer.drawStringWithShadow(textPowerStorage, xPowerStorage, y + 4, colorHex);
 
         // progression stats
         String textPowerProgression = "-" + cache_power_consumption + " / +" + cache_power_production;
-        int xPowerProgression = isRightAnchored ? x + getWidth() - 15 - fontRenderer.getStringWidth(textPowerProgression) : x + 15;
+        int xPowerProgression = isRightAnchored ? x + getWidth() - 15 - fontRenderer.width(textPowerProgression) : x + 15;
         fontRenderer.drawStringWithShadow(textPowerProgression, xPowerProgression, y + 14, colorHex);
 
         matrixStack.popPose();
-    }
+    }*/
 
 }

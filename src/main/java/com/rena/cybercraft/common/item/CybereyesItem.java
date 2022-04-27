@@ -5,6 +5,7 @@ import com.rena.cybercraft.api.CybercraftUpdateEvent;
 import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.client.ClientUtils;
 import com.rena.cybercraft.common.util.LibConstants;
+import com.rena.cybercraft.events.EssentialsMissingHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -77,7 +78,7 @@ public class CybereyesItem extends CybercraftItem{
         }
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public void overlayPre(RenderGameOverlayEvent.Pre event)
     {
@@ -95,7 +96,7 @@ public class CybereyesItem extends CybercraftItem{
                 GlStateManager.popMatrix();
             }
         }
-    }
+    }*/
 
     @Override
     public int getPowerConsumption(ItemStack stack) {

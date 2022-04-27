@@ -36,13 +36,13 @@ public enum ArmorClass {
                 }
             }
 
-            if (stack.getItem() instanceof ISpecialArmor)
+            /*if (stack.getItem() instanceof ISpecialArmor)
             {
                 if (((ISpecialArmor) stack.getItem()).getProperties(entityLivingBase, stack, DamageSource.CACTUS, 1, 1).AbsorbRatio * 25D > 4)
                 {
                     return HEAVY;
                 }
-            }
+            }*/
         }
         return hasNoArmor ? NONE : LIGHT;
     }

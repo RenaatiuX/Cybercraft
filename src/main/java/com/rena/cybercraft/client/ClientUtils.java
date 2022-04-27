@@ -3,6 +3,7 @@ package com.rena.cybercraft.client;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.api.CybercraftAPI;
+import com.rena.cybercraft.core.network.CCNetwork;
 import com.rena.cybercraft.core.network.TriggerActiveAbilityPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -56,10 +57,10 @@ public class ClientUtils {
         GuiUtils.drawHoveringText(stack, textLines, x, y, gui.width, gui.height, -1, font);
     }
 
-    /*
-    public static void useActiveItemClient(Entity entity, ItemStack stack)
+
+    /*public static void useActiveItemClient(Entity entity, ItemStack stack)
     {
-        CyberwarePacketHandler.INSTANCE.sendToServer(new TriggerActiveAbilityPacket(stack));
+        CCNetwork.sendToServer(new TriggerActiveAbilityPacket(stack));
         CybercraftAPI.useActiveItem(entity, stack);
     }*/
 

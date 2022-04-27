@@ -86,7 +86,7 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
         return stack.getDamageValue() == META_WIRED_REFLEXES ? 3 : 1;
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public void handleHurt(LivingHurtEvent event)
     {
         if (event.isCanceled()) return;
@@ -170,12 +170,12 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
                 }
             }
         }
-    }
+    }*/
 
     private Set<UUID> setIsSpeedPowered = new HashSet<>();
     private Set<UUID> setIsStrengthPowered = new HashSet<>();
 
-    @SubscribeEvent(priority= EventPriority.NORMAL)
+    /*@SubscribeEvent(priority= EventPriority.NORMAL)
     public void handleLivingUpdate(CybercraftUpdateEvent event)
     {
         LivingEntity entityLivingBase = event.getEntityLiving();
@@ -242,7 +242,7 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
                 setIsSpeedPowered.remove(entityLivingBase.getUUID());
             }
         }
-    }
+    }*/
 
     @Override
     public int getPowerConsumption(ItemStack stack)

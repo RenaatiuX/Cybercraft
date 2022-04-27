@@ -33,7 +33,7 @@ public class LegUpgradeItem extends CybercraftItem{
                         ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_RIGHT_CYBER_LEG) }});
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public void playerJumps(LivingEvent.LivingJumpEvent event)
     {
         LivingEntity entityLivingBase = event.getEntityLiving();
@@ -76,7 +76,7 @@ public class LegUpgradeItem extends CybercraftItem{
                 }
             }
         }
-    }
+    }*/
 
     @SubscribeEvent
     public void onFallDamage(LivingAttackEvent event)

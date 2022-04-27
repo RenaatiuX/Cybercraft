@@ -3,7 +3,7 @@ package com.rena.cybercraft.common.item;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.CybercraftUpdateEvent;
 import com.rena.cybercraft.api.ICybercraftUserData;
-import com.rena.cybercraft.common.util.CybercraftDamageSource;
+import com.rena.cybercraft.events.EssentialsMissingHandler;
 import com.rena.cybercraft.common.util.LibConstants;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -43,7 +43,7 @@ public class CyberHeartItem extends CybercraftItem{
         {
             if (!cyberwareUserData.usePower(itemStackCyberheart, getPowerConsumption(itemStackCyberheart)))
             {
-                entityLivingBase.hurt(CybercraftDamageSource.heartless, Integer.MAX_VALUE);
+                entityLivingBase.hurt(EssentialsMissingHandler.heartless, Integer.MAX_VALUE);
             }
             else if (entityLivingBase.hasEffect(Effects.WEAKNESS))
             {

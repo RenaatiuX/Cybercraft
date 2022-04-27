@@ -71,7 +71,7 @@ public class HandUpgradeItem extends CybercraftItem implements IMenuItem {
     private Map<UUID, Boolean> lastClaws = new HashMap<>();
     public static float clawsTime;
 
-    @SubscribeEvent(priority= EventPriority.NORMAL)
+    /*@SubscribeEvent(priority= EventPriority.NORMAL)
     public void handleLivingUpdate(CybercraftUpdateEvent event)
     {
         LivingEntity entityLivingBase = event.getEntityLiving();
@@ -110,7 +110,7 @@ public class HandUpgradeItem extends CybercraftItem implements IMenuItem {
             removeUnarmedDamage(entityLivingBase, itemStackClaws);
             lastClaws.put(entityLivingBase.getUUID(), false);
         }
-    }
+    }*/
 
     private void updateHand(LivingEntity entityLivingBase, boolean delay)
     {
@@ -207,11 +207,11 @@ public class HandUpgradeItem extends CybercraftItem implements IMenuItem {
 
     @Override
     public void use(Entity entity, ItemStack stack) {
-        EnableDisableHelper.toggle(stack);
-        if (entity instanceof LivingEntity && FMLCommonHandler.instance().getSide() == MixinEnvironment.Side.CLIENT)
+        /*EnableDisableHelper.toggle(stack);
+        if (entity instanceof LivingEntity && FMLCommonHandler.instance().getSide() == Side.CLIENT)
         {
             updateHand((LivingEntity) entity, false);
-        }
+        }*/
     }
 
     @Override

@@ -71,7 +71,7 @@ public class FootUpgradeItem extends CybercraftItem implements IMenuItem {
     private Map<UUID, Integer> mapCountdownWheelsPowered = new HashMap<>();
     private Map<UUID, Float> mapStepHeight = new HashMap<>();
 
-    @SubscribeEvent(priority= EventPriority.NORMAL)
+    /*@SubscribeEvent(priority= EventPriority.NORMAL)
     public void handleLivingUpdate(CybercraftUpdateEvent event)
     {
         LivingEntity entityLivingBase = event.getEntityLiving();
@@ -155,7 +155,7 @@ public class FootUpgradeItem extends CybercraftItem implements IMenuItem {
 
             mapCountdownWheelsPowered.put(entityLivingBase.getUUID(), countdownWheelsPowered);
         }
-    }
+    }*/
 
     private int getCountdownWheelsPowered(LivingEntity entityLivingBase)
     {

@@ -34,7 +34,7 @@ public class LungsUpgradeItem extends CybercraftItem{
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    /*@OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onDrawScreenPost(RenderGameOverlayEvent.Post event)
     {
@@ -89,11 +89,11 @@ public class LungsUpgradeItem extends CybercraftItem{
                 GlStateManager.popMatrix();
             }
         }
-    }
+    }*/
 
     private Map<UUID, Boolean> mapIsOxygenPowered = new HashMap<>();
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public void handleLivingUpdate(CybercraftUpdateEvent event)
     {
         LivingEntity entityLivingBase = event.getEntityLiving();
@@ -133,7 +133,7 @@ public class LungsUpgradeItem extends CybercraftItem{
                 mapIsOxygenPowered.put(entityLivingBase.getUUID(), isPowered);
             }
         }
-    }
+    }*/
 
     private boolean getIsOxygenPowered(LivingEntity entityLivingBase)
     {

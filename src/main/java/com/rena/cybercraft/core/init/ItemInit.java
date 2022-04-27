@@ -32,7 +32,7 @@ public class ItemInit {
             () -> new ArmorItem(CybercraftArmorMaterial.SHADES, EquipmentSlotType.HEAD, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
     public static final RegistryObject<Item> SHADES2 = ITEMS.register("shades2",
             () -> new ArmorItem(CybercraftArmorMaterial.SHADES2, EquipmentSlotType.HEAD, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
-    public static final RegistryObject<Item> TRENCHCOAT = ITEMS.register("trenchcoat",
+    public static final RegistryObject<CybercraftItemAmor> TRENCHCOAT = ITEMS.register("trenchcoat",
             () -> new CybercraftItemAmor(CybercraftArmorMaterial.TRENCHCOAT, EquipmentSlotType.CHEST, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
 
     //Weapon

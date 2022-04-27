@@ -8,6 +8,7 @@ import com.rena.cybercraft.api.hud.NotificationInstance;
 import com.rena.cybercraft.client.ClientUtils;
 import com.rena.cybercraft.common.ArmorClass;
 import com.rena.cybercraft.common.tileentities.TileEntityBeacon;
+import com.rena.cybercraft.events.HudHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
@@ -30,7 +31,12 @@ public class NotificationDisplay extends HudElementBase {
         setDefaultVerticalAnchor(EnumAnchorVertical.BOTTOM);
     }
 
-    private static int cache_tickExisted = -1;
+    @Override
+    public void renderElement(int x, int y, PlayerEntity entityPlayer, MatrixStack stack, boolean hudjackAvailable, boolean isConfigOpen, float partialTicks) {
+
+    }
+
+    /*private static int cache_tickExisted = -1;
     private static int cache_tierRadio = -1;
     private static boolean cache_isWearingLightArmor = false;
     private static final NotificationInstance[] examples = new NotificationInstance[] {
@@ -214,5 +220,5 @@ public class NotificationDisplay extends HudElementBase {
         {
             return 40;
         }
-    }
+    }*/
 }

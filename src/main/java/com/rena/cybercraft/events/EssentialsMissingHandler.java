@@ -1,4 +1,4 @@
-package com.rena.cybercraft.common.util;
+package com.rena.cybercraft.events;
 
 import com.google.common.collect.HashMultimap;
 import com.rena.cybercraft.Cybercraft;
@@ -14,9 +14,12 @@ import com.rena.cybercraft.core.init.EffectInit;
 import com.rena.cybercraft.core.init.ItemInit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.UseAction;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
@@ -41,7 +44,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class CybercraftDamageSource {
+public class EssentialsMissingHandler {
 
     public static final DamageSource brainless = new DamageSource("cybercraft.brainless").bypassArmor().bypassMagic();
     public static final DamageSource heartless = new DamageSource("cybercraft.heartless").bypassArmor().bypassMagic();
@@ -52,16 +55,16 @@ public class CybercraftDamageSource {
     public static final DamageSource lowessence = new DamageSource("cybercraft.lowessence").bypassArmor().bypassMagic();
 
 
-    public static final CybercraftDamageSource INSTANCE = new CybercraftDamageSource();
+    public static final EssentialsMissingHandler INSTANCE = new EssentialsMissingHandler();
 
     private static Map<Integer, Integer> timesLungs = new HashMap<>();
 
     private static final UUID idMissingLegSpeedAttribute = UUID.fromString("fe00fdea-5044-11e6-beb8-9e71128cae77");
-    private static final HashMultimap<String, AttributeModifier> multimapMissingLegSpeedAttribute;
+    private static final HashMultimap<Attribute, AttributeModifier> multimapMissingLegSpeedAttribute;
 
     static {
         multimapMissingLegSpeedAttribute = HashMultimap.create();
-        multimapMissingLegSpeedAttribute.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(idMissingLegSpeedAttribute, "Missing leg speed", -100F, 0));
+        multimapMissingLegSpeedAttribute.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(idMissingLegSpeedAttribute, "Missing leg speed", -100F, AttributeModifier.Operation.ADDITION));
     }
 
     private Map<Integer, Boolean> last = new HashMap<>();
@@ -80,7 +83,7 @@ public class CybercraftDamageSource {
         }
     }
 
-    @SubscribeEvent(priority= EventPriority.LOWEST)
+    /*@SubscribeEvent(priority= EventPriority.LOWEST)
     public void handleMissingEssentials(CybercraftUpdateEvent event)
     {
         LivingEntity entityLivingBase = event.getEntityLiving();
@@ -148,7 +151,7 @@ public class CybercraftDamageSource {
             if (numMissingLegsVisible == 2)
             {
                 entityLivingBase.height = 1.8F - (10F / 16F);
-                ((PlayerEntity) entityLivingBase).eyeHeight = ((PlayerEntity) entityLivingBase).getDefaultEyeHeight() - (10F / 16F);
+                ((PlayerEntity) entityLivingBase).eyeHeight = entityLivingBase.getEyeHeight() - (10F / 16F);
                 AxisAlignedBB axisalignedbb = entityLivingBase.getBoundingBox();
                 entityLivingBase.setBoundingBox(new AxisAlignedBB(
                         axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ,
@@ -186,12 +189,12 @@ public class CybercraftDamageSource {
         if ( numMissingLegs >= 1
                 && entityLivingBase.isOnGround() )
         {
-            entityLivingBase.getAttributeMap().applyAttributeModifiers(multimapMissingLegSpeedAttribute);
+            entityLivingBase.getAttributes().addTransientAttributeModifiers(multimapMissingLegSpeedAttribute);
         }
         else if ( numMissingLegs >= 1
                 || entityLivingBase.tickCount % 20 == 0 )
         {
-            entityLivingBase.getAttributeMap().removeAttributeModifiers(multimapMissingLegSpeedAttribute);
+            entityLivingBase.getAttributes().removeAttributeModifiers(multimapMissingLegSpeedAttribute);
         }
 
         if (!cyberwareUserData.hasEssential(ICybercraft.EnumSlot.HEART))
@@ -300,7 +303,7 @@ public class CybercraftDamageSource {
 
         if ( entityLivingBase instanceof PlayerEntity
                 && !stack.isEmpty()
-                && stack.getItem().getItemUseAction(stack) == EnumAction.EAT )
+                && stack.getItem().getUseAnimation(stack) == UseAction.EAT )
         {
             PlayerEntity entityPlayer = (PlayerEntity) entityLivingBase;
             ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityLivingBase);
@@ -325,7 +328,7 @@ public class CybercraftDamageSource {
 
         if ( entityLivingBase instanceof PlayerEntity
                 && !stack.isEmpty()
-                && stack.getItem().getItemUseAction(stack) == EnumAction.EAT )
+                && stack.getItem().getUseAnimation(stack) == UseAction.EAT )
         {
             PlayerEntity entityPlayer = (PlayerEntity) entityLivingBase;
             ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityLivingBase);
@@ -359,7 +362,7 @@ public class CybercraftDamageSource {
         {
             PlayerEntity entityPlayer = Minecraft.getInstance().player;
 
-            entityPlayer.getAttributeMap().removeAttributeModifiers(multimapMissingLegSpeedAttribute);
+            entityPlayer.getAttributes().removeAttributeModifiers(multimapMissingLegSpeedAttribute);
         }
     }
 
@@ -417,7 +420,7 @@ public class CybercraftDamageSource {
         {
             if (!cyberwareUserData.hasEssential(ICybercraft.EnumSlot.SKIN))
             {
-                if (!event.getSource().isUnblockable() || event.getSource() == DamageSource.FALL)
+                if (!event.getSource().isBypassArmor() || event.getSource() == DamageSource.FALL)
                 {
                     event.setAmount(event.getAmount() * 3F);
                 }
@@ -502,6 +505,6 @@ public class CybercraftDamageSource {
         {
             event.setCanceled(true);
         }
-    }
+    }*/
 
 }

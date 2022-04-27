@@ -4,7 +4,7 @@ import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.CybercraftUpdateEvent;
 import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.common.ArmorClass;
-import com.rena.cybercraft.common.util.CybercraftDamageSource;
+import com.rena.cybercraft.events.EssentialsMissingHandler;
 import com.rena.cybercraft.common.util.LibConstants;
 import com.rena.cybercraft.core.init.EffectInit;
 import net.minecraft.enchantment.ThornsEnchantment;
@@ -12,7 +12,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
@@ -39,7 +38,7 @@ public class SkinUpgradeItem extends CybercraftItem{
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public void handleLivingUpdate(CybercraftUpdateEvent event)
     {
         LivingEntity entityLivingBase = event.getEntityLiving();
@@ -77,7 +76,7 @@ public class SkinUpgradeItem extends CybercraftItem{
         float offsetRadians = celestialAngleRadians < (float) Math.PI ? 0.0F : ((float) Math.PI * 2.0F);
         float celestialAngleRadians2 = celestialAngleRadians + (offsetRadians - celestialAngleRadians) * 0.2F;
         return MathHelper.cos(celestialAngleRadians2);
-    }
+    }*/
 
     private Set<UUID> setIsImmunosuppressantPowered = new HashSet<>();
     private static Map<UUID, Collection<EffectInstance>> mapPotions = new HashMap<>();
@@ -100,7 +99,7 @@ public class SkinUpgradeItem extends CybercraftItem{
                     && entityLivingBase.tickCount % 100 == 0
                     && !entityLivingBase.hasEffect(EffectInit.NEUROPOZYNE.get()) )
             {
-                entityLivingBase.hurt(CybercraftDamageSource.lowessence, 2F);
+                entityLivingBase.hurt(EssentialsMissingHandler.lowessence, 2F);
             }
 
             if (mapPotions.containsKey(entityLivingBase.getUUID()))
@@ -159,7 +158,7 @@ public class SkinUpgradeItem extends CybercraftItem{
         return stack.getDamageValue() == META_IMMUNOSUPPRESSANT ? LibConstants.IMMUNO_CONSUMPTION : 0;
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public void handleHurt(LivingHurtEvent event)
     {
         LivingEntity entityLivingBase = event.getEntityLiving();
@@ -185,7 +184,7 @@ public class SkinUpgradeItem extends CybercraftItem{
                 }
             }
         }
-    }
+    }*/
 
     @Override
     public int getPowerProduction(ItemStack stack)
