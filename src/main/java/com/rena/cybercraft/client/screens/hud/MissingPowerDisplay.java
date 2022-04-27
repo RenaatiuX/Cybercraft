@@ -5,11 +5,9 @@ import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.api.hud.HudElementBase;
 import com.rena.cybercraft.core.init.ItemInit;
-import com.rena.cybercraft.events.HudHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
@@ -43,6 +41,7 @@ public class MissingPowerDisplay extends HudElementBase {
     @Override
     public void renderElement(int x, int y, PlayerEntity entityPlayer, MatrixStack mstack, boolean isHUDjackAvailable, boolean isConfigOpen, float partialTicks)
     {
+        /*
         if ( isHidden()
                 || !isHUDjackAvailable ) {
             return;
@@ -96,11 +95,11 @@ public class MissingPowerDisplay extends HudElementBase {
 
                     //fontRenderer.draw("!", xPosition + 14, yPosition + 8, 0xFF0000);
 
-                    RenderHelper.turnBackOn();
-                    renderItem.renderGuiItem(stack, xPosition, yPosition);
-                    RenderHelper.turnOff();
+                    RenderHelper.enableStandardItemLighting();
+                    renderItem.renderItemAndEffectIntoGUI(stack, xPosition, yPosition);
+                    RenderHelper.disableStandardItemLighting();
 
-                    mstack.popPose();
+                    GlStateManager.popMatrix();
                     yPosition += 18;
                 }
                 else if (!isConfigOpen)
@@ -109,7 +108,7 @@ public class MissingPowerDisplay extends HudElementBase {
                 }
             }
         }
-        renderItem.blitOffset = zLevelSaved;
+        renderItem.zLevel = zLevelSaved;
 
         for (int indexElapsed : indexesElapsed)
         {
@@ -117,7 +116,9 @@ public class MissingPowerDisplay extends HudElementBase {
             timesPowerOutage.remove(indexElapsed);
         }
 
-        mstack.popPose();
+        GlStateManager.popMatrix();
+
+         */
     }
 
 }

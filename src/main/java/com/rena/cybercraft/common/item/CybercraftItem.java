@@ -8,9 +8,11 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -253,7 +255,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
         if (hasPowerConsumption)
         {
             String toTranslate = hasCustomPowerMessage(stack) ?
-                    "cybercraft.tooltip." + this.getRegistryName().toString().substring(10)
+                    "cybercraft.tooltip." + this.getRegistryName().getPath()
                             + (this.subnames.length > 0 ? "." + CybercraftAPI.getMetaData(stack) : "") + ".power_consumption"
                     :
                     "cybercraft.tooltip.power_consumption";
@@ -276,7 +278,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
             {
                 toAddPowerProduction.append(new TranslationTextComponent("cybercraft.tooltip.joiner", cost));
             }else
-                toAddPowerProduction.append(new TranslationTextComponent("", cost));
+                toAddPowerProduction.append(new StringTextComponent("" + cost));
         }
 
         if (hasPowerProduction)
@@ -322,7 +324,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
                 toAddEssence.append(new TranslationTextComponent("cybercraft.tooltip.joiner", cost));
             }
 
-            toAddEssence.append(new TranslationTextComponent("", Math.abs(cost)));
+            toAddEssence.append(new StringTextComponent("" + Math.abs(cost)));
         }
 
         if (hasEssenceCost)
