@@ -123,10 +123,18 @@
   "effect.cybercraft.neuropozyne" : "Neuropozyne",
   "effect.cybercraft.rejection" : "Rejection",
 
+  "_comment": "Quality",
+  "cybercraft.quality.scavenged": "Scavenged ",
+  "cybercraft.quality.manufactured": "Manufactured",
+  "cybercraft.quality.scavenged.name_modifier": "Scavenged ",
+
   "_comment": "Tooltips",
   "tooltip.cybercraft.exp_capsule.before": "",
   "tooltip.cybercraft.exp_capsule.after": "recorded experiences stored",
   "tooltip.cybercraft.neuropozyne":"Anti-Rejection (20:00)",
+  "cybercraft.tooltip.power_production": "Power Production: ",
+
+  "cybercraft.tooltip.essence": "Essence: ",
 
   "tooltip.cybercraft.blueprint": "Creates %1$s",
   "tooltip.cybercraft.craft_blueprint": "Craft with a piece of Cyberware",

@@ -8,7 +8,6 @@ import com.rena.cybercraft.api.hud.NotificationInstance;
 import com.rena.cybercraft.client.ClientUtils;
 import com.rena.cybercraft.common.ArmorClass;
 import com.rena.cybercraft.common.tileentities.TileEntityBeacon;
-import com.rena.cybercraft.events.HudHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
@@ -31,12 +30,7 @@ public class NotificationDisplay extends HudElementBase {
         setDefaultVerticalAnchor(EnumAnchorVertical.BOTTOM);
     }
 
-    @Override
-    public void renderElement(int x, int y, PlayerEntity entityPlayer, MatrixStack stack, boolean hudjackAvailable, boolean isConfigOpen, float partialTicks) {
-
-    }
-
-    /*private static int cache_tickExisted = -1;
+    private static int cache_tickExisted = -1;
     private static int cache_tierRadio = -1;
     private static boolean cache_isWearingLightArmor = false;
     private static final NotificationInstance[] examples = new NotificationInstance[] {
@@ -47,8 +41,9 @@ public class NotificationDisplay extends HudElementBase {
     };
 
     @Override
-    public void renderElement(int x, int y, PlayerEntity entityPlayer, MatrixStack matrixStack, boolean isHUDjackAvailable, boolean isConfigOpen, float partialTicks)
+    public void renderElement(int x, int y, PlayerEntity entityPlayer, MatrixStack resolution, boolean isHUDjackAvailable, boolean isConfigOpen, float partialTicks)
     {
+        /*
         if ( isHidden()
                 || !isHUDjackAvailable ) {
             return;
@@ -59,7 +54,7 @@ public class NotificationDisplay extends HudElementBase {
 
         float currTime = entityPlayer.tickCount + partialTicks;
 
-        matrixStack.pushPose();
+        GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
 
         Minecraft.getInstance().getTextureManager().bind(HudHandler.HUD_TEXTURE);
@@ -97,13 +92,13 @@ public class NotificationDisplay extends HudElementBase {
 
                 float yOffset = (float) (20F * Math.sin(percentVisible * Math.PI / 2F));
 
-                matrixStack.pushPose();
+                GlStateManager.pushMatrix();
                 GlStateManager.color(1.0F, 1.0F, 1.0F);
                 GlStateManager.translate(0F, isTopAnchored ? -yOffset : yOffset, 0F);
                 int index = (examples.length - 1) - indexNotification;
                 int xPos = isRightAnchored ? (x + getWidth() - ((index + 1) * 18)) : (x + index * 18);
                 notification.render(xPos, y + (isTopAnchored ? 20 : 0));
-                matrixStack.popPose();
+                GlStateManager.popMatrix();
             }
         }
         else
@@ -119,13 +114,13 @@ public class NotificationDisplay extends HudElementBase {
 
                     float yOffset = (float) (20F * Math.sin(percentVisible * Math.PI / 2F));
 
-                    matrixStack.pushPose();
+                    GlStateManager.pushMatrix();
                     GlStateManager.color(1.0F, 1.0F, 1.0F);
                     GlStateManager.translate(0F, isTopAnchored ? -yOffset : yOffset, 0F);
                     int index = (HudHandler.notifications.size() - 1) - indexNotification;
                     int xPos = isRightAnchored ? (x + getWidth() - ((index + 1) * 18)) : (x + index * 18);
                     notification.render(xPos, y + (isTopAnchored ? 20 : 0));
-                    matrixStack.popPose();
+                    GlStateManager.popMatrix();
                 }
                 else
                 {
@@ -140,7 +135,8 @@ public class NotificationDisplay extends HudElementBase {
         }
 
         // GlStateManager.popMatrix();
-        matrixStack.popPose();
+        GlStateManager.popMatrix();
+        */
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -156,7 +152,8 @@ public class NotificationDisplay extends HudElementBase {
         @Override
         public void render(int x, int y)
         {
-            Minecraft.getInstance().getTextureManager().bind(HudHandler.HUD_TEXTURE);
+            /*
+            Minecraft.getInstance().getTextureManager().bindTexture(HudHandler.HUD_TEXTURE);
             GlStateManager.pushMatrix();
             float[] color = CybercraftAPI.getHUDColor();
             GlStateManager.color(color[0], color[1], color[2]);
@@ -172,6 +169,8 @@ public class NotificationDisplay extends HudElementBase {
             {
                 ClientUtils.drawTexturedModalRect(x + 8, y + 1 + 7, 22, 25, 8, 9);
             }
+
+             */
         }
 
         @Override
@@ -194,7 +193,8 @@ public class NotificationDisplay extends HudElementBase {
         @Override
         public void render(int x, int y)
         {
-            Minecraft.getInstance().getTextureManager().bind(HudHandler.HUD_TEXTURE);
+            /*
+            Minecraft.getInstance().getTextureManager().bindTexture(HudHandler.HUD_TEXTURE);
             if (tier > 0)
             {
                 GlStateManager.pushMatrix();
@@ -213,6 +213,8 @@ public class NotificationDisplay extends HudElementBase {
                 GlStateManager.color(color[0], color[1], color[2]);
                 ClientUtils.drawTexturedModalRect(x, y + 1, 28, 39, 15, 14);
             }
+
+             */
         }
 
         @Override
@@ -220,5 +222,5 @@ public class NotificationDisplay extends HudElementBase {
         {
             return 40;
         }
-    }*/
+    }
 }
