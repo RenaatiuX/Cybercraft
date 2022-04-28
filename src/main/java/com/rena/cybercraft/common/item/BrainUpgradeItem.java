@@ -23,6 +23,7 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.GameRules;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.EntityTeleportEvent;
@@ -48,6 +49,7 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
 
     public BrainUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
         super(properties, slots, subnames);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override
@@ -224,6 +226,16 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
         {
             isRadioWorking.put(entityLivingBase.getUUID(), Boolean.FALSE);
         }
+    }
+
+    public static boolean isRadioWorking(LivingEntity entityLivingBase)
+    {
+        if (!isRadioWorking.containsKey(entityLivingBase.getUUID()))
+        {
+            isRadioWorking.put(entityLivingBase.getUUID(), Boolean.FALSE);
+        }
+
+        return isRadioWorking.get(entityLivingBase.getUUID());
     }
 
     private boolean isContextWorking(LivingEntity entityLivingBase)
