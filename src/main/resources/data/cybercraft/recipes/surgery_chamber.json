@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iii",
+    "iIi",
+    "iYi"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "I": {
+      "item": "minecraft:iron_block"
+    },
+    "Y": {
+      "item": "minecraft:iron_door"
+    }
+  },
+  "result": {
+    "item": "cybercraft:surgery_chamber",
+    "count": 1
+  }
+}

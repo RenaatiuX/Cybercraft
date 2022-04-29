@@ -15,23 +15,16 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.function.Supplier;
 
 public enum CybercraftArmorMaterial implements IArmorMaterial {
-
+    BIKER_HELMET("biker_helmet", 37, new int[]{3, 6, 8, 3}, 15,
+            SoundEvents.ARMOR_EQUIP_GENERIC, 1.0F, 0.3F,() -> Ingredient.of(Blocks.GLASS)),
     SHADES("vanity", 5, new int[]{1, 2, 3, 1}, 15,
-            SoundEvents.ARMOR_EQUIP_GENERIC, 0.0F, 0.0F,() -> {
-        return Ingredient.of(Blocks.GLASS);
-    }),
+            SoundEvents.ARMOR_EQUIP_GENERIC, 0.0F, 0.0F,() -> Ingredient.of(Blocks.GLASS)),
     SHADES2("vanity_2", 5, new int[]{1, 2, 3, 1}, 15,
-    SoundEvents.ARMOR_EQUIP_GENERIC, 0.0F, 0.0F,() -> {
-        return Ingredient.of(Blocks.GLASS);
-    }),
+    SoundEvents.ARMOR_EQUIP_GENERIC, 0.0F, 0.0F,() -> Ingredient.of(Blocks.GLASS)),
     JACKET("jacket", 5, new int[]{1, 2, 3, 1}, 15,
-            SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F,() -> {
-        return Ingredient.of(Items.LEATHER);
-    }),
+            SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F,() -> Ingredient.of(Items.LEATHER)),
     TRENCHCOAT("trenchcoat", 5, new int[]{1, 2, 3, 1}, 15,
-            SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F,() -> {
-        return Ingredient.of(Items.LEATHER);
-    });
+            SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F,() -> Ingredient.of(Items.LEATHER));
 
     private static final int[] HEALTH_PER_SLOT = new int[]{13, 15, 16, 11};
     private final String name;

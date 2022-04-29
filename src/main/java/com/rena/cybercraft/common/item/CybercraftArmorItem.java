@@ -1,13 +1,17 @@
 package com.rena.cybercraft.common.item;
 
+import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.item.IDeconstructable;
 import com.rena.cybercraft.common.util.CybercraftArmorMaterial;
+import com.rena.cybercraft.core.init.ItemInit;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nonnull;
+
+import static com.rena.cybercraft.api.CybercraftAPI.withMetaData;
 
 
 public class CybercraftArmorItem extends ArmorItem implements IDeconstructable, IDyeableArmorItem {
@@ -24,7 +28,27 @@ public class CybercraftArmorItem extends ArmorItem implements IDeconstructable, 
 
     @Override
     public NonNullList<ItemStack> getComponents(ItemStack stack) {
-        return null;
+        Item item = stack.getItem();
+
+        NonNullList<ItemStack> nnl = NonNullList.create();
+        if (item == ItemInit.TRENCHCOAT.get())
+        {
+            nnl.add(withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 2));
+            nnl.add(withMetaData(new ItemStack(Items.LEATHER, 12), 0));
+            //nnl.add(new ItemStack(Items.DYE, 1, 0));
+        }
+        else if (item == ItemInit.JACKET.get())
+        {
+            nnl.add(withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 2));
+            nnl.add(withMetaData(new ItemStack(Items.LEATHER, 8), 0));
+            //nnl.add(new ItemStack(Items.DYE, 1, 0));
+        }
+        else
+        {
+            //nnl.add(new ItemStack(Blocks.STAINED_GLASS, 4, 15));
+            nnl.add(withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 4));
+        }
+        return nnl;
     }
 
     @Override

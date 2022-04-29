@@ -26,12 +26,14 @@ public class ItemInit {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Cybercraft.MOD_ID);
 
     //Armor
+    public static final RegistryObject<Item> BIKER_HELMET = ITEMS.register("biker_helmet",
+            ()-> new ArmorItem(CybercraftArmorMaterial.BIKER_HELMET, EquipmentSlotType.HEAD, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
     public static final RegistryObject<Item> JACKET = ITEMS.register("jacket",
-            () -> new CybercraftArmorItem(CybercraftArmorMaterial.JACKET, EquipmentSlotType.CHEST, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
+            () -> new ArmorItem(CybercraftArmorMaterial.JACKET, EquipmentSlotType.CHEST, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
     public static final RegistryObject<Item> SHADES = ITEMS.register("shades",
-            () -> new CybercraftArmorItem(CybercraftArmorMaterial.SHADES, EquipmentSlotType.HEAD, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
+            () -> new ArmorItem(CybercraftArmorMaterial.SHADES, EquipmentSlotType.HEAD, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
     public static final RegistryObject<Item> SHADES2 = ITEMS.register("shades2",
-            () -> new CybercraftArmorItem(CybercraftArmorMaterial.SHADES2, EquipmentSlotType.HEAD, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
+            () -> new ArmorItem(CybercraftArmorMaterial.SHADES2, EquipmentSlotType.HEAD, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
     public static final RegistryObject<CybercraftArmorItem> TRENCHCOAT = ITEMS.register("trenchcoat",
             () -> new CybercraftArmorItem(CybercraftArmorMaterial.TRENCHCOAT, EquipmentSlotType.CHEST, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
 
