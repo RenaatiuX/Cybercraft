@@ -5,6 +5,7 @@ import com.rena.cybercraft.api.CybercraftUpdateEvent;
 import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.client.ClientUtils;
 import com.rena.cybercraft.common.util.LibConstants;
+import com.rena.cybercraft.core.init.ItemInit;
 import com.rena.cybercraft.events.EssentialsMissingHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
@@ -23,8 +24,8 @@ public class CybereyesItem extends CybercraftItem{
 
     private static boolean isBlind;
 
-    public CybereyesItem(Properties properties, EnumSlot slots) {
-        super(properties, slots);
+    public CybereyesItem(Properties properties, EnumSlot slots, Quality q) {
+        super(properties, slots, q);
     }
 
     @Override
@@ -47,7 +48,7 @@ public class CybereyesItem extends CybercraftItem{
 
         ICybercraftUserData cyberwareUserData = event.getCybercrafteUserData();
 
-        if (cyberwareUserData.isCybercraftInstalled(getCachedStack(0)))
+        if (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_EYES.get()))
         {
             entityLivingBase.removeEffect(Effects.BLINDNESS);
         }
@@ -61,7 +62,7 @@ public class CybereyesItem extends CybercraftItem{
 
         ICybercraftUserData cyberwareUserData = event.getCybercrafteUserData();
 
-        ItemStack itemStackCybereye = cyberwareUserData.getCybercraft(getCachedStack(0));
+        ItemStack itemStackCybereye = cyberwareUserData.getCybercraft(ItemInit.CYBER_EYES.get());
         if (!itemStackCybereye.isEmpty())
         {
             boolean isPowered = cyberwareUserData.usePower(itemStackCybereye, getPowerConsumption(itemStackCybereye));

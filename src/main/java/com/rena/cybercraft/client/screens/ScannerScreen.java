@@ -11,7 +11,7 @@ import net.minecraft.util.text.ITextComponent;
 
 public class ScannerScreen extends ContainerScreen<ScannerContainer> {
 
-    public static final ResourceLocation TEXTURE = Cybercraft.modeLoc("textures/gui/scanner.png");
+    public static final ResourceLocation TEXTURE = Cybercraft.modLoc("textures/gui/scanner.png");
 
     public ScannerScreen(ScannerContainer p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
         super(p_i51105_1_, p_i51105_2_, p_i51105_3_);

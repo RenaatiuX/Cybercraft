@@ -4,6 +4,7 @@ import com.rena.cybercraft.api.item.ICybercraft;
 import com.rena.cybercraft.api.item.ICybercraft.EnumSlot;
 import com.rena.cybercraft.api.item.ICybercraft.ISidedLimb.EnumSide;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
@@ -16,7 +17,7 @@ public interface ICybercraftUserData {
     NonNullList<ItemStack> getInstalledCybercraft(ICybercraft.EnumSlot slot);
     void setInstalledCybercraft(LivingEntity livingEntity, EnumSlot slot, List<ItemStack> cybercraft);
     void setInstalledCybercraft(LivingEntity livingEntity, EnumSlot slot, NonNullList<ItemStack> cybercraft);
-    boolean isCybercraftInstalled(ItemStack cybercraft);
+    boolean isCybercraftInstalled(Item cybercraft);
     int getCybercraftRank(ItemStack cybercraft);
 
     CompoundNBT serializeNBT();
@@ -25,7 +26,7 @@ public interface ICybercraftUserData {
 
     boolean hasEssential(EnumSlot slot);
     void setHasEssential(EnumSlot slot, boolean hasLeft, boolean hasRight);
-    ItemStack getCybercraft(ItemStack cybercraft);
+    ItemStack getCybercraft(Item cybercraft);
     void updateCapacity();
     void resetBuffer();
     void addPower(int amount, ItemStack inputter);

@@ -24,7 +24,7 @@ import org.apache.logging.log4j.Logger;
 @Mod(Cybercraft.MOD_ID)
 public class Cybercraft {
 
-    public static final ResourceLocation modeLoc(String path){
+    public static final ResourceLocation modLoc(String path){
         return new ResourceLocation(MOD_ID, path);
     }
 

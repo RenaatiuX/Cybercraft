@@ -7,8 +7,8 @@ import net.minecraft.item.ItemStack;
 
 public class BodyPartItem extends CybercraftItem implements ISidedLimb {
 
-    public BodyPartItem(Properties properties, EnumSlot[] slots, String... subnames) {
-        super(properties, slots, subnames);
+    public BodyPartItem(Properties properties, EnumSlot slot, Quality q) {
+        super(properties, slot, q);
     }
 
     @Override
@@ -45,11 +45,6 @@ public class BodyPartItem extends CybercraftItem implements ISidedLimb {
     @Override
     public EnumSide getSide(ItemStack stack) {
         return stack.getDamageValue() % 2 == 0 ? EnumSide.LEFT : EnumSide.RIGHT;
-    }
-
-    @Override
-    public Quality getQuality(ItemStack stack) {
-        return null;
     }
 
     @Override

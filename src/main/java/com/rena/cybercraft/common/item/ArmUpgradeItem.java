@@ -14,19 +14,10 @@ public class ArmUpgradeItem extends CybercraftItem{
 
     public static final int META_BOW = 0;
 
-    public ArmUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
-        super(properties, slots, subnames);
+    public ArmUpgradeItem(Properties properties, EnumSlot slot, Quality q) {
+        super(properties, slot, q);
     }
 
-    @Override
-    public NonNullList<NonNullList<ItemStack>> required(ItemStack stack) {
-        NonNullList<NonNullList<ItemStack>> l1 = NonNullList.create();
-        NonNullList<ItemStack> l2 = NonNullList.create();
-        l2.add(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_LEFT_CYBER_ARM));
-        l2.add(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_RIGHT_CYBER_ARM));
-        l1.add(l2);
-        return l1;
-    }
 
     @SubscribeEvent
     public void useBow(LivingEntityUseItemEvent.Tick event)
@@ -39,7 +30,7 @@ public class ArmUpgradeItem extends CybercraftItem{
             ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(livingEntity);
             if (cyberwareUserData == null) return;
 
-            if (cyberwareUserData.isCybercraftInstalled(getCachedStack(META_BOW)))
+            if (cyberwareUserData.isCybercraftInstalled(ItemInit.ARM_UPGRADES_BOW.get()))
             {
                 event.setDuration(event.getDuration() - 1);
             }

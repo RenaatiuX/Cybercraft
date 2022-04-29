@@ -16,7 +16,7 @@ public class DenseBatteryItem extends CybercraftItem implements ISpecialBattery 
     @Override
     public boolean isIncompatible(ItemStack stack, ItemStack other)
     {
-        return other.getItem() == ItemInit.LOWER_ORGANS_UPGRADES.get()
+        return other.getItem() == ItemInit.LOWER_ORGANS_UPGRADES_BATTERY.get()
                 && stack.getDamageValue() == LowerOrgansUpgradeItem.META_BATTERY;
     }
 

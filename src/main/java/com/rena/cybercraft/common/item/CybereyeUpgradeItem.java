@@ -14,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
@@ -40,21 +41,19 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
     public static final int META_TARGETING = 3;
     public static final int META_ZOOM = 4;
 
-    public CybereyeUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
-        super(properties, slots, subnames);
+    public CybereyeUpgradeItem(Properties properties, EnumSlot slot, Quality q) {
+        super(properties, slot, q);
     }
 
     @Override
-    public NonNullList<NonNullList<ItemStack>> required(ItemStack stack) {
-        if (stack.getDamageValue() == META_TARGETING)
-        {
-            return NNLUtil.fromArray(new ItemStack[][] {
-                    new ItemStack[] { ItemInit.CYBER_EYES.get().getCachedStack(0) },
-                    new ItemStack[] { getCachedStack(META_HUDJACK) }});
+    public NonNullList<Item> requiredInstalledItems() {
+        if (this == ItemInit.CYBER_EYE_UPGRADES_TARGETING.get()) {
+            return NonNullList.of(
+                    ItemInit.CYBER_EYES.get(),
+                    ItemInit.CYBER_EYE_UPGRADES_HUDJACK.get());
         }
 
-        return NNLUtil.fromArray(new ItemStack[][] {
-                new ItemStack[] { ItemInit.CYBER_EYES.get().getCachedStack(0) }});
+        return NonNullList.of(ItemInit.CYBER_EYES.get());
     }
 
     private static int cache_tickExisted = -1;
@@ -122,7 +121,7 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
         ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityPlayer);
         if (cyberwareUserData == null) return;
 
-        if (cyberwareUserData.isCybercraftInstalled(getCachedStack(META_UNDERWATER_VISION)))
+        if (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_EYE_UPGRADES_UNDERWATER_VISION.get()))
         {
             if (entityPlayer.isEyeInFluid(FluidTags.WATER))
             {
@@ -142,7 +141,7 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
     {
         LivingEntity entityLivingBase = event.getEntityLiving();
         ICybercraftUserData cyberwareUserData = event.getCybercrafteUserData();
-        ItemStack itemStackNightVision = cyberwareUserData.getCybercraft(getCachedStack(META_NIGHT_VISION));
+        ItemStack itemStackNightVision = cyberwareUserData.getCybercraft(ItemInit.CYBER_EYE_UPGRADES_NIGHT_VISION.get());
 
         if ( !itemStackNightVision.isEmpty()
                 && EnableDisableHelper.isEnabled(itemStackNightVision) )
@@ -166,7 +165,7 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
         PlayerEntity entityPlayer = event.getPlayer();
         ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityPlayer);
         if (cyberwareUserData == null) return;
-        ItemStack itemStackUnderwaterVision = cyberwareUserData.getCybercraft(getCachedStack(META_UNDERWATER_VISION));
+        ItemStack itemStackUnderwaterVision = cyberwareUserData.getCybercraft(ItemInit.CYBER_EYE_UPGRADES_UNDERWATER_VISION.get());
 
         if (!itemStackUnderwaterVision.isEmpty())
         {

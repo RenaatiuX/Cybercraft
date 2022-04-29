@@ -10,6 +10,7 @@ import com.rena.cybercraft.api.item.IDeconstructable;
 import com.rena.cybercraft.api.item.IMenuItem;
 import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.item.CybercraftBaseItem;
+import com.rena.cybercraft.common.item.CybercraftItem;
 import com.rena.cybercraft.common.util.NNLUtil;
 import com.rena.cybercraft.core.network.CCNetwork;
 import com.rena.cybercraft.core.network.CybercraftSyncPacket;
@@ -31,6 +32,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
+import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -65,7 +67,7 @@ public final class CybercraftAPI {
 
     public static Map<ItemStack, ICybercraft> linkedWare = new HashMap<>();
 
-    public static SimpleChannel PACKET_HANDLER = CCNetwork.PACKET_HANDLER;
+    public final static SimpleChannel PACKET_HANDLER = CCNetwork.PACKET_HANDLER;
 
     /**
      * Sets the HUD color for the Hudjack, radial menu, and other AR HUD elements
@@ -415,7 +417,7 @@ public final class CybercraftAPI {
     public static boolean isCybercraftInstalled(@Nullable Entity targetEntity, ItemStack stack)
     {
         ICybercraftUserData cyberwareUserData = getCapabilityOrNull(targetEntity);
-        return cyberwareUserData != null && cyberwareUserData.isCybercraftInstalled(stack);
+        return cyberwareUserData != null && cyberwareUserData.isCybercraftInstalled(stack.getItem());
     }
 
     /**
@@ -449,7 +451,7 @@ public final class CybercraftAPI {
     public static ItemStack getCybercraft(@Nullable Entity targetEntity, ItemStack stack)
     {
         ICybercraftUserData cyberwareUserData = getCapabilityOrNull(targetEntity);
-        return cyberwareUserData == null ? ItemStack.EMPTY : cyberwareUserData.getCybercraft(stack);
+        return cyberwareUserData == null ? ItemStack.EMPTY : cyberwareUserData.getCybercraft(stack.getItem());
     }
 
     public static void updateData(Entity targetEntity)
@@ -493,6 +495,27 @@ public final class CybercraftAPI {
     public static void useActiveItem(Entity entity, ItemStack stack)
     {
         ((IMenuItem) stack.getItem()).use(entity, stack);
+    }
+
+    /**
+     * returns the quality of a stack
+     * @param stack
+     * @return
+     */
+    public static Quality getQuality(ItemStack stack)
+    {
+        return getCybercraft(stack).getQuality();
+    }
+
+    /**
+     * won´t change the stack, returns a new stack with the quality requested
+     */
+    public static ItemStack setQuality(ItemStack stack, Quality quality) {
+        if (quality == getQuality(stack))
+            return stack;
+        ICybercraft cybercraft = getCybercraft(stack);
+        Item otherQuality = cybercraft.withQuality(quality);
+        return new ItemStack(otherQuality, stack.getCount(), stack.getTag());
     }
 
 }

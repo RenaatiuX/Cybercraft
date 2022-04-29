@@ -1,6 +1,7 @@
 package com.rena.cybercraft.api.item;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
@@ -14,25 +15,16 @@ public interface ICybercraft {
 
     public EnumSlot getSlot(ItemStack stack);
     public int installedStackSize(ItemStack stack);
-    public NonNullList<NonNullList<ItemStack>> required(ItemStack stack);
     public boolean isIncompatible(ItemStack stack, ItemStack comparison);
     boolean isEssential(ItemStack stack);
     public List<ITextComponent> getInfo(ItemStack stack);
     public int getCapacity(ItemStack wareStack);
+    NonNullList<Item> requiredInstalledItems();
 
 
-    /**
-     * Returns a Quality object representing the quality of this stack - all
-     * changes that this Quality has to function must be handled internally,
-     * this is just for the tooltip and external factors. See CyberwareAPI for
-     * the base Qualities.
-     *
-     * @param stack	The ItemStack to check
-     * @return		An instance of Quality
-     */
-    public Quality getQuality(ItemStack stack);
+    public Quality getQuality();
 
-    public ItemStack setQuality(ItemStack stack, Quality quality);
+    public Item withQuality(Quality quality);
     public boolean canHoldQuality(ItemStack stack, Quality quality);
 
     public class Quality

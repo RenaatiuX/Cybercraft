@@ -6,92 +6,60 @@ import com.rena.cybercraft.api.item.ICybercraftTabItem;
 import com.rena.cybercraft.api.item.IDeconstructable;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, ICybercraftTabItem, IDeconstructable {
 
-    private EnumSlot[] slots;
-    private int[] essence;
-    private NonNullList<NonNullList<ItemStack>> components;
+    private EnumSlot slot;
+    private int essence;
+    private final Quality q;
 
-    public CybercraftItem(Properties properties, EnumSlot[] slots, String... subnames) {
-        super(properties, subnames);
-        this.slots = slots;
-
-        this.essence = new int[subnames.length + 1];
-        this.components = NonNullList.create();
+    public CybercraftItem(Properties properties, EnumSlot slot, Quality q) {
+        super(properties);
+        this.slot = slot;
+        this.q = q;
     }
 
-    public CybercraftItem(Properties properties, EnumSlot slot, String[] subnames)
+   public CybercraftItem setWeight(int weight)
     {
-        this(properties, new EnumSlot[] { slot }, subnames);
-    }
-
-    public CybercraftItem(Properties properties, EnumSlot slot)
-    {
-        this(properties, slot, new String[0]);
-    }
-
-   public CybercraftItem setWeights(int... weight)
-    {
-        for (int meta = 0; meta < weight.length; meta++)
-        {
-            ItemStack stack = CybercraftAPI.withMetaData(new ItemStack(this, 1), meta);
+            ItemStack stack = new ItemStack(this);
             int installedStackSize = installedStackSize(stack);
             stack.setCount(installedStackSize);
-            this.setQuality(stack, CybercraftAPI.QUALITY_SCAVENGED);
+            CybercraftAPI.setQuality(stack, CybercraftAPI.QUALITY_SCAVENGED);
             //ItemInit.zombieItems.add(new ZombieItem(weight[meta], stack));
-        }
         return this;
     }
 
-    public CybercraftItem setEssenceCost(int... essence){
+    public CybercraftItem setEssenceCost(int essence){
         this.essence = essence;
-        return this;
-    }
-
-    public CybercraftItem setComponents(NonNullList<NonNullList<ItemStack>> components) {
-        this.components = components;
-        return this;
-    }
-
-    public CybercraftItem setComponents(NonNullList<ItemStack>... components){
-        NonNullList<NonNullList<ItemStack>> list = NonNullList.create();
-        for (NonNullList<ItemStack> l : components){
-            list.add(l);
-        }
-        this.components = list;
         return this;
     }
 
     @Override
     public EnumSlot getSlot(ItemStack stack) {
-        return slots[Math.min(slots.length - 1, CybercraftAPI.getMetaData(stack))];
+        return this.slot;
     }
 
     protected int getUnmodifiedEssenceCost(ItemStack stack)
     {
-        return essence[Math.min(this.subnames.length, CybercraftAPI.getMetaData(stack))];
+        return essence;
     }
 
     @Override
     public int installedStackSize(ItemStack stack) {
         return 1;
-    }
-
-    @Override
-    public NonNullList<NonNullList<ItemStack>> required(ItemStack stack) {
-        return null;
     }
 
     @Override
@@ -117,27 +85,26 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
     }
 
     @Override
-    public Quality getQuality(ItemStack stack) {
-        Quality q = CybercraftAPI.getQualityTag(stack);
-        if (q == null) return CybercraftAPI.QUALITY_MANUFACTURED;
+    public NonNullList<Item> requiredInstalledItems() {
+        return NonNullList.create();
+    }
+
+    @Override
+    public Quality getQuality() {
         return q;
     }
 
     @Override
-    public ItemStack setQuality(ItemStack stack, Quality quality) {
-        if (quality == CybercraftAPI.QUALITY_MANUFACTURED)
-        {
-            if (!stack.isEmpty() && stack.hasTag())
-            {
-                stack.getTag().remove(CybercraftAPI.QUALITY_TAG);
-                if (stack.getTag().isEmpty())
-                {
-                    stack.setTag(null);
-                }
-            }
-            return stack;
+    public Item withQuality(Quality quality) {
+        if (quality == q)
+            return this;
+        String path = "";
+        if (quality == CybercraftAPI.QUALITY_MANUFACTURED){
+            path += this.getRegistryName().getPath().replace(q.getSpriteSuffix(), "");
+            path = path.substring(0, path.length() - 1);
+            return ForgeRegistries.ITEMS.getValue(new ResourceLocation(this.getRegistryName().getNamespace(), path));
         }
-        return this.canHoldQuality(stack, quality) ? CybercraftAPI.writeQualityTag(stack, quality) : stack;
+        return ForgeRegistries.ITEMS.getValue(new ResourceLocation(this.getRegistryName().getNamespace(), this.getRegistryName().getPath() + "_" + quality.getSpriteSuffix()));
     }
 
     @Override
@@ -154,7 +121,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
     @Override
     public int getEssenceCost(ItemStack stack) {
         int cost = getUnmodifiedEssenceCost(stack);
-        if (getQuality(stack) == CybercraftAPI.QUALITY_SCAVENGED){
+        if (getQuality() == CybercraftAPI.QUALITY_SCAVENGED){
             float half = ((float)cost) / 2f;
             if (cost > 0){
                 cost += Math.ceil(half);
@@ -172,12 +139,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
 
     @Override
     public boolean canDestroy(ItemStack stack) {
-        return CybercraftAPI.getMetaData(stack) < this.components.size();
-    }
-
-    @Override
-    public NonNullList<ItemStack> getComponents(ItemStack stack) {
-        return components.get(Math.min(this.components.size() - 1, CybercraftAPI.getMetaData(stack)));
+        return true;
     }
 
     public int getPowerConsumption(ItemStack stack)
@@ -200,24 +162,9 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
         return false;
     }
 
-
-    @Override
-    public void fillItemCategory(ItemGroup itemGroup, NonNullList<ItemStack> itemStack) {
-        if (this.getCreativeTabs().contains(itemGroup)){
-            if (subnames.length == 0){
-                itemStack.add(new ItemStack(this));
-            }else{
-                for (int meta = 0;meta<subnames.length;meta++){
-                    itemStack.add(CybercraftAPI.withMetaData(new ItemStack(this), meta));
-                }
-            }
-        }
-        super.fillItemCategory(itemGroup, itemStack);
-    }
-
     @Override
     public ITextComponent getName(ItemStack stack) {
-        Quality q = getQuality(stack);
+        Quality q = getQuality();
         if (q != null && q.getNameModifier() != null)
         {
             return new TranslationTextComponent(q.getNameModifier()).append(super.getName(stack));
@@ -254,11 +201,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
 
         if (hasPowerConsumption)
         {
-            String toTranslate = hasCustomPowerMessage(stack) ?
-                    "cybercraft.tooltip." + this.getRegistryName().getPath()
-                            + (this.subnames.length > 0 ? "." + CybercraftAPI.getMetaData(stack) : "") + ".power_consumption"
-                    :
-                    "cybercraft.tooltip.power_consumption";
+            String toTranslate = hasCustomPowerMessage(stack) ? "cybercraft.tooltip." + this.getRegistryName().getPath() + ".power_consumption" : "cybercraft.tooltip.power_consumption";
             list.add(new TranslationTextComponent(toTranslate).append(toAddPowerConsumption).withStyle(TextFormatting.GREEN));
         }
 
@@ -283,21 +226,13 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
 
         if (hasPowerProduction)
         {
-            String toTranslate = hasCustomPowerMessage(stack) ?
-                    "cybercraft.tooltip." + this.getRegistryName().toString().substring(10)
-                            + (this.subnames.length > 0 ? "." + CybercraftAPI.getMetaData(stack) : "") + ".power_production"
-                    :
-                    "cybercraft.tooltip.power_production";
+            String toTranslate = hasCustomPowerMessage(stack) ? "cybercraft.tooltip." + this.getRegistryName().getPath() + ".power_production" : "cybercraft.tooltip.power_production";
             list.add(new TranslationTextComponent(toTranslate).append(toAddPowerProduction).withStyle(TextFormatting.GREEN));
         }
 
         if (getCapacity(stack) > 0)
         {
-            String toTranslate = hasCustomCapacityMessage(stack) ?
-                    "cybercraft.tooltip." + this.getRegistryName().toString().substring(10)
-                            + (this.subnames.length > 0 ? "." + CybercraftAPI.getMetaData(stack) : "") + ".capacity"
-                    :
-                    "cybercraft.tooltip.capacity";
+            String toTranslate = hasCustomCapacityMessage(stack) ? "cybercraft.tooltip." + this.getRegistryName().getPath() + ".capacity" : "cybercraft.tooltip.capacity";
             list.add(new TranslationTextComponent(toTranslate, getCapacity(stack)));
         }
 

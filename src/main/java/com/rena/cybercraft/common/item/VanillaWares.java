@@ -9,6 +9,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.shader.ShaderGroup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
@@ -32,8 +33,6 @@ public class VanillaWares {
 
     public static class SpiderEyeWare implements ICybercraft {
 
-        private static final ItemStack itemStackSpiderEye = new ItemStack(Items.SPIDER_EYE);
-
         public SpiderEyeWare()
         {
             MinecraftForge.EVENT_BUS.register(this);
@@ -49,12 +48,6 @@ public class VanillaWares {
         public int installedStackSize(ItemStack stack)
         {
             return 1;
-        }
-
-        @Override
-        public NonNullList<NonNullList<ItemStack>> required(ItemStack stack)
-        {
-            return NonNullList.create();
         }
 
         @Override
@@ -81,7 +74,7 @@ public class VanillaWares {
             if (entityLivingBase.tickCount % 20 != 0) return;
 
             ICybercraftUserData cyberwareUserData = event.getCybercrafteUserData();
-            if (cyberwareUserData.isCybercraftInstalled(itemStackSpiderEye))
+            if (cyberwareUserData.isCybercraftInstalled(Items.SPIDER_EYE))
             {
                 entityLivingBase.addEffect(new EffectInstance(Effects.NIGHT_VISION, Integer.MAX_VALUE, -53, true, false));
             }
@@ -183,6 +176,11 @@ public class VanillaWares {
         }
 
         @Override
+        public NonNullList<Item> requiredInstalledItems() {
+            return NonNullList.create();
+        }
+
+        @Override
         public void onAdded(LivingEntity entityLivingBase, ItemStack stack) {}
 
         @Override
@@ -195,16 +193,16 @@ public class VanillaWares {
         }
 
         @Override
-        public Quality getQuality(ItemStack stack)
+        public Quality getQuality()
         {
             return null;
         }
 
         @Override
-        public ItemStack setQuality(ItemStack stack, Quality quality)
-        {
-            return stack;
+        public Item withQuality(Quality quality) {
+            return Items.SPIDER_EYE;
         }
+
 
         @Override
         public boolean canHoldQuality(ItemStack stack, Quality quality)

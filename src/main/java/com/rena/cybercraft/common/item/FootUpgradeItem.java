@@ -29,36 +29,21 @@ public class FootUpgradeItem extends CybercraftItem implements IMenuItem {
     public static final int META_AQUA = 1;
     public static final int META_WHEELS = 2;
 
-    public FootUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
-        super(properties, slots, subnames);
+    public FootUpgradeItem(Properties properties, EnumSlot slot, Quality q) {
+        super(properties, slot, q);
     }
 
-    @Override
-    public NonNullList<NonNullList<ItemStack>> required(ItemStack stack) {
-        if (stack.getDamageValue() != META_AQUA) return NonNullList.create();
-
-        return NNLUtil.fromArray(new ItemStack[][] {
-                new ItemStack[] {
-                        ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_LEFT_CYBER_LEG),
-                        ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_RIGHT_CYBER_LEG) }});
-    }
 
     @SubscribeEvent
     public void handleHorseMove(LivingEvent.LivingUpdateEvent event)
     {
         LivingEntity entityLivingBase = event.getEntityLiving();
-        if (entityLivingBase instanceof HorseEntity)
-        {
-            ItemStack itemStackSpurs = getCachedStack(META_SPURS);
+        if (entityLivingBase instanceof HorseEntity) {
             HorseEntity entityHorse = (HorseEntity) entityLivingBase;
-            for (Entity entityPassenger : entityHorse.getPassengers())
-            {
-                if (entityPassenger instanceof LivingEntity)
-                {
+            for (Entity entityPassenger : entityHorse.getPassengers()) {
+                if (entityPassenger instanceof LivingEntity) {
                     ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityPassenger);
-                    if ( cyberwareUserData != null
-                            && cyberwareUserData.isCybercraftInstalled(itemStackSpurs) )
-                    {
+                    if ( cyberwareUserData != null && cyberwareUserData.isCybercraftInstalled(ItemInit.FOOT_UPGRADES_SPURS.get()) ) {
                         entityHorse.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 1, 5, true, false));
                         break;
                     }

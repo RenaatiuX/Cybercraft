@@ -12,6 +12,7 @@ import com.rena.cybercraft.common.util.NNLUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.ByteNBT;
 import net.minecraft.nbt.CompoundNBT;
@@ -51,7 +52,7 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
     }
 
     @Override
-    public boolean isCybercraftInstalled(ItemStack cybercraft) {
+    public boolean isCybercraftInstalled(Item cybercraft) {
         return false;
     }
 

@@ -40,28 +40,19 @@ public class CybercraftTab extends ItemGroup{
 
         for (Item item : ForgeRegistries.ITEMS)
         {
-            if (item == null)
-            {
+            if (item == null) {
                 continue;
             }
-            for (ItemGroup tab : item.getCreativeTabs())
-            {
-                if (tab == this)
-                {
-                    if (item instanceof ICybercraftTabItem)
-                    {
+            for (ItemGroup tab : item.getCreativeTabs()) {
+                if (tab == this) {
+                    if (item instanceof ICybercraftTabItem) {
                         NonNullList<ItemStack> tempList = NonNullList.create();
                         item.fillItemCategory(this, tempList);
-
-                        for (ItemStack stack : tempList)
-                        {
-                            if (!stack.isEmpty())
-                            {
-                                if (CybercraftAPI.isCybercraft(stack))
-                                {
+                        for (ItemStack stack : tempList) {
+                            if (!stack.isEmpty()) {
+                                if (CybercraftAPI.isCybercraft(stack)) {
                                     ICybercraft ware = CybercraftAPI.getCybercraft(stack);
-                                    if (ware.canHoldQuality(stack, q))
-                                    {
+                                    if (ware.canHoldQuality(stack, q)) {
                                         stack = ware.setQuality(stack, q);
                                     }
                                 }

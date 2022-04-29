@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = Cybercraft.MOD_ID, value = Dist.CLIENT)
 public class CreativeMenuHandler {
 
-    private static final ResourceLocation CEX_GUI_TEXTURES = Cybercraft.modeLoc("textures/gui/creative_expansion.png");
+    private static final ResourceLocation CEX_GUI_TEXTURES = Cybercraft.modLoc("textures/gui/creative_expansion.png");
     private static CEXButton salvaged, manufactured;
     public static int pageSelected = 0;
 

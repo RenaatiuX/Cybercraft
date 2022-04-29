@@ -14,7 +14,7 @@ public class CCNetwork {
     private static int CHANNEL_INDEX = 0;
 
     protected static SimpleChannel registerChannel(String id, String version){
-        return NetworkRegistry.newSimpleChannel(Cybercraft.modeLoc(id), () -> version, version::equals, version::equals);
+        return NetworkRegistry.newSimpleChannel(Cybercraft.modLoc(id), () -> version, version::equals, version::equals);
     }
 
     public static final void init(){
