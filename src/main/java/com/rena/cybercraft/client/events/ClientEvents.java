@@ -9,8 +9,6 @@ import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -26,9 +24,6 @@ public class ClientEvents {
     public static void clientSetup(FMLClientSetupEvent event) {
 
 
-    }
-
-    public static final void registerModels(ModelBakeEvent event){
     }
 
     private void registerRenders(Item item)
@@ -68,7 +63,7 @@ public class ClientEvents {
                 models.add(new ModelResourceLocation(name, "inventory"));
 
             }
-            ModelLoader.instance()..registerItemVariants(item, models.toArray(new ModelResourceLocation[0]));
+            ModelLoader.registerItemVariants(item, models.toArray(new ModelResourceLocation[0]));
             ModelLoader.setCustomMeshDefinition(item, new CybercraftMeshDefinition());
         }
         else if (item instanceof BlueprintItem)

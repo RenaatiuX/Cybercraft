@@ -1,9 +1,6 @@
 package com.rena.cybercraft.common.block;
 
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.HorizontalBlock;
+import net.minecraft.block.*;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.tileentity.TileEntity;
@@ -12,7 +9,7 @@ import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nullable;
 
-public class BeaconBlock extends ContainerBlock {
+public class BeaconBlock extends Block {
 
     public static final DirectionProperty FACING = HorizontalBlock.FACING;
 
@@ -23,15 +20,9 @@ public class BeaconBlock extends ContainerBlock {
         super(properties);
     }
 
+
     public static AxisAlignedBB getBound() {
         return bound;
-    }
-
-
-    @Nullable
-    @Override
-    public TileEntity newBlockEntity(IBlockReader p_196283_1_) {
-        return null;
     }
 
     @Override

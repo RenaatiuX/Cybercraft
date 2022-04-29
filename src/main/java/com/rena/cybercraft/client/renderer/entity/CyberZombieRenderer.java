@@ -1,4 +1,4 @@
-package com.rena.cybercraft.client.renderer;
+package com.rena.cybercraft.client.renderer.entity;
 
 import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.common.entity.CyberZombieEntity;
