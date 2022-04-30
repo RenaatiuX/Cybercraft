@@ -1,6 +1,7 @@
 package com.rena.cybercraft.core.init;
 
 import com.rena.cybercraft.Cybercraft;
+import com.rena.cybercraft.common.block.BlueprintArchiveBlock;
 import com.rena.cybercraft.common.block.ChargerBlock;
 import com.rena.cybercraft.common.block.ComponentBoxBlock;
 import com.rena.cybercraft.common.block.ScannerBlock;
@@ -19,10 +20,12 @@ import net.minecraftforge.registries.IForgeRegistry;
 public class BlockInit {
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Cybercraft.MOD_ID);
-
+    public static final DeferredRegister<Block> BLOCKS_ITEM = DeferredRegister.create(ForgeRegistries.BLOCKS, Cybercraft.MOD_ID);
     public static final RegistryObject<ScannerBlock> SCANNER_BLOCK = BLOCKS.register("scanner", ScannerBlock::new);
     public static final RegistryObject<ChargerBlock> CHARGER_BLOCK = BLOCKS.register("charger", ChargerBlock::new);
-    public static final RegistryObject<ComponentBoxBlock> COMPONENT_BOX = BLOCKS.register("component_box", ComponentBoxBlock::new);
+    public static final RegistryObject<ComponentBoxBlock> COMPONENT_BOX = BLOCKS_ITEM.register("component_box", ComponentBoxBlock::new);
+    public static final RegistryObject<BlueprintArchiveBlock> BLUEPRINTER_ARCHIVE = BLOCKS.register("blueprint_archive", BlueprintArchiveBlock::new);
+
 
     @SubscribeEvent
     public static final void registerBlockItems(RegistryEvent.Register<Item> event){

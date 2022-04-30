@@ -140,5 +140,7 @@
 
   "tooltip.cybercraft.blueprint": "Creates %1$s",
   "tooltip.cybercraft.craft_blueprint": "Craft with a piece of Cyberware",
-  "tooltip.cybercraft.shift_prompt": "Hold SNEAK for more info"
+  "tooltip.cybercraft.shift_prompt": "Hold SNEAK for more info",
+  "cybercraft.tooltip.component_box": "Shift-click to place or pick up",
+  "cybercrft.tooltip.component_box2": "Accessible by Engineering Table if nearby or in inventory"
 }

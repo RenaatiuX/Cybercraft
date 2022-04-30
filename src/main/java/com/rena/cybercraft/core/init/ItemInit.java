@@ -4,6 +4,7 @@ import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.item.ICybercraft;
 import com.rena.cybercraft.common.item.*;
+import com.rena.cybercraft.common.item.block.ItemComponentBox;
 import com.rena.cybercraft.common.util.CybercraftArmorMaterial;
 import com.rena.cybercraft.common.util.CybercraftItemTier;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -534,5 +535,8 @@ public class ItemInit {
 
     public static final RegistryObject<Item> SURGERY = ITEMS.register("surgery_chamber",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
+
+    public static final RegistryObject<Item> COMPONENT_BOX = ITEMS.register("component_box",
+            () -> new ItemComponentBox(BlockInit.COMPONENT_BOX.get(), new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
 
 }
