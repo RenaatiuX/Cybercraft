@@ -1,0 +1,7 @@
+{
+  "type": "cybercraft:blueprintrecipe",
+  "input": {
+    "tag": "cybercraft:blueprint_items"
+  },
+  "worktime": 400
+}

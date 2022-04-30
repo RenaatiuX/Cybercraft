@@ -2,6 +2,7 @@ package com.rena.cybercraft.core.init;
 
 import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.common.block.ChargerBlock;
+import com.rena.cybercraft.common.block.ComponentBoxBlock;
 import com.rena.cybercraft.common.block.ScannerBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
@@ -21,6 +22,7 @@ public class BlockInit {
 
     public static final RegistryObject<ScannerBlock> SCANNER_BLOCK = BLOCKS.register("scanner", ScannerBlock::new);
     public static final RegistryObject<ChargerBlock> CHARGER_BLOCK = BLOCKS.register("charger", ChargerBlock::new);
+    public static final RegistryObject<ComponentBoxBlock> COMPONENT_BOX = BLOCKS.register("component_box", ComponentBoxBlock::new);
 
     @SubscribeEvent
     public static final void registerBlockItems(RegistryEvent.Register<Item> event){

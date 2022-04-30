@@ -9,6 +9,7 @@ public class Tags {
 
     public static final class Items{
         public static final ITag.INamedTag<Item> BLUPRINT_ITEMS = mod("blueprint_items");
+        public static final ITag.INamedTag<Item> COMPONENTS = mod("components");
 
         private static ITag.INamedTag<Item> mod(String name){
             return ItemTags.bind(Cybercraft.modLoc(name).toString());

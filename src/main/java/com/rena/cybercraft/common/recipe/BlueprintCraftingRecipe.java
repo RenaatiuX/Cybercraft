@@ -86,7 +86,7 @@ public class BlueprintCraftingRecipe implements IRecipe<IInventory> {
 
         @Override
         public BlueprintCraftingRecipe fromJson(ResourceLocation id, JsonObject json) {
-            final Ingredient input =Ingredient.fromJson(getJsonElement(json, "input"));
+            final Ingredient input = Ingredient.fromJson(getJsonElement(json, "input"));
             final int workTime = JSONUtils.getAsInt(json, "worktime", 200);
             return new BlueprintCraftingRecipe(input, id, workTime);
         }

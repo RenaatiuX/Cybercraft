@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "cybercraft:component_actuator",
+    "cybercraft:component_fullerene",
+    "cybercraft:component_ssc",
+    "cybercraft:component_plating",
+    "cybercraft:component_fiberoptics",
+    "cybercraft:component_microelectric",
+    "cybercraft:component_reactor",
+    "cybercraft:component_storage",
+    "cybercraft:component_synthnerves",
+    "cybercraft:component_titanium"
+  ]
+}

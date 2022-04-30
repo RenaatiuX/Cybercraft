@@ -107,8 +107,10 @@ public class CreativeMenuHandler {
     @SubscribeEvent
     public static void drawGui(GuiScreenEvent.DrawScreenEvent.Post event){
         if (isCorrectTab(event.getGui())){
-            salvaged.visible = true;
-            manufactured.visible = true;
+            if (salvaged != null && manufactured != null) {
+                salvaged.visible = true;
+                manufactured.visible = true;
+            }
             CreativeScreen gui = (CreativeScreen) event.getGui();
             int mouseX = event.getMouseX();
             int mouseY = event.getMouseY();
@@ -117,7 +119,7 @@ public class CreativeMenuHandler {
             }else if(manufactured.isMouseOver(mouseX, mouseY)){
                 gui.renderTooltip(event.getMatrixStack(), new TranslationTextComponent(CybercraftAPI.QUALITY_MANUFACTURED.getUnlocalizedName()), mouseX, mouseY);
             }
-        }else{
+        }else if(salvaged != null && manufactured != null){
             salvaged.visible = false;
             manufactured.visible = false;
         }

@@ -8,6 +8,8 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 
 public class ScannerScreen extends ContainerScreen<ScannerContainer> {
 
@@ -23,6 +25,23 @@ public class ScannerScreen extends ContainerScreen<ScannerContainer> {
         int middleX = (this.width - this.imageWidth) / 2;
         int middleY = (this.height - this.imageHeight) / 2;
         this.blit(stack, middleX, middleY, 0, 0, 176, 166);
+        this.blit(stack, middleX + 7, middleY + 30, 0, 166, 162, 9);
+        if (menu.getCounterPercentage() != 0){
+            float percentage = ((float) menu.getCounterPercentage()) / 100f;
+            this.blit(stack, middleX + 7, middleY + 30, 0, 175, (int) (162f * percentage), 9);
+        }
+    }
+
+    @Override
+    protected void renderTooltip(MatrixStack stack, int mouseX, int mouseY) {
+        super.renderTooltip(stack, mouseX, mouseY);
+        int middleX = (this.width - this.imageWidth) / 2;
+        int middleY = (this.height - this.imageHeight) / 2;
+        if (mouseX >= middleX + 7 && mouseY >= middleY + 30){
+            if (mouseX <= middleX + 7 + 162 && mouseY <= middleY + 30 + 9){
+                renderTooltip(stack, new StringTextComponent(menu.getCounterPercentage() + "%").withStyle(TextFormatting.AQUA), mouseX, mouseY);
+            }
+        }
     }
 
     @Override

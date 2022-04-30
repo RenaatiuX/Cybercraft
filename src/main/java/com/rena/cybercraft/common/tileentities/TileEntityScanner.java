@@ -6,23 +6,29 @@ import com.rena.cybercraft.common.item.BlueprintItem;
 import com.rena.cybercraft.common.recipe.BlueprintCraftingRecipe;
 import com.rena.cybercraft.core.init.RecipeInit;
 import com.rena.cybercraft.core.init.TileEntityTypeInit;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
 public class TileEntityScanner extends LockableLootTileEntity implements ITickableTileEntity {
 
     private NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
-    private int maxCounter = 1, counter = 0;
+    private int maxCounter = 1, counter = 0, counterPercentage;
 
     public TileEntityScanner() {
         super(TileEntityTypeInit.SCANNER_TE.get());
@@ -45,8 +51,17 @@ public class TileEntityScanner extends LockableLootTileEntity implements ITickab
                         }
                     }
                 }
-            }
+                if (!canProcess(recipe)) {
+                    reset();
+                }
+            }else
+                reset();
+            counterPercentage = (int) (((double) counter) * 100d/((double) maxCounter));
         }
+    }
+
+    private void reset(){
+        counter = 0;
     }
 
     private void startProcessing(BlueprintCraftingRecipe recipe){
@@ -82,6 +97,24 @@ public class TileEntityScanner extends LockableLootTileEntity implements ITickab
     }
 
     @Override
+    public CompoundNBT save(CompoundNBT nbt) {
+        if (!this.tryLoadLootTable(nbt))
+            nbt = ItemStackHelper.saveAllItems(nbt, this.items);
+        return super.save(nbt);
+    }
+
+    @Override
+    public void load(BlockState state, CompoundNBT nbt) {
+        super.load(state, nbt);
+        readItems(nbt);
+    }
+
+    protected void readItems(CompoundNBT nbt) {
+        if(!this.tryLoadLootTable(nbt))
+            ItemStackHelper.loadAllItems(nbt, this.items);
+    }
+
+    @Override
     protected void setItems(NonNullList<ItemStack> items) {
         this.items = items;
     }
@@ -99,5 +132,13 @@ public class TileEntityScanner extends LockableLootTileEntity implements ITickab
     @Override
     public int getContainerSize() {
         return items.size();
+    }
+
+    public int getCounterPercentage() {
+        return counterPercentage;
+    }
+
+    public void setCounterPercentage(int counterPercentage) {
+        this.counterPercentage = counterPercentage;
     }
 }

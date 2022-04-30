@@ -13,6 +13,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.lwjgl.system.CallbackI;
 
+import static com.rena.cybercraft.core.init.ItemInit.*;
+
 import javax.annotation.Nullable;
 
 public class ModItemTagsProvider extends ItemTagsProvider {
@@ -22,9 +24,11 @@ public class ModItemTagsProvider extends ItemTagsProvider {
 
     @Override
     protected void addTags() {
-        for (Item i : ForgeRegistries.ITEMS){
+        for (Item i : ForgeRegistries.ITEMS) {
             if (CybercraftAPI.isCybercraft(new ItemStack(i)))
                 tag(Tags.Items.BLUPRINT_ITEMS).add(i);
         }
+        tag(Tags.Items.COMPONENTS).add(COMPONENT_ACTUATOR.get(), COMPONENT_FULLERENE.get(), COMPONENT_SSC.get(), COMPONENT_PLATING.get(), COMPONENT_FIBER_OPTICS.get(),
+                COMPONENT_MICRO_ELECTRIC.get(), COMPONENT_REACTOR.get(), COMPONENT_STORAGE.get(), COMPONENT_SYNTHNERVES.get(), COMPONENT_TITANIUM.get());
     }
 }

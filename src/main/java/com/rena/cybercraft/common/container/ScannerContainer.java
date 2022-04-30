@@ -1,5 +1,6 @@
 package com.rena.cybercraft.common.container;
 
+import com.rena.cybercraft.common.container.util.BetterRefrenceHolder;
 import com.rena.cybercraft.common.tileentities.TileEntityScanner;
 import com.rena.cybercraft.core.init.ContainerInit;
 import net.minecraft.entity.player.PlayerInventory;
@@ -21,5 +22,25 @@ public class ScannerContainer extends BaseTeContainer<TileEntityScanner> {
         addSlot(new Slot(tileEntity, 0, 15, 53));
         addSlot(new Slot(tileEntity, 1, 35, 53));
         addSlot(new LockedSlot(tileEntity, 2, 140, 56));
+
+        track();
+    }
+
+    public int getCounterPercentage(){
+        return tileEntity.getCounterPercentage();
+    }
+
+    private void track(){
+        addDataSlot(new BetterRefrenceHolder() {
+            @Override
+            public int get() {
+                return tileEntity.getCounterPercentage();
+            }
+
+            @Override
+            public void set(int value) {
+                tileEntity.setCounterPercentage(value);
+            }
+        });
     }
 }
