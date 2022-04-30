@@ -6,6 +6,7 @@ import com.rena.cybercraft.api.CybercraftUpdateEvent;
 import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.client.ClientUtils;
 import com.rena.cybercraft.common.util.LibConstants;
+import com.rena.cybercraft.core.init.ItemInit;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
@@ -29,8 +30,8 @@ public class LungsUpgradeItem extends CybercraftItem{
     private static final int META_COMPRESSED_OXYGEN       = 0;
     private static final int META_HYPEROXYGENATION_BOOST  = 1;
 
-    public LungsUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
-        super(properties, slots, subnames);
+    public LungsUpgradeItem(Properties properties, EnumSlot slots, Quality q) {
+        super(properties, slots, q);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -147,7 +148,7 @@ public class LungsUpgradeItem extends CybercraftItem{
     @Override
     public int installedStackSize(ItemStack stack)
     {
-        return stack.getDamageValue() == META_HYPEROXYGENATION_BOOST ? 3 : 1;
+        return stack.getItem() == ItemInit.LUNGS_HYPEROXYGENATION.get() ? 3 : 1;
     }
 
     private int getAir(ItemStack stack)
@@ -163,13 +164,13 @@ public class LungsUpgradeItem extends CybercraftItem{
     @Override
     public int getPowerConsumption(ItemStack stack)
     {
-        return stack.getDamageValue() == META_HYPEROXYGENATION_BOOST ? LibConstants.HYPEROXYGENATION_CONSUMPTION * stack.getCount() : 0;
+        return stack.getItem() == ItemInit.LUNGS_HYPEROXYGENATION.get() ? LibConstants.HYPEROXYGENATION_CONSUMPTION * stack.getCount() : 0;
     }
 
     @Override
     protected int getUnmodifiedEssenceCost(ItemStack stack)
     {
-        if (stack.getDamageValue() == META_HYPEROXYGENATION_BOOST)
+        if (stack.getItem() == ItemInit.LUNGS_HYPEROXYGENATION.get())
         {
             switch (stack.getCount())
             {

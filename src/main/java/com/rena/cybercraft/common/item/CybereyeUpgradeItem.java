@@ -274,15 +274,15 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
 
     @Override
     public boolean hasMenu(ItemStack stack) {
-        return stack.getDamageValue() == META_NIGHT_VISION
-                || stack.getDamageValue() == META_HUDJACK
-                || stack.getDamageValue() == META_TARGETING
-                || stack.getDamageValue() == META_ZOOM;
+        return stack.getItem() == ItemInit.CYBER_EYE_UPGRADES_NIGHT_VISION.get()
+                || stack.getItem() == ItemInit.CYBER_EYE_UPGRADES_HUDJACK.get()
+                || stack.getItem() == ItemInit.CYBER_EYE_UPGRADES_TARGETING.get()
+                || stack.getItem() == ItemInit.CYBER_EYE_UPGRADES_ZOOM.get();
     }
 
     @Override
     public void use(Entity entity, ItemStack stack) {
-        if (stack.getDamageValue() == META_ZOOM)
+        if (stack.getItem() == ItemInit.CYBER_EYE_UPGRADES_ZOOM.get())
         {
             if (entity == player)
             {
@@ -302,9 +302,9 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
 
     @Override
     public String getUnlocalizedLabel(ItemStack stack) {
-        if (stack.getDamageValue() == META_ZOOM)
+        if (stack.getItem() == ItemInit.CYBER_EYE_UPGRADES_ZOOM.get())
         {
-            return "cyberware.gui.active.zoom";
+            return "cybercraft.gui.active.zoom";
         }
         return EnableDisableHelper.getUnlocalizedLabel(stack);
     }
@@ -313,7 +313,7 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
 
     @Override
     public float[] getColor(ItemStack stack) {
-        if (stack.getDamageValue() == META_ZOOM)
+        if (stack.getItem() == ItemInit.CYBER_EYE_UPGRADES_ZOOM.get())
         {
             return null;
         }
@@ -322,7 +322,7 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
 
     @Override
     public boolean isActive(ItemStack stack) {
-        return stack.getDamageValue() == META_HUDJACK
+        return stack.getItem() == ItemInit.CYBER_EYE_UPGRADES_HUDJACK.get()
                 && EnableDisableHelper.isEnabled(stack);
     }
 }

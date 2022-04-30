@@ -9,8 +9,8 @@ import net.minecraft.nbt.CompoundNBT;
 
 public class DenseBatteryItem extends CybercraftItem implements ISpecialBattery {
 
-    public DenseBatteryItem(Properties properties, EnumSlot slots) {
-        super(properties, slots);
+    public DenseBatteryItem(Properties properties, EnumSlot slots, Quality q) {
+        super(properties, slots, q);
     }
 
     @Override

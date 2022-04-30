@@ -28,7 +28,7 @@ public class LegUpgradeItem extends CybercraftItem {
 
     @Override
     public NonNullList<Item> requiredInstalledItems() {
-        return NonNullList.of(ItemInit.LIMB_RIGHT.get(), ItemInit.LIMB_LEFT.get());
+        return NonNullList.of(ItemInit.CYBER_LIMB_LEG_RIGHT.get(), ItemInit.CYBER_LIMB_LEG_LEFT.get());
     }
 
     @SubscribeEvent
@@ -40,10 +40,10 @@ public class LegUpgradeItem extends CybercraftItem {
         ItemStack itemStackJumpBoost = cyberwareUserData.getCybercraft(ItemInit.LEG_JUMP_BOOST.get());
         if (!itemStackJumpBoost.isEmpty()) {
             int numLegs = 0;
-            if (cyberwareUserData.isCybercraftInstalled(ItemInit.LIMB_RIGHT.get())) {
+            if (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMB_LEG_RIGHT.get())) {
                 numLegs++;
             }
-            if (cyberwareUserData.isCybercraftInstalled(ItemInit.LIMB_LEFT.get())) {
+            if (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMB_LEG_LEFT.get())) {
                 numLegs++;
             }
             if (cyberwareUserData.usePower(itemStackJumpBoost, getPowerConsumption(itemStackJumpBoost))) {
@@ -85,6 +85,6 @@ public class LegUpgradeItem extends CybercraftItem {
 
     @Override
     public int getPowerConsumption(ItemStack stack) {
-        return stack.getDamageValue() == META_JUMP_BOOST ? LibConstants.JUMPBOOST_CONSUMPTION : 0;
+        return stack.getItem() == ItemInit.LEG_JUMP_BOOST.get() ? LibConstants.JUMPBOOST_CONSUMPTION : 0;
     }
 }

@@ -4,6 +4,7 @@ import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.CybercraftUpdateEvent;
 import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.common.ArmorClass;
+import com.rena.cybercraft.core.init.ItemInit;
 import com.rena.cybercraft.events.EssentialsMissingHandler;
 import com.rena.cybercraft.common.util.LibConstants;
 import com.rena.cybercraft.core.init.EffectInit;
@@ -33,8 +34,8 @@ public class SkinUpgradeItem extends CybercraftItem{
     public static final int META_SYNTHETIC_SKIN = 2;
     public static final int META_IMMUNOSUPPRESSANT = 3;
 
-    public SkinUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
-        super(properties, slots, subnames);
+    public SkinUpgradeItem(Properties properties, EnumSlot slots, Quality q) {
+        super(properties, slots, q);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -87,7 +88,7 @@ public class SkinUpgradeItem extends CybercraftItem{
         LivingEntity entityLivingBase = event.getEntityLiving();
         ICybercraftUserData cyberwareUserData = event.getCybercrafteUserData();
 
-        ItemStack itemStackImmunosuppressant = cyberwareUserData.getCybercraft(getCachedStack(META_IMMUNOSUPPRESSANT));
+        ItemStack itemStackImmunosuppressant = cyberwareUserData.getCybercraft(ItemInit.SKIN_IMMUNO.get());
         if (!itemStackImmunosuppressant.isEmpty())
         {
             boolean isPowered = entityLivingBase.tickCount % 20 == 0
@@ -155,7 +156,7 @@ public class SkinUpgradeItem extends CybercraftItem{
     @Override
     public int getPowerConsumption(ItemStack stack)
     {
-        return stack.getDamageValue() == META_IMMUNOSUPPRESSANT ? LibConstants.IMMUNO_CONSUMPTION : 0;
+        return stack.getItem() == ItemInit.SKIN_IMMUNO.get() ? LibConstants.IMMUNO_CONSUMPTION : 0;
     }
 
     /*@SubscribeEvent
@@ -189,6 +190,6 @@ public class SkinUpgradeItem extends CybercraftItem{
     @Override
     public int getPowerProduction(ItemStack stack)
     {
-        return stack.getDamageValue() == META_SOLARSKIN ? LibConstants.SOLAR_PRODUCTION : 0;
+        return stack.getItem() == ItemInit.SKIN_SOLAR.get() ? LibConstants.SOLAR_PRODUCTION : 0;
     }
 }

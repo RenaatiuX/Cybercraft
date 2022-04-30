@@ -17,6 +17,7 @@ import net.minecraft.potion.Effects;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -26,6 +27,7 @@ public class CybereyesItem extends CybercraftItem{
 
     public CybereyesItem(Properties properties, EnumSlot slots, Quality q) {
         super(properties, slots, q);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override

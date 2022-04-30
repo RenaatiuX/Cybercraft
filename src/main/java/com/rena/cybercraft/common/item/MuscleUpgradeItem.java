@@ -8,6 +8,7 @@ import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.api.item.EnableDisableHelper;
 import com.rena.cybercraft.api.item.IMenuItem;
 import com.rena.cybercraft.common.util.LibConstants;
+import com.rena.cybercraft.core.init.ItemInit;
 import com.rena.cybercraft.core.network.CCNetwork;
 import com.rena.cybercraft.core.network.SwitchHeldItemAndRotationPacket;
 import net.minecraft.entity.Entity;
@@ -49,19 +50,19 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
         multimapMuscleDamageAttribute.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(idMuscleDamageAttribute, "Muscle damage upgrade", 3F, AttributeModifier.Operation.ADDITION));
     }
 
-    public MuscleUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
-        super(properties, slots, subnames);
+    public MuscleUpgradeItem(Properties properties, EnumSlot slots, Quality q) {
+        super(properties, slots, q);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override
     public void onAdded(LivingEntity entityLivingBase, ItemStack stack)
     {
-        if (stack.getDamageValue() == META_WIRED_REFLEXES)
+        if (stack.getItem() == ItemInit.MUSCLE_REFLEXES.get())
         {
             entityLivingBase.getAttributes().addTransientAttributeModifiers(multimapMuscleSpeedAttribute);
         }
-        else if (stack.getDamageValue() == META_MUSCLE_REPLACEMENTS)
+        else if (stack.getItem() == ItemInit.MUSCLE_REPLACEMENTS.get())
         {
             entityLivingBase.getAttributes().addTransientAttributeModifiers(multimapMuscleDamageAttribute);
         }
@@ -70,11 +71,11 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
     @Override
     public void onRemoved(LivingEntity entityLivingBase, ItemStack stack)
     {
-        if (stack.getDamageValue() == META_WIRED_REFLEXES)
+        if (stack.getItem() == ItemInit.MUSCLE_REFLEXES.get())
         {
             entityLivingBase.getAttributes().removeAttributeModifiers(multimapMuscleSpeedAttribute);
         }
-        else if (stack.getDamageValue() == META_MUSCLE_REPLACEMENTS)
+        else if (stack.getItem() == ItemInit.MUSCLE_REPLACEMENTS.get())
         {
             entityLivingBase.getAttributes().removeAttributeModifiers(multimapMuscleDamageAttribute);
         }
@@ -83,7 +84,7 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
     @Override
     public int installedStackSize(ItemStack stack)
     {
-        return stack.getDamageValue() == META_WIRED_REFLEXES ? 3 : 1;
+        return stack.getItem() == ItemInit.MUSCLE_REFLEXES.get() ? 3 : 1;
     }
 
     /*@SubscribeEvent
@@ -247,13 +248,13 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
     @Override
     public int getPowerConsumption(ItemStack stack)
     {
-        return stack.getDamageValue() == META_WIRED_REFLEXES ? LibConstants.REFLEXES_CONSUMPTION : LibConstants.REPLACEMENTS_CONSUMPTION;
+        return stack.getItem() == ItemInit.MUSCLE_REFLEXES.get() ? LibConstants.REFLEXES_CONSUMPTION : LibConstants.REPLACEMENTS_CONSUMPTION;
     }
 
     @Override
     protected int getUnmodifiedEssenceCost(ItemStack stack)
     {
-        if (stack.getDamageValue() == META_WIRED_REFLEXES)
+        if (stack.getItem() == ItemInit.MUSCLE_REFLEXES.get())
         {
             switch (stack.getCount())
             {
@@ -271,7 +272,7 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
     @Override
     public boolean hasMenu(ItemStack stack)
     {
-        return stack.getDamageValue() == META_WIRED_REFLEXES;
+        return stack.getItem() == ItemInit.MUSCLE_REFLEXES.get();
     }
 
     @Override
@@ -298,13 +299,13 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
     @Override
     public boolean isEssential(ItemStack stack)
     {
-        return stack.getDamageValue() == META_MUSCLE_REPLACEMENTS;
+        return stack.getItem() == ItemInit.MUSCLE_REPLACEMENTS.get();
     }
 
     @Override
     public boolean isIncompatible(ItemStack stack, ItemStack other)
     {
-        return stack.getDamageValue() == META_MUSCLE_REPLACEMENTS
+        return stack.getItem() == ItemInit.MUSCLE_REPLACEMENTS.get()
                 && CybercraftAPI.getCybercraft(other).isEssential(other);
     }
 }

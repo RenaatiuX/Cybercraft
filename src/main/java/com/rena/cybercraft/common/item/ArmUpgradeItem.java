@@ -7,15 +7,16 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class ArmUpgradeItem extends CybercraftItem{
 
-    public static final int META_BOW = 0;
 
     public ArmUpgradeItem(Properties properties, EnumSlot slot, Quality q) {
         super(properties, slot, q);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
 

@@ -11,10 +11,12 @@ import com.rena.cybercraft.core.init.ItemInit;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.horse.HorseEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -31,8 +33,17 @@ public class FootUpgradeItem extends CybercraftItem implements IMenuItem {
 
     public FootUpgradeItem(Properties properties, EnumSlot slot, Quality q) {
         super(properties, slot, q);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
+    @Override
+    public NonNullList<Item> requiredInstalledItems() {
+        if (this.getItem() != ItemInit.FOOT_UPGRADES_AQUA.get()) return NonNullList.create();
+
+        return NonNullList.of(
+                        ItemInit.CYBER_LIMB_LEG_LEFT.get(),
+                ItemInit.CYBER_LIMB_LEG_RIGHT.get());
+    }
 
     @SubscribeEvent
     public void handleHorseMove(LivingEvent.LivingUpdateEvent event)
@@ -149,13 +160,13 @@ public class FootUpgradeItem extends CybercraftItem implements IMenuItem {
 
     @Override
     public int getPowerConsumption(ItemStack stack) {
-        return stack.getDamageValue() == META_AQUA ? LibConstants.AQUA_CONSUMPTION :
-                stack.getDamageValue() == META_WHEELS ? LibConstants.WHEEL_CONSUMPTION : 0;
+        return stack.getItem() == ItemInit.FOOT_UPGRADES_AQUA.get() ? LibConstants.AQUA_CONSUMPTION :
+                stack.getItem() == ItemInit.FOOT_UPGRADES_WHEELS.get() ? LibConstants.WHEEL_CONSUMPTION : 0;
     }
 
     @Override
     public boolean hasMenu(ItemStack stack) {
-        return stack.getDamageValue() == META_WHEELS;
+        return stack.getItem() == ItemInit.FOOT_UPGRADES_WHEELS.get();
     }
 
     @Override

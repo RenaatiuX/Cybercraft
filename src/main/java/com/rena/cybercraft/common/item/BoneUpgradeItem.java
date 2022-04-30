@@ -4,6 +4,7 @@ import com.google.common.collect.HashMultimap;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.common.util.LibConstants;
+import com.rena.cybercraft.core.init.ItemInit;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -11,6 +12,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -29,8 +31,9 @@ public class BoneUpgradeItem extends CybercraftItem {
     private static final UUID idBoneHealthAttribute = UUID.fromString("8bce997a-4c3a-11e6-beb8-9e71128cae77");
     private static final HashMap<Integer, HashMultimap<Attribute, AttributeModifier>> multimapBoneHealthAttributes = new HashMap<>(MAX_STACK_SIZE_LACING + 1);
 
-    public BoneUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
-        super(properties, slots, subnames);
+    public BoneUpgradeItem(Properties properties, EnumSlot slots, Quality q) {
+        super(properties, slots, q);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     private static HashMultimap<Attribute, AttributeModifier> getBoneHealthAttribute(int stackSize)
@@ -48,7 +51,7 @@ public class BoneUpgradeItem extends CybercraftItem {
     @Override
     public void onAdded(LivingEntity livingEntity, ItemStack stack) {
 
-        if (stack.getDamageValue() == META_LACING)
+        if (stack.getItem() == ItemInit.BONES_UPGRADES_BONELACING.get())
         {
             livingEntity.getAttributes().addTransientAttributeModifiers(getBoneHealthAttribute(stack.getCount()));
         }
@@ -56,7 +59,7 @@ public class BoneUpgradeItem extends CybercraftItem {
 
     @Override
     public void onRemoved(LivingEntity livingEntity, ItemStack stack) {
-        if (stack.getDamageValue() == META_LACING)
+        if (stack.getItem() == ItemInit.BONES_UPGRADES_BONELACING.get())
         {
             livingEntity.getAttributes().removeAttributeModifiers(getBoneHealthAttribute(stack.getCount()));
         }
@@ -72,7 +75,7 @@ public class BoneUpgradeItem extends CybercraftItem {
         ICybercraftUserData cybercraftUserData = CybercraftAPI.getCapabilityOrNull(livingEntity);
         if (cybercraftUserData != null)
         {
-            ItemStack itemStackMetalLacing = cybercraftUserData.getCybercraft(getCachedStack(META_LACING));
+            ItemStack itemStackMetalLacing = cybercraftUserData.getCybercraft(ItemInit.BONES_UPGRADES_BONELACING.get());
             if (!itemStackMetalLacing.isEmpty())
             {
                 onAdded(livingEntity, cybercraftUserData.getCybercraft(itemStackMetalLacing));
@@ -93,7 +96,7 @@ public class BoneUpgradeItem extends CybercraftItem {
         ICybercraftUserData cybercraftUserData = CybercraftAPI.getCapabilityOrNull(livingEntity);
         if (cybercraftUserData == null) return;
 
-        if (cybercraftUserData.isCybercraftInstalled(getCachedStack(META_FLEX)))
+        if (cybercraftUserData.isCybercraftInstalled(ItemInit.BONES_UPGRADES_BONEFLEX.get()))
         {
             event.setAmount(event.getAmount() * .3333F);
         }
@@ -106,18 +109,18 @@ public class BoneUpgradeItem extends CybercraftItem {
 
     @Override
     public int getCapacity(ItemStack wareStack) {
-        return wareStack.getDamageValue() == META_BATTERY ? LibConstants.BONE_BATTERY_CAPACITY * wareStack.getCount() : 0;
+        return wareStack.getItem() == ItemInit.BONES_UPGRADES_BATTERY.get() ? LibConstants.BONE_BATTERY_CAPACITY * wareStack.getCount() : 0;
     }
 
     @Override
     public int installedStackSize(ItemStack stack) {
-        return stack.getDamageValue() == META_LACING ? MAX_STACK_SIZE_LACING
-                : stack.getDamageValue() == META_BATTERY ? 4 : 1;
+        return stack.getItem() == ItemInit.BONES_UPGRADES_BONELACING.get() ? MAX_STACK_SIZE_LACING
+                : stack.getItem() == ItemInit.BONES_UPGRADES_BATTERY.get() ? 4 : 1;
     }
 
     @Override
     protected int getUnmodifiedEssenceCost(ItemStack stack) {
-        if (stack.getDamageValue() == META_LACING)
+        if (stack.getItem() == ItemInit.BONES_UPGRADES_BONELACING.get())
         {
             switch (stack.getCount())
             {
@@ -133,7 +136,7 @@ public class BoneUpgradeItem extends CybercraftItem {
                     return 15;
             }
         }
-        if (stack.getDamageValue() == META_BATTERY)
+        if (stack.getItem() == ItemInit.BONES_UPGRADES_BATTERY.get())
         {
             switch (stack.getCount())
             {

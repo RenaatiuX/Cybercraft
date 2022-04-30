@@ -34,8 +34,8 @@ public class CyberLimbItem extends CybercraftItem implements ICybercraft.ISidedL
     private Set<Integer> didFall = new HashSet<>();
     private final EnumSide side;
 
-    public CyberLimbItem(Properties properties, EnumSlot slot, EnumSide side) {
-        super(properties, slot);
+    public CyberLimbItem(Properties properties, EnumSlot slot, EnumSide side, Quality q) {
+        super(properties, slot, q);
         this.side = side;
         MinecraftForge.EVENT_BUS.register(this);
     }

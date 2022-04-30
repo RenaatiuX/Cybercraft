@@ -14,8 +14,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class CyberHeartItem extends CybercraftItem{
 
-    public CyberHeartItem(Properties properties, EnumSlot slots) {
-        super(properties, slots);
+    public CyberHeartItem(Properties properties, EnumSlot slots, Quality q) {
+        super(properties, slots, q);
         MinecraftForge.EVENT_BUS.register(this);
     }
 

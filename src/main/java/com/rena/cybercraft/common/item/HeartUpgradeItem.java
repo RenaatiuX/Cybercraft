@@ -30,21 +30,21 @@ import java.util.UUID;
 
 public class HeartUpgradeItem extends CybercraftItem {
 
-    public static final int META_INTERNAL_DEFIBRILLATOR = 0;
+    /*public static final int META_INTERNAL_DEFIBRILLATOR = 0;
     public static final int META_PLATELET_DISPATCHER = 1;
     public static final int META_STEM_CELL_SYNTHESIZER = 2;
-    public static final int META_CARDIOVASCULAR_COUPLER = 3;
+    public static final int META_CARDIOVASCULAR_COUPLER = 3;*/
 
     private static Map<UUID, Integer> timesPlatelets = new HashMap<>();
 
-    public HeartUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
-        super(properties, slots, subnames);
+    public HeartUpgradeItem(Properties properties, EnumSlot slots, Quality q) {
+        super(properties, slots, q);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override
     public boolean isIncompatible(ItemStack stack, ItemStack comparison) {
-        return comparison.getItem() == ItemInit.CYBER_HEART.get() && (stack.getDamageValue() == META_INTERNAL_DEFIBRILLATOR || stack.getDamageValue() == META_CARDIOVASCULAR_COUPLER);
+        return comparison.getItem() == ItemInit.CYBER_HEART.get() && (stack.getItem() == ItemInit.HEART_UPGRADES_DEFIBRILLATOR.get() || stack.getItem() == ItemInit.HEART_UPGRADES_COUPLER.get());
     }
 
     @SubscribeEvent
@@ -54,7 +54,7 @@ public class HeartUpgradeItem extends CybercraftItem {
         ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityLivingBase);
         if (cyberwareUserData == null) return;
 
-        ItemStack itemStackInternalDefibrillator = cyberwareUserData.getCybercraft(getCachedStack(META_INTERNAL_DEFIBRILLATOR));
+        ItemStack itemStackInternalDefibrillator = cyberwareUserData.getCybercraft(ItemInit.HEART_UPGRADES_DEFIBRILLATOR.get());
         if (!itemStackInternalDefibrillator.isEmpty()) {
             if ((!CybercraftAPI.getCybercraftNBT(itemStackInternalDefibrillator).contains("used"))
                     && cyberwareUserData.usePower(itemStackInternalDefibrillator, getPowerConsumption(itemStackInternalDefibrillator), false)) {
@@ -96,14 +96,14 @@ public class HeartUpgradeItem extends CybercraftItem {
         LivingEntity entityLivingBase = event.getEntityLiving();
         ICybercraftUserData cyberwareUserData = event.getCybercrafteUserData();
 
-        ItemStack itemStackStemCellSynthesizer = cyberwareUserData.getCybercraft(getCachedStack(META_STEM_CELL_SYNTHESIZER));
+        ItemStack itemStackStemCellSynthesizer = cyberwareUserData.getCybercraft(ItemInit.HEART_MEDKIT.get());
         if (entityLivingBase.tickCount % 20 == 0) {
             if (!itemStackStemCellSynthesizer.isEmpty()) {
                 isStemWorking.put(entityLivingBase.getUUID(), cyberwareUserData.usePower(itemStackStemCellSynthesizer, getPowerConsumption(itemStackStemCellSynthesizer)));
             }
         }
 
-        ItemStack itemStackPlateletDispatcher = cyberwareUserData.getCybercraft(getCachedStack(META_PLATELET_DISPATCHER));
+        ItemStack itemStackPlateletDispatcher = cyberwareUserData.getCybercraft(ItemInit.HEART_PLATELETS.get());
         if (entityLivingBase.tickCount % 20 == 0
                 && !itemStackPlateletDispatcher.isEmpty()) {
             isPlateletWorking.put(entityLivingBase.getUUID(), cyberwareUserData.usePower(itemStackPlateletDispatcher, getPowerConsumption(itemStackPlateletDispatcher)));
@@ -182,7 +182,7 @@ public class HeartUpgradeItem extends CybercraftItem {
         ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityLivingBase);
         if (cyberwareUserData == null) return;
 
-        ItemStack itemStackStemCellSynthesizer = cyberwareUserData.getCybercraft(getCachedStack(META_STEM_CELL_SYNTHESIZER));
+        ItemStack itemStackStemCellSynthesizer = cyberwareUserData.getCybercraft(ItemInit.HEART_MEDKIT.get());
         if (!itemStackStemCellSynthesizer.isEmpty()) {
             float damageAmount = event.getAmount();
             DamageSource damageSrc = event.getSource();
@@ -261,7 +261,7 @@ public class HeartUpgradeItem extends CybercraftItem {
 
         ICybercraftUserData cyberwareUserData = event.getCybercrafteUserData();
 
-        ItemStack itemStackCardiovascularCoupler = cyberwareUserData.getCybercraft(getCachedStack(META_CARDIOVASCULAR_COUPLER));
+        ItemStack itemStackCardiovascularCoupler = cyberwareUserData.getCybercraft(ItemInit.HEART_UPGRADES_COUPLER.get());
         if (!itemStackCardiovascularCoupler.isEmpty()) {
             cyberwareUserData.addPower(getPowerProduction(itemStackCardiovascularCoupler), itemStackCardiovascularCoupler);
         }
@@ -269,25 +269,25 @@ public class HeartUpgradeItem extends CybercraftItem {
 
     @Override
     public int getPowerConsumption(ItemStack stack) {
-        return stack.getDamageValue() == META_INTERNAL_DEFIBRILLATOR ? LibConstants.DEFIBRILLATOR_CONSUMPTION
-                : stack.getDamageValue() == META_PLATELET_DISPATCHER ? LibConstants.PLATELET_CONSUMPTION
-                : stack.getDamageValue() == META_STEM_CELL_SYNTHESIZER ? LibConstants.STEMCELL_CONSUMPTION
+        return stack.getItem() == ItemInit.HEART_UPGRADES_DEFIBRILLATOR.get() ? LibConstants.DEFIBRILLATOR_CONSUMPTION
+                : stack.getItem() == ItemInit.HEART_PLATELETS.get() ? LibConstants.PLATELET_CONSUMPTION
+                : stack.getItem() == ItemInit.HEART_MEDKIT.get() ? LibConstants.STEMCELL_CONSUMPTION
                 : 0;
     }
 
     @Override
     public int getCapacity(ItemStack stack) {
-        return stack.getDamageValue() == META_INTERNAL_DEFIBRILLATOR ? LibConstants.DEFIBRILLATOR_CONSUMPTION : 0;
+        return stack.getItem() == ItemInit.HEART_UPGRADES_DEFIBRILLATOR.get() ? LibConstants.DEFIBRILLATOR_CONSUMPTION : 0;
     }
 
     @Override
     public boolean hasCustomPowerMessage(ItemStack stack) {
-        return stack.getDamageValue() == META_INTERNAL_DEFIBRILLATOR;
+        return stack.getItem() == ItemInit.HEART_UPGRADES_DEFIBRILLATOR.get();
     }
 
     @Override
     public int getPowerProduction(ItemStack stack) {
-        return stack.getDamageValue() == META_CARDIOVASCULAR_COUPLER ? LibConstants.COUPLER_PRODUCTION + 1 : 0;
+        return stack.getItem() == ItemInit.HEART_UPGRADES_COUPLER.get() ? LibConstants.COUPLER_PRODUCTION + 1 : 0;
     }
 
 }

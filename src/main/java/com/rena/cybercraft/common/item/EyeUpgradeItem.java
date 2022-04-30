@@ -9,8 +9,8 @@ import net.minecraft.item.ItemStack;
 
 public class EyeUpgradeItem extends CybercraftItem implements IMenuItem, IHudjack {
 
-    public EyeUpgradeItem(Properties properties, EnumSlot slots, String ... subnames) {
-        super(properties, slots, subnames);
+    public EyeUpgradeItem(Properties properties, EnumSlot slots, Quality q) {
+        super(properties, slots, q);
     }
 
     @Override

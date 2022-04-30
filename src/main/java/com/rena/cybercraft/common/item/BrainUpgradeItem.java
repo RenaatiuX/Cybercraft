@@ -47,16 +47,16 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
     public static final int META_THREAT_MATRIX = 4;
     public static final int META_RADIO= 5;
 
-    public BrainUpgradeItem(Properties properties, EnumSlot slots, String... subnames) {
-        super(properties, slots, subnames);
+    public BrainUpgradeItem(Properties properties, EnumSlot slots, Quality q) {
+        super(properties, slots, q);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override
     public boolean isIncompatible(ItemStack stack, ItemStack other) {
         return other.getItem() == this
-                && stack.getDamageValue() == META_CORTICAL_STACK
-                && other.getDamageValue() == META_CONSCIOUSNESS_TRANSMITTER;
+                && stack.getItem() == ItemInit.BRAIN_UPGRADES_CORTICAL_STACK.get()
+                && other.getItem() == ItemInit.BRAIN_UPGRADES_CONSCIOUSNESS_TRANSMITTER.get();
     }
 
     @SubscribeEvent
@@ -123,7 +123,7 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
             ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityPlayerOriginal);
             if (cyberwareUserData == null) return;
 
-            if (cyberwareUserData.isCybercraftInstalled(getCachedStack(META_CORTICAL_STACK)))
+            if (cyberwareUserData.isCybercraftInstalled(ItemInit.BRAIN_UPGRADES_CORTICAL_STACK.get()))
             {
                 if (!entityPlayerOriginal.level.isClientSide)
                 {
@@ -135,7 +135,7 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
                     entityPlayerOriginal.level.addFreshEntity(item);
                 }
             }
-            else if (cyberwareUserData.isCybercraftInstalled(getCachedStack(META_CONSCIOUSNESS_TRANSMITTER)))
+            else if (cyberwareUserData.isCybercraftInstalled(ItemInit.BRAIN_UPGRADES_CONSCIOUSNESS_TRANSMITTER.get()))
             {
                 event.getOriginal().giveExperienceLevels((int) (Math.min(100, entityPlayerOriginal.experienceLevel * 7) * .9F));
             }
@@ -150,7 +150,7 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
         ICybercraftUserData cybercraftUserData = CybercraftAPI.getCapabilityOrNull(entityPlayer);
         if (cybercraftUserData == null) return;
 
-        ItemStack itemStackNeuralContextualizer = cybercraftUserData.getCybercraft(getCachedStack(META_NEURAL_CONTEXTUALIZER));
+        ItemStack itemStackNeuralContextualizer = cybercraftUserData.getCybercraft(ItemInit.BRAIN_UPGRADES_NEURAL_CONTEXTUALIZER.get());
         if ( !itemStackNeuralContextualizer.isEmpty()
                 && EnableDisableHelper.isEnabled(itemStackNeuralContextualizer)
                 && isContextWorking(entityPlayer)
@@ -195,7 +195,7 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
 
         ICybercraftUserData cybercraftUserData = event.getCybercrafteUserData();
 
-        ItemStack itemStackNeuralContextualizer = cybercraftUserData.getCybercraft(getCachedStack(META_NEURAL_CONTEXTUALIZER));
+        ItemStack itemStackNeuralContextualizer = cybercraftUserData.getCybercraft(ItemInit.BRAIN_UPGRADES_NEURAL_CONTEXTUALIZER.get());
         if ( !itemStackNeuralContextualizer.isEmpty()
                 && EnableDisableHelper.isEnabled(itemStackNeuralContextualizer) )
         {
@@ -206,7 +206,7 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
             isContextWorking.put(entityLivingBase.getUUID(), Boolean.FALSE);
         }
 
-        ItemStack itemStackThreatMatrix = cybercraftUserData.getCybercraft(getCachedStack(META_THREAT_MATRIX));
+        ItemStack itemStackThreatMatrix = cybercraftUserData.getCybercraft(ItemInit.BRAIN_UPGRADES_MATRIX.get());
         if (!itemStackThreatMatrix.isEmpty())
         {
             isMatrixWorking.put(entityLivingBase.getUUID(), cybercraftUserData.usePower(itemStackThreatMatrix, getPowerConsumption(itemStackThreatMatrix)));
@@ -216,7 +216,7 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
             isMatrixWorking.put(entityLivingBase.getUUID(), Boolean.FALSE);
         }
 
-        ItemStack itemStackRadio = cybercraftUserData.getCybercraft(getCachedStack(META_RADIO));
+        ItemStack itemStackRadio = cybercraftUserData.getCybercraft(ItemInit.BRAIN_UPGRADES_RADIO.get());
         if ( !itemStackRadio.isEmpty()
                 && EnableDisableHelper.isEnabled(itemStackRadio) )
         {
@@ -280,8 +280,8 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
         ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityLivingBase);
         if (cyberwareUserData == null) return;
 
-        if ( cyberwareUserData.isCybercraftInstalled(getCachedStack(META_CORTICAL_STACK))
-                || cyberwareUserData.isCybercraftInstalled(getCachedStack(META_CONSCIOUSNESS_TRANSMITTER)) )
+        if ( cyberwareUserData.isCybercraftInstalled(ItemInit.BRAIN_UPGRADES_CORTICAL_STACK.get())
+                || cyberwareUserData.isCybercraftInstalled(ItemInit.BRAIN_UPGRADES_CONSCIOUSNESS_TRANSMITTER.get()) )
         {
             event.setCanceled(true);
         }
@@ -297,7 +297,7 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
         ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityLivingBase);
         if (cyberwareUserData == null) return;
 
-        if (cyberwareUserData.isCybercraftInstalled(getCachedStack(META_THREAT_MATRIX)))
+        if (cyberwareUserData.isCybercraftInstalled(ItemInit.BRAIN_UPGRADES_MATRIX.get()))
         {
             if ( !entityLivingBase.level.isClientSide
                     && event.getSource() instanceof EntityDamageSource)
@@ -338,17 +338,17 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
     @Override
     public int getPowerConsumption(ItemStack stack)
     {
-        return stack.getDamageValue() == META_NEURAL_CONTEXTUALIZER ? LibConstants.CONTEXTUALIZER_CONSUMPTION
-                : stack.getDamageValue() == META_THREAT_MATRIX ? LibConstants.MATRIX_CONSUMPTION
-                : stack.getDamageValue() == META_RADIO ? LibConstants.RADIO_CONSUMPTION
+        return stack.getItem() == ItemInit.BRAIN_UPGRADES_NEURAL_CONTEXTUALIZER.get() ? LibConstants.CONTEXTUALIZER_CONSUMPTION
+                : stack.getItem() == ItemInit.BRAIN_UPGRADES_MATRIX.get() ? LibConstants.MATRIX_CONSUMPTION
+                : stack.getItem() == ItemInit.BRAIN_UPGRADES_RADIO.get() ? LibConstants.RADIO_CONSUMPTION
                 : 0;
     }
 
     @Override
     public boolean hasMenu(ItemStack stack) {
-        return stack.getDamageValue() == META_ENDER_JAMMER
-                || stack.getDamageValue() == META_NEURAL_CONTEXTUALIZER
-                || stack.getDamageValue() == META_RADIO;
+        return stack.getItem() == ItemInit.BRAIN_UPGRADES_ENDER_HAMMER.get()
+                || stack.getItem() == ItemInit.BRAIN_UPGRADES_NEURAL_CONTEXTUALIZER.get()
+                || stack.getItem() == ItemInit.BRAIN_UPGRADES_RADIO.get();
     }
 
     @Override
