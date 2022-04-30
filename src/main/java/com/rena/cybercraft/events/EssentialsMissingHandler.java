@@ -46,6 +46,8 @@ import java.util.UUID;
 
 public class EssentialsMissingHandler {
 
+    public static final ResourceLocation BLACK_PX = Cybercraft.modLoc("textures/gui/blackpx.png");
+
     public static final DamageSource brainless = new DamageSource("cybercraft.brainless").bypassArmor().bypassMagic();
     public static final DamageSource heartless = new DamageSource("cybercraft.heartless").bypassArmor().bypassMagic();
     public static final DamageSource surgery = new DamageSource("cybercraft.surgery").bypassArmor();

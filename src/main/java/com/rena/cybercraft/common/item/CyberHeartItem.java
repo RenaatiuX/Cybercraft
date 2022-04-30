@@ -37,7 +37,7 @@ public class CyberHeartItem extends CybercraftItem{
         LivingEntity entityLivingBase = event.getEntityLiving();
         if (entityLivingBase.tickCount % 20 != 0) return;
         ICybercraftUserData cyberwareUserData = event.getCybercrafteUserData();
-        ItemStack itemStackCyberheart = cyberwareUserData.getCybercraft(getCachedStack(0));
+        ItemStack itemStackCyberheart = cyberwareUserData.getCybercraft(this);
 
         if (!itemStackCyberheart.isEmpty())
         {

@@ -39,13 +39,14 @@ public class ItemInit {
     public static final RegistryObject<Item> KATANA = ITEMS.register("katana",
             () -> new SwordCybercraftItem(CybercraftItemTier.KATANA, 4, -2.5F, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
 
+    //Components
     public static final RegistryObject<Item> COMPONENT_FIBER_OPTICS = ITEMS.register("component_fiberoptics",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
     public static final RegistryObject<Item> COMPONENT_FULLERENE = ITEMS.register("component_fullerene",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
     public static final RegistryObject<Item> COMPONENT_MICRO_ELECTRIC = ITEMS.register("component_microelectric",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
-    public static final RegistryObject<Item> COMPONENT_PLANTING = ITEMS.register("component_plating",
+    public static final RegistryObject<Item> COMPONENT_PLATING = ITEMS.register("component_plating",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
     public static final RegistryObject<Item> COMPONENT_REACTOR = ITEMS.register("component_reactor",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
@@ -436,7 +437,7 @@ public class ItemInit {
                     .setEssenceCost(3)
                     .setWeight(RARE));
     public static final RegistryObject<CybercraftItem> LEG_JUMP_BOOST_SCAVENGED = ITEMS.register("leg_upgrades_jump_boost_scavenged",
-            () -> new LegUpgradeItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.LEG, CybercraftAPI.QUALITY_MANUFACTURED)
+            () -> new LegUpgradeItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.LEG, CybercraftAPI.QUALITY_SCAVENGED)
                     .setEssenceCost(3)
                     .setWeight(RARE));
 
@@ -445,7 +446,7 @@ public class ItemInit {
                     .setEssenceCost(2)
                     .setWeight(RARE));
     public static final RegistryObject<CybercraftItem> LEG_FALL_DAMAGE_SCAVENGED = ITEMS.register("leg_upgrades_fall_damage_scavenged",
-            () -> new LegUpgradeItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.LEG, CybercraftAPI.QUALITY_MANUFACTURED)
+            () -> new LegUpgradeItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.LEG, CybercraftAPI.QUALITY_SCAVENGED)
                     .setEssenceCost(2)
                     .setWeight(RARE));
 

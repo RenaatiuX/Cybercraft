@@ -205,7 +205,7 @@ public class VanillaWares {
 
 
         @Override
-        public boolean canHoldQuality(ItemStack stack, Quality quality)
+        public boolean canHoldQuality(Quality quality)
         {
             return false;
         }

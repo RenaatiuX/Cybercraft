@@ -11,6 +11,10 @@ public class BodyPartItem extends CybercraftItem implements ISidedLimb {
         super(properties, slot, q);
     }
 
+    public BodyPartItem(Properties properties, EnumSlot slot){
+        this(properties, slot, null);
+    }
+
     @Override
     public boolean isEssential(ItemStack stack) {
         return true;
@@ -48,7 +52,7 @@ public class BodyPartItem extends CybercraftItem implements ISidedLimb {
     }
 
     @Override
-    public boolean canHoldQuality(ItemStack stack, Quality quality) {
+    public boolean canHoldQuality(Quality quality) {
         return false;
     }
 }

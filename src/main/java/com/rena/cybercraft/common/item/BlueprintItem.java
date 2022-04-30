@@ -40,8 +40,8 @@ public class BlueprintItem extends Item implements IBlueprint {
                     ItemStack blueprintItem = ItemStack.of(tagCompound.getCompound("blueprintItem"));
                     if (!blueprintItem.isEmpty() && CybercraftAPI.canDeconstruct(blueprintItem))
                     {
+                        tooltip.add(new TranslationTextComponent("tooltip.cybercraft.blueprint").append(blueprintItem.getDisplayName()));
                         NonNullList<ItemStack> items = NNLUtil.copyList(CybercraftAPI.getComponents(blueprintItem));
-                        tooltip.add(new TranslationTextComponent(I18n.get("tooltip.cybercraft.blueprint", blueprintItem.getDisplayName())));
                         for (ItemStack item : items)
                         {
                             if (!item.isEmpty())
@@ -52,12 +52,12 @@ public class BlueprintItem extends Item implements IBlueprint {
                         return;
                     }
                 }else{
-                    tooltip.add(new TranslationTextComponent(I18n.get("tooltip.cybercraft.shift_prompt")).withStyle(TextFormatting.DARK_GRAY));
+                    tooltip.add(new TranslationTextComponent("tooltip.cybercraft.shift_prompt").withStyle(TextFormatting.DARK_GRAY));
                     return;
                 }
             }
         }
-        tooltip.add(new TranslationTextComponent(I18n.get("tooltip.cybercraft.craft_blueprint")).withStyle(TextFormatting.DARK_GRAY));
+        tooltip.add(new TranslationTextComponent("tooltip.cybercraft.craft_blueprint").withStyle(TextFormatting.DARK_GRAY));
     }
 
     @Override
@@ -75,8 +75,7 @@ public class BlueprintItem extends Item implements IBlueprint {
 
 
             toBlue.setCount(1);
-            if (toBlue.isDamageableItem())
-            {
+            if (toBlue.isDamageableItem()) {
                 toBlue.setDamageValue(0);
             }
             toBlue.setTag(null);
@@ -104,11 +103,11 @@ public class BlueprintItem extends Item implements IBlueprint {
                 ItemStack blueprintItem = ItemStack.of(tagCompound.getCompound("blueprintItem"));
                 if (!blueprintItem.isEmpty())
                 {
-                    return (new TranslationTextComponent(I18n.get("item.cybercraft.blueprint.not_blank.name", blueprintItem.getDisplayName())));
+                    return (new TranslationTextComponent("item.cybercraft.blueprint.not_blank.name", blueprintItem.getDisplayName()));
                 }
             }
         }
-        return (new TranslationTextComponent("" + I18n.get(this.getDescriptionId(stack) + ".name")));
+        return (new TranslationTextComponent(this.getDescriptionId(stack) + ".name"));
     }
 
     @Override
@@ -138,7 +137,6 @@ public class BlueprintItem extends Item implements IBlueprint {
                         }
                         if (!satisfied) return ItemStack.EMPTY;
                     }
-
                     return blueprintItem;
                 }
             }
@@ -151,11 +149,9 @@ public class BlueprintItem extends Item implements IBlueprint {
         CompoundNBT tagCompound = stack.getTag();
         if (tagCompound != null)
         {
-            if (tagCompound.contains("blueprintItem"))
-            {
+            if (tagCompound.contains("blueprintItem")) {
                 ItemStack blueprintItem = ItemStack.of(tagCompound.getCompound("blueprintItem"));
-                if (!blueprintItem.isEmpty() && CybercraftAPI.canDeconstruct(blueprintItem))
-                {
+                if (!blueprintItem.isEmpty() && CybercraftAPI.canDeconstruct(blueprintItem)) {
                     NonNullList<ItemStack> requiredItems = NNLUtil.copyList(CybercraftAPI.getComponents(blueprintItem));
                     NonNullList<ItemStack> newCrafting = NonNullList.create();
                     newCrafting.addAll(items);
@@ -179,6 +175,7 @@ public class BlueprintItem extends Item implements IBlueprint {
                             }
                         }
                     }
+
 
                     return newCrafting;
                 }

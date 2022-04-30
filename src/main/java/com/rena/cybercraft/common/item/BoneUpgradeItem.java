@@ -78,7 +78,7 @@ public class BoneUpgradeItem extends CybercraftItem {
             ItemStack itemStackMetalLacing = cybercraftUserData.getCybercraft(ItemInit.BONES_UPGRADES_BONELACING.get());
             if (!itemStackMetalLacing.isEmpty())
             {
-                onAdded(livingEntity, cybercraftUserData.getCybercraft(itemStackMetalLacing));
+                onAdded(livingEntity, itemStackMetalLacing);
             }
             else
             {

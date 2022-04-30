@@ -15,6 +15,7 @@ public class CybercraftMeshDefinition extends ItemModelMesherForge {
         super(manager);
     }
 
+    /*
     @Override
     public ModelResourceLocation getLocation(@Nonnull ItemStack stack) {
         ItemStack test = stack.copy();
@@ -42,4 +43,5 @@ public class CybercraftMeshDefinition extends ItemModelMesherForge {
             return new ModelResourceLocation(ware.getRegistryName() + added, "inventory");
         }
     }
+    */
 }

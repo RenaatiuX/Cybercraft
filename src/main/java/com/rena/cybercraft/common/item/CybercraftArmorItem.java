@@ -27,31 +27,6 @@ public class CybercraftArmorItem extends ArmorItem implements IDeconstructable, 
     }
 
     @Override
-    public NonNullList<ItemStack> getComponents(ItemStack stack) {
-        Item item = stack.getItem();
-
-        NonNullList<ItemStack> nnl = NonNullList.create();
-        if (item == ItemInit.TRENCHCOAT.get())
-        {
-            nnl.add(withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 2), 2));
-            nnl.add(withMetaData(new ItemStack(Items.LEATHER, 12), 0));
-            //nnl.add(new ItemStack(Items.DYE, 1, 0));
-        }
-        else if (item == ItemInit.JACKET.get())
-        {
-            nnl.add(withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 2));
-            nnl.add(withMetaData(new ItemStack(Items.LEATHER, 8), 0));
-            //nnl.add(new ItemStack(Items.DYE, 1, 0));
-        }
-        else
-        {
-            //nnl.add(new ItemStack(Blocks.STAINED_GLASS, 4, 15));
-            nnl.add(withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 4));
-        }
-        return nnl;
-    }
-
-    @Override
     public boolean hasCustomColor(@Nonnull ItemStack stack)
     {
         if (getMaterial() != CybercraftArmorMaterial.TRENCHCOAT)

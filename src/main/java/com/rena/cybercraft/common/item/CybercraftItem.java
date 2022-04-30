@@ -18,29 +18,31 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, ICybercraftTabItem, IDeconstructable {
 
     private EnumSlot slot;
     private int essence;
     private final Quality q;
+    private int weight;
 
-    public CybercraftItem(Properties properties, EnumSlot slot, Quality q) {
+    /**
+     *
+     * @param properties - the properties of this item
+     * @param slot - the slot this will fit in
+     * @param q - the Quality this stack has, can be null if no quality is assigned
+     */
+    public CybercraftItem(Properties properties, EnumSlot slot, @Nullable Quality q) {
         super(properties);
         this.slot = slot;
         this.q = q;
     }
 
-   public CybercraftItem setWeight(int weight)
-    {
-            ItemStack stack = new ItemStack(this);
-            int installedStackSize = installedStackSize(stack);
-            stack.setCount(installedStackSize);
-            CybercraftAPI.setQuality(stack, CybercraftAPI.QUALITY_SCAVENGED);
-            //ItemInit.zombieItems.add(new ZombieItem(weight[meta], stack));
-        return this;
+   public CybercraftItem setWeight(int weight) {
+        this.weight = weight;
+         return this;
     }
+
 
     public CybercraftItem setEssenceCost(int essence){
         this.essence = essence;
@@ -91,11 +93,16 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
 
     @Override
     public Quality getQuality() {
+        if (q == null)
+            return CybercraftAPI.QUALITY_MANUFACTURED;
         return q;
     }
 
     @Override
     public Item withQuality(Quality quality) {
+        if (!canHoldQuality(quality)){
+            return this;
+        }
         if (quality == q)
             return this;
         String path = "";
@@ -108,7 +115,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
     }
 
     @Override
-    public boolean canHoldQuality(ItemStack stack, Quality quality) {
+    public boolean canHoldQuality(Quality quality) {
         return true;
     }
 

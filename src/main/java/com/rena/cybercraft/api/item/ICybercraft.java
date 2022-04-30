@@ -25,7 +25,7 @@ public interface ICybercraft {
     public Quality getQuality();
 
     public Item withQuality(Quality quality);
-    public boolean canHoldQuality(ItemStack stack, Quality quality);
+    public boolean canHoldQuality(Quality quality);
 
     public class Quality
     {

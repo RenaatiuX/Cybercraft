@@ -22,14 +22,4 @@ public class SwordCybercraftItem extends SwordItem implements IDeconstructable {
     public boolean canDestroy(ItemStack stack) {
         return true;
     }
-
-    @Override
-    public NonNullList<ItemStack> getComponents(ItemStack stack) {
-        return NNLUtil.fromArray(new ItemStack[]
-                {
-                        withMetaData(new ItemStack(Items.IRON_INGOT, 2), 0),
-                        withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 2),
-                        withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 4)
-                });
-    }
 }

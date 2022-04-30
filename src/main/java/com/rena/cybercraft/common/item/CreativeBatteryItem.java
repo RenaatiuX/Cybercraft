@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 public class CreativeBatteryItem extends CybercraftItem implements ISpecialBattery {
 
     public CreativeBatteryItem(Properties properties, EnumSlot slots) {
-        super(properties, slots);
+        super(properties, slots, CybercraftAPI.QUALITY_MANUFACTURED);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class CreativeBatteryItem extends CybercraftItem implements ISpecialBatte
     }
 
     @Override
-    public boolean canHoldQuality(ItemStack stack, Quality quality) {
+    public boolean canHoldQuality(Quality quality) {
         return quality == CybercraftAPI.QUALITY_MANUFACTURED;
     }
 }

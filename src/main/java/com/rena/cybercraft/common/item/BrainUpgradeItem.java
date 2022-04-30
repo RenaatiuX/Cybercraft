@@ -71,12 +71,9 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
 
     public static boolean isTeleportationAllowed(@Nullable LivingEntity livingEntity) {
         if (livingEntity == null) return true;
-
-        ItemStack itemStackJammer = ItemInit.BRAIN_UPGRADES.get().getCachedStack(BrainUpgradeItem.META_ENDER_JAMMER);
-
         ICybercraftUserData cyberwareUserDataSelf = CybercraftAPI.getCapabilityOrNull(livingEntity);
         if (cyberwareUserDataSelf != null) {
-            ItemStack itemStackJammerSelf = cyberwareUserDataSelf.getCybercraft(itemStackJammer);
+            ItemStack itemStackJammerSelf = cyberwareUserDataSelf.getCybercraft(ItemInit.BRAIN_UPGRADES_ENDER_HAMMER.get());
             if ( !itemStackJammerSelf.isEmpty()
                     && EnableDisableHelper.isEnabled(itemStackJammerSelf) )
             {
@@ -96,7 +93,7 @@ public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
                 ICybercraftUserData cyberwareUserDataInRange = CybercraftAPI.getCapabilityOrNull(entityInRange);
                 if (cyberwareUserDataInRange != null)
                 {
-                    ItemStack itemStackJammerInRange = cyberwareUserDataInRange.getCybercraft(itemStackJammer);
+                    ItemStack itemStackJammerInRange = cyberwareUserDataInRange.getCybercraft(ItemInit.BRAIN_UPGRADES_ENDER_HAMMER.get());
                     if ( !itemStackJammerInRange.isEmpty()
                             && EnableDisableHelper.isEnabled(itemStackJammerInRange) )
                     {

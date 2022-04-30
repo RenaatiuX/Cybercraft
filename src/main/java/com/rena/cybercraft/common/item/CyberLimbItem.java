@@ -26,10 +26,10 @@ import java.util.Set;
 
 public class CyberLimbItem extends CybercraftItem implements ICybercraft.ISidedLimb {
 
-    public static final int META_LEFT_CYBER_ARM         = 0;
-    public static final int META_RIGHT_CYBER_ARM        = 1;
-    public static final int META_LEFT_CYBER_LEG         = 2;
-    public static final int META_RIGHT_CYBER_LEG        = 3;
+    public static final int META_LEFT_CYBER_ARM = 0;
+    public static final int META_RIGHT_CYBER_ARM = 1;
+    public static final int META_LEFT_CYBER_LEG = 2;
+    public static final int META_RIGHT_CYBER_LEG = 3;
 
     private Set<Integer> didFall = new HashSet<>();
     private final EnumSide side;
@@ -49,8 +49,7 @@ public class CyberLimbItem extends CybercraftItem implements ICybercraft.ISidedL
     public boolean isIncompatible(ItemStack stack, ItemStack comparison) {
         ICybercraft ware = CybercraftAPI.getCybercraft(comparison);
 
-        if (ware instanceof ISidedLimb)
-        {
+        if (ware instanceof ISidedLimb) {
             return ware.isEssential(comparison) && ((ISidedLimb) ware).getSide(comparison) == this.getSide(stack);
         }
         return false;
@@ -61,11 +60,9 @@ public class CyberLimbItem extends CybercraftItem implements ICybercraft.ISidedL
         return side;
     }
 
-    public static boolean isPowered(ItemStack stack)
-    {
+    public static boolean isPowered(ItemStack stack) {
         CompoundNBT data = CybercraftAPI.getCybercraftNBT(stack);
-        if (!data.contains("active"))
-        {
+        if (!data.contains("active")) {
             data.putBoolean("active", true);
         }
         return data.getBoolean("active");
@@ -77,25 +74,22 @@ public class CyberLimbItem extends CybercraftItem implements ICybercraft.ISidedL
     }
 
     @SubscribeEvent
-    public void handleFallDamage(LivingAttackEvent event)
-    {
+    public void handleFallDamage(LivingAttackEvent event) {
         LivingEntity entityLivingBase = event.getEntityLiving();
-        if ( entityLivingBase.level.isClientSide() && event.getSource() == DamageSource.FALL )
-        {
+        if (entityLivingBase.level.isClientSide() && event.getSource() == DamageSource.FALL) {
             ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityLivingBase);
             if (cyberwareUserData == null) return;
-            if ( cyberwareUserData.isCybercraftInstalled(new ItemStack(ItemInit.CYBER_LIMBS.get())))
-            {
+            if (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMB_LEG_LEFT.get())
+                    && cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMB_LEG_RIGHT.get())) {
                 didFall.add(entityLivingBase.getId());
             }
         }
     }
 
     @SubscribeEvent
-    public void handleSound(PlaySoundAtEntityEvent event)
-    {
+    public void handleSound(PlaySoundAtEntityEvent event) {
         Entity entity = event.getEntity();
-        if ( entity instanceof PlayerEntity && event.getSound() == SoundEvents.PLAYER_HURT && entity.level.isClientSide ) {
+        if (entity instanceof PlayerEntity && event.getSound() == SoundEvents.PLAYER_HURT && entity.level.isClientSide) {
             if (didFall.contains(entity.getId())) {
                 int numLegs = 0;
 
@@ -103,11 +97,11 @@ public class CyberLimbItem extends CybercraftItem implements ICybercraft.ISidedL
                 if (cyberwareUserData == null) return;
 
                 //left leg
-                if (cyberwareUserData.isCybercraftInstalled(new ItemStack(this))) {
+                if (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMB_LEG_LEFT.get())) {
                     numLegs++;
                 }
                 //right Leg
-                if (cyberwareUserData.isCybercraftInstalled(new ItemStack(this))) {
+                if (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMB_LEG_RIGHT.get())) {
                     numLegs++;
                 }
 
@@ -119,6 +113,7 @@ public class CyberLimbItem extends CybercraftItem implements ICybercraft.ISidedL
             }
         }
     }
+
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void power(CybercraftUpdateEvent event) {
         LivingEntity entityLivingBase = event.getEntityLiving();
@@ -126,7 +121,7 @@ public class CyberLimbItem extends CybercraftItem implements ICybercraft.ISidedL
 
         ICybercraftUserData cyberwareUserData = event.getCybercrafteUserData();
         for (int damage = 0; damage < 4; damage++) {
-            ItemStack itemStackInstalled = cyberwareUserData.getCybercraft(new ItemStack(this));
+            ItemStack itemStackInstalled = cyberwareUserData.getCybercraft(this);
             if (!itemStackInstalled.isEmpty()) {
                 boolean isPowered = cyberwareUserData.usePower(itemStackInstalled, getPowerConsumption(itemStackInstalled));
 

@@ -12,8 +12,7 @@ import java.util.function.Supplier;
 
 public enum CybercraftItemTier implements IItemTier {
 
-    KATANA(2, 1561, 8.0F, 3.0F, 22,
-            ()-> Ingredient.of(CybercraftAPI.withMetaData(new ItemStack(ItemInit.COMPONENT.get(), 1), 4)));
+    KATANA(2, 1561, 8.0F, 3.0F, 22, ()-> Ingredient.of(ItemInit.COMPONENT_PLATING.get()));
 
     private final int level;
     private final int uses;

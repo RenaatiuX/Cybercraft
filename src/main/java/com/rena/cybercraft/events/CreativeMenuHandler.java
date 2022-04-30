@@ -55,12 +55,10 @@ public class CreativeMenuHandler {
 
                 int i = 4;
                 int j = 8;
-                if (isHovered)
-                {
+                if (isHovered) {
                     i = 29;
                     j = 0;
                 }
-
                 j += offset * (isHovered ? 18 : 23);
                 this.blit(stack, this.x, this.y, i, j, 18, 18);
             }
@@ -109,19 +107,23 @@ public class CreativeMenuHandler {
     @SubscribeEvent
     public static void drawGui(GuiScreenEvent.DrawScreenEvent.Post event){
         if (isCorrectTab(event.getGui())){
+            salvaged.visible = true;
+            manufactured.visible = true;
             CreativeScreen gui = (CreativeScreen) event.getGui();
             int mouseX = event.getMouseX();
             int mouseY = event.getMouseY();
-            int i = (gui.width - 136) / 2;
-            int j = (gui.height - 195) / 2;
             if (salvaged.isMouseOver(mouseX, mouseY)){
                 gui.renderTooltip(event.getMatrixStack(), new TranslationTextComponent(CybercraftAPI.QUALITY_SCAVENGED.getUnlocalizedName()), mouseX, mouseY);
             }else if(manufactured.isMouseOver(mouseX, mouseY)){
                 gui.renderTooltip(event.getMatrixStack(), new TranslationTextComponent(CybercraftAPI.QUALITY_MANUFACTURED.getUnlocalizedName()), mouseX, mouseY);
             }
+        }else{
+            salvaged.visible = false;
+            manufactured.visible = false;
         }
     }
 
+    @SubscribeEvent
     public static final void drawBackground(GuiScreenEvent.BackgroundDrawnEvent event){
         if (isCorrectTab(event.getGui())){
             CreativeScreen gui = (CreativeScreen) event.getGui();

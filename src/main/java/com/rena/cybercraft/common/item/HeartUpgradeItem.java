@@ -64,9 +64,7 @@ public class HeartUpgradeItem extends CybercraftItem {
                     itemsNew.addAll(items);
                     for (int index = 0; index < items.size(); index++) {
                         ItemStack item = items.get(index);
-                        if (!item.isEmpty()
-                                && item.getItem() == this
-                                && CybercraftAPI.getMetaData(item) == META_INTERNAL_DEFIBRILLATOR) {
+                        if (!item.isEmpty() && item.getItem() == ItemInit.HEART_UPGRADES_DEFIBRILLATOR.get()) {
                             itemsNew.set(index, ItemStack.EMPTY);
                             break;
                         }
@@ -77,7 +75,7 @@ public class HeartUpgradeItem extends CybercraftItem {
                         CybercraftAPI.updateData(entityLivingBase);
                     }
                 } else {
-                    itemStackInternalDefibrillator = cyberwareUserData.getCybercraft(itemStackInternalDefibrillator);
+                    itemStackInternalDefibrillator = cyberwareUserData.getCybercraft(ItemInit.HEART_UPGRADES_DEFIBRILLATOR.get());
                     CompoundNBT tagCompoundCyberware = CybercraftAPI.getCybercraftNBT(itemStackInternalDefibrillator);
                     tagCompoundCyberware.putBoolean("used", true);
 

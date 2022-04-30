@@ -16,7 +16,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public class CybercraftTab extends ItemGroup{
+public class CybercraftTab extends ItemGroup {
 
     public CybercraftTab(String label) {
         super(label);
@@ -24,53 +24,45 @@ public class CybercraftTab extends ItemGroup{
 
     @Override
     public ItemStack makeIcon() {
-        return new ItemStack(ItemInit.BRAIN_UPGRADES.get());
+        return new ItemStack(ItemInit.BRAIN_UPGRADES_MATRIX.get());
     }
 
-   @Override
+    @Override
     public void fillItemList(NonNullList<ItemStack> list) {
         Map<ICybercraftTabItem.EnumCategory, List<ItemStack>> subLists = new EnumMap(ICybercraftTabItem.EnumCategory.class);
-        for (ICybercraftTabItem.EnumCategory category : ICybercraftTabItem.EnumCategory.values())
-        {
+        for (ICybercraftTabItem.EnumCategory category : ICybercraftTabItem.EnumCategory.values()) {
             subLists.put(category, new ArrayList<>());
         }
         NonNullList<ItemStack> unsorted = NonNullList.create();
 
         ICybercraft.Quality q = CreativeMenuHandler.pageSelected == 0 ? CybercraftAPI.QUALITY_SCAVENGED : CybercraftAPI.QUALITY_MANUFACTURED;
 
-        for (Item item : ForgeRegistries.ITEMS)
-        {
+        for (Item item : ForgeRegistries.ITEMS) {
             if (item == null) {
                 continue;
             }
             for (ItemGroup tab : item.getCreativeTabs()) {
                 if (tab == this) {
                     if (item instanceof ICybercraftTabItem) {
-                        NonNullList<ItemStack> tempList = NonNullList.create();
-                        item.fillItemCategory(this, tempList);
-                        for (ItemStack stack : tempList) {
-                            if (!stack.isEmpty()) {
-                                if (CybercraftAPI.isCybercraft(stack)) {
-                                    ICybercraft ware = CybercraftAPI.getCybercraft(stack);
-                                    if (ware.canHoldQuality(stack, q)) {
-                                        stack = ware.setQuality(stack, q);
-                                    }
+                        ItemStack stack = new ItemStack(item);
+                        if (!stack.isEmpty()) {
+                            if (CybercraftAPI.isCybercraft(stack)) {
+                                ICybercraft ware = CybercraftAPI.getCybercraft(stack);
+                                if (ware.canHoldQuality(q)) {
+                                    stack = new ItemStack(ware.withQuality(q));
                                 }
-                                ICybercraftTabItem.EnumCategory cat = ((ICybercraftTabItem) stack.getItem()).getCategory(stack);
-                                subLists.get(cat).add(stack);
                             }
+                            ICybercraftTabItem.EnumCategory cat = ((ICybercraftTabItem) stack.getItem()).getCategory(stack);
+                            subLists.get(cat).add(stack);
                         }
-                    }
-                    else
-                    {
-                        item.fillItemCategory(this, unsorted);
+                    } else {
+                        unsorted.add(new ItemStack(item));
                     }
                 }
             }
         }
 
-        for (ICybercraftTabItem.EnumCategory category : ICybercraftTabItem.EnumCategory.values())
-        {
+        for (ICybercraftTabItem.EnumCategory category : ICybercraftTabItem.EnumCategory.values()) {
             List<ItemStack> toAdd = subLists.get(category);
             list.addAll(toAdd);
         }

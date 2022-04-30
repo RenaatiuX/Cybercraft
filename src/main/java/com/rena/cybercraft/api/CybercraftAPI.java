@@ -320,26 +320,6 @@ public final class CybercraftAPI {
                 && ((IDeconstructable) stack.getItem()).canDestroy(stack);
     }
 
-    /**
-     * Returns a list of ItemStacks containing the components of a destructable
-     * item.
-     *
-     * @param stack	The ItemStack to test
-     * @return		The components of the item
-     */
-    public static NonNullList<ItemStack> getComponents(@Nonnull ItemStack stack)
-    {
-        if (!stack.isEmpty())
-        {
-            if (stack.getItem() instanceof IDeconstructable)
-            {
-                return NNLUtil.copyList(((IDeconstructable)stack.getItem()).getComponents(stack));
-            }
-        }
-
-        throw new RuntimeException("Cannot call getComponents on a non-cybercraft or non deconstructable item!");
-    }
-
     @Nullable
     private static ICybercraft getLinkedWare(@Nonnull ItemStack stack)
     {
@@ -511,11 +491,15 @@ public final class CybercraftAPI {
      * won´t change the stack, returns a new stack with the quality requested
      */
     public static ItemStack setQuality(ItemStack stack, Quality quality) {
-        if (quality == getQuality(stack))
+        if (getCybercraft(stack) == null || !getCybercraft(stack).canHoldQuality(quality) || getQuality(stack) == quality){
             return stack;
+        }
         ICybercraft cybercraft = getCybercraft(stack);
         Item otherQuality = cybercraft.withQuality(quality);
         return new ItemStack(otherQuality, stack.getCount(), stack.getTag());
     }
 
+    public static NonNullList<ItemStack> getComponents(ItemStack blueprintItem) {
+        return NonNullList.create();
+    }
 }

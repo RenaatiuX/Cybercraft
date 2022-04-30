@@ -82,7 +82,7 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
     }
 
     @Override
-    public ItemStack getCybercraft(ItemStack cybercraft) {
+    public ItemStack getCybercraft(Item cybercraft) {
         return null;
     }
 

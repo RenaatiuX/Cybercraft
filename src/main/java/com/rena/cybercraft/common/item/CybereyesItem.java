@@ -1,5 +1,7 @@
 package com.rena.cybercraft.common.item;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.CybercraftUpdateEvent;
 import com.rena.cybercraft.api.ICybercraftUserData;
@@ -21,7 +23,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class CybereyesItem extends CybercraftItem{
+public class CybereyesItem extends CybercraftItem {
 
     private static boolean isBlind;
 
@@ -30,76 +32,73 @@ public class CybereyesItem extends CybercraftItem{
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    public CybereyesItem(Properties properties, EnumSlot slots) {
+        this(properties, slots, null);
+    }
+
     @Override
-    public boolean isEssential(ItemStack stack)
-    {
+    public boolean isEssential(ItemStack stack) {
         return true;
     }
 
     @Override
-    public boolean isIncompatible(ItemStack stack, ItemStack other)
-    {
+    public boolean isIncompatible(ItemStack stack, ItemStack other) {
         return CybercraftAPI.getCybercraft(other).isEssential(other);
     }
 
+    @Override
+    public boolean canHoldQuality(Quality quality) {
+        return false;
+    }
+
     @SubscribeEvent
-    public void handleBlindnessImmunity(CybercraftUpdateEvent event)
-    {
+    public void handleBlindnessImmunity(CybercraftUpdateEvent event) {
         LivingEntity entityLivingBase = event.getEntityLiving();
         if (!entityLivingBase.addEffect(new EffectInstance(Effects.BLINDNESS))) return;
 
         ICybercraftUserData cyberwareUserData = event.getCybercrafteUserData();
 
-        if (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_EYES.get()))
-        {
+        if (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_EYES.get())) {
             entityLivingBase.removeEffect(Effects.BLINDNESS);
         }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
-    public void handleMissingEssentials(CybercraftUpdateEvent event)
-    {
+    public void handleMissingEssentials(CybercraftUpdateEvent event) {
         LivingEntity entityLivingBase = event.getEntityLiving();
         if (entityLivingBase.tickCount % 20 != 0) return;
 
         ICybercraftUserData cyberwareUserData = event.getCybercrafteUserData();
 
         ItemStack itemStackCybereye = cyberwareUserData.getCybercraft(ItemInit.CYBER_EYES.get());
-        if (!itemStackCybereye.isEmpty())
-        {
+        if (!itemStackCybereye.isEmpty()) {
             boolean isPowered = cyberwareUserData.usePower(itemStackCybereye, getPowerConsumption(itemStackCybereye));
-            if ( entityLivingBase.level.isClientSide
-                    && entityLivingBase == Minecraft.getInstance().player )
-            {
+            if (entityLivingBase.level.isClientSide
+                    && entityLivingBase == Minecraft.getInstance().player) {
                 isBlind = !isPowered;
             }
-        }
-        else if ( entityLivingBase.level.isClientSide
-                && entityLivingBase == Minecraft.getInstance().player )
-        {
+        } else if (entityLivingBase.level.isClientSide
+                && entityLivingBase == Minecraft.getInstance().player) {
             isBlind = false;
         }
     }
 
-    /*@SubscribeEvent
+    @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public void overlayPre(RenderGameOverlayEvent.Pre event)
-    {
-        if (event.getType() == RenderGameOverlayEvent.ElementType.ALL)
-        {
+    public void overlayPre(RenderGameOverlayEvent.Pre event) {
+        if (event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
             PlayerEntity entityPlayer = Minecraft.getInstance().player;
 
-            if (isBlind && !entityPlayer.isCreative())
-            {
-                GlStateManager.pushMatrix();
-                GlStateManager.enableBlend();
-                GlStateManager.color(1.0F, 1.0F, 1.0F, 0.9F);
+            if (isBlind && !entityPlayer.isCreative()) {
+                MatrixStack stack = event.getMatrixStack();
+                stack.pushPose();
+                RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
                 Minecraft.getInstance().getTextureManager().bind(EssentialsMissingHandler.BLACK_PX);
-                ClientUtils.drawTexturedModalRect(0, 0, 0, 0, Minecraft.getInstance().displayWidth, Minecraft.getInstance().displayHeight);
-                GlStateManager.popMatrix();
+                ClientUtils.drawTexturedModalRect(0, 0, 0, 0, Minecraft.getInstance().getWindow().getWidth(), Minecraft.getInstance().getWindow().getWidth());
+                stack.popPose();
             }
         }
-    }*/
+    }
 
     @Override
     public int getPowerConsumption(ItemStack stack) {
