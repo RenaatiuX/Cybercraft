@@ -19,15 +19,15 @@ public class ComponentBoxScreen extends ContainerScreen<ComponentBoxContainer> {
     @Override
     protected void renderLabels(MatrixStack stack, int x, int y) {
         this.font.draw(stack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
-        this.font.draw(stack, this.inventory.getDisplayName(), (float)this.inventoryLabelX, (float)this.inventoryLabelY, 4210752);
+        this.font.draw(stack, this.inventory.getDisplayName(), (float)this.inventoryLabelX, (float)this.inventoryLabelY - 15, 4210752);
     }
 
     @Override
-    protected void renderBg(MatrixStack p_230450_1_, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
+    protected void renderBg(MatrixStack stack, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
         Minecraft.getInstance().textureManager.bind(TEXTURE);
         int middleX = (this.width - this.imageWidth) / 2;
         int middleY = (this.height - this.imageHeight) / 2;
-
+        this.blit(stack, middleX, middleY, 0, 0, 175, 149);
     }
 
 

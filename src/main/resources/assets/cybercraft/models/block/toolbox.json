@@ -5,7 +5,8 @@
         "1": "cybercraft:block/toolbox_side",
         "2": "cybercraft:block/toolbox_front",
         "3": "cybercraft:block/toolbox_top",
-        "4": "cybercraft:block/toolbox_bottom"
+        "4": "cybercraft:block/toolbox_bottom",
+        "particle": "cybercraft:block/toolbox_side"
     },
     "elements": [
         {

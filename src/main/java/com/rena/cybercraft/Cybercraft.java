@@ -1,5 +1,6 @@
 package com.rena.cybercraft;
 
+import com.rena.cybercraft.client.screens.ComponentBoxScreen;
 import com.rena.cybercraft.client.screens.ScannerScreen;
 import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.util.CybercraftTab;
@@ -71,6 +72,7 @@ public class Cybercraft {
 
         event.enqueueWork(() -> {
             ScreenManager.register(ContainerInit.SCANNER_CONTAINER.get(), ScannerScreen::new);
+            ScreenManager.register(ContainerInit.COMPONENT_BOX_CONTAINER.get(), ComponentBoxScreen::new);
 
             RenderTypeLookup.setRenderLayer(BlockInit.SCANNER_BLOCK.get(), RenderType.translucent());
 

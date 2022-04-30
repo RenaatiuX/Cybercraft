@@ -38,5 +38,6 @@ public class GeneratorProvider {
         gen.addProvider(blockTags);
         gen.addProvider(new ModRecipeProvider(gen));
         gen.addProvider(new ModItemTagsProvider(gen, blockTags, helper));
+        gen.addProvider(new ModLootTableProvider(gen));
     }
 }

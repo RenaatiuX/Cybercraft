@@ -1,6 +1,7 @@
 package com.rena.cybercraft.common.tileentities;
 
 import com.rena.cybercraft.Cybercraft;
+import com.rena.cybercraft.common.container.ComponentBoxContainer;
 import com.rena.cybercraft.core.init.TileEntityTypeInit;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerInventory;
@@ -38,8 +39,8 @@ public class TileEntityComponentBox extends LockableLootTileEntity{
     }
 
     @Override
-    protected Container createMenu(int p_213906_1_, PlayerInventory p_213906_2_) {
-        return null;
+    protected Container createMenu(int id, PlayerInventory inv) {
+        return new ComponentBoxContainer(id, inv, this);
     }
 
     @Override
@@ -49,9 +50,14 @@ public class TileEntityComponentBox extends LockableLootTileEntity{
 
     @Override
     public CompoundNBT save(CompoundNBT nbt) {
+        nbt = saveItems(nbt);
+        return super.save(nbt);
+    }
+
+    public CompoundNBT saveItems(CompoundNBT nbt){
         if (!this.tryLoadLootTable(nbt))
             nbt = ItemStackHelper.saveAllItems(nbt, this.items);
-        return super.save(nbt);
+        return nbt;
     }
 
     @Override
@@ -60,7 +66,7 @@ public class TileEntityComponentBox extends LockableLootTileEntity{
         readItems(nbt);
     }
 
-    protected void readItems(CompoundNBT nbt) {
+    public void readItems(CompoundNBT nbt) {
         if(!this.tryLoadLootTable(nbt))
             ItemStackHelper.loadAllItems(nbt, this.items);
     }

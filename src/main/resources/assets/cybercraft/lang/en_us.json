@@ -115,9 +115,11 @@
   "_comment": "Block",
   "block.cybercraft.scanner": "Scanner",
   "block.cybercraft.charger": "Charger",
+  "block.cybercraft.component_box": "Component Box",
 
   "_comment": "Container",
   "container.cybercraft.scanner" : "Scanner",
+  "container.cybercraft.component_box": "Component Box",
 
   "_comment": "Effect",
   "effect.cybercraft.neuropozyne" : "Neuropozyne",

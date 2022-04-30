@@ -32,10 +32,29 @@ public abstract class UtilContainer extends Container {
         return Index;
     }
 
+    protected int addHorizontalSlots(IInventory handler, int Index, int x, int y, int amount,
+                                     int distanceBetweenSlots, ISlotProvider provider) {
+        for (int i = 0; i < amount; i++) {
+            addSlot(provider.createSlot(handler, Index, x, y));
+            Index++;
+            x += distanceBetweenSlots;
+        }
+        return Index;
+    }
+
     protected int addSlotField(IInventory handler, int StartIndex, int x, int y, int horizontalAmount,
                                int horizontalDistance, int verticalAmount, int VerticalDistance) {
         for (int i = 0; i < verticalAmount; i++) {
             StartIndex = addHorizontalSlots(handler, StartIndex, x, y, horizontalAmount, horizontalDistance);
+            y += VerticalDistance;
+        }
+        return StartIndex;
+    }
+
+    protected int addSlotField(IInventory handler, int StartIndex, int x, int y, int horizontalAmount,
+                               int horizontalDistance, int verticalAmount, int VerticalDistance, ISlotProvider provider) {
+        for (int i = 0; i < verticalAmount; i++) {
+            StartIndex = addHorizontalSlots(handler, StartIndex, x, y, horizontalAmount, horizontalDistance, provider);
             y += VerticalDistance;
         }
         return StartIndex;
@@ -47,6 +66,10 @@ public abstract class UtilContainer extends Container {
         y += 58;
         // Hotbar
         addHorizontalSlots(playerInventory, 0, x, y, 9, 18);
+    }
+
+    public static interface ISlotProvider{
+        Slot createSlot(IInventory inv,int index, int x, int y);
     }
 
     protected static class LockedSlot extends Slot {
