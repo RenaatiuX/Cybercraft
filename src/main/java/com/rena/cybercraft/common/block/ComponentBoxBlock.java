@@ -9,6 +9,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -19,14 +23,18 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 
 public class ComponentBoxBlock extends ShapedBlock {
     private static final VoxelShape SHAPE = Block.box(1f, 0f, 4f, 15f, 10f, 12f);
 
     public ComponentBoxBlock() {
-        super(AbstractBlock.Properties.of(Material.METAL).strength(10f, 20f).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops().harvestLevel(1).dynamicShape().noOcclusion(), SHAPE);
+        super(AbstractBlock.Properties.of(Material.METAL).strength(10f, 20f).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops().harvestLevel(1).noOcclusion(), SHAPE);
     }
 
     @Override
@@ -55,9 +63,17 @@ public class ComponentBoxBlock extends ShapedBlock {
     public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean bool) {
         if (!world.isClientSide()){
             if (state.is(newState.getBlock())){
-                InventoryHelper.dropContents(world, pos, WorldUtil.getTileEntity(TileEntityComponentBox.class, world, pos));
+                TileEntityComponentBox te = WorldUtil.getTileEntity(TileEntityComponentBox.class, world,pos);
+                CompoundNBT nbt = te.serializeNBT();
+                ItemStack stack = new ItemStack(state.getBlock().asItem(), 1, nbt);
+                InventoryHelper.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
             }
         }
         super.onRemove(state, world, pos, newState, bool);
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState p_220076_1_, LootContext.Builder p_220076_2_) {
+        return Collections.emptyList();
     }
 }

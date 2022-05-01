@@ -4,6 +4,9 @@ import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.common.block.ChargerBlock;
 import com.rena.cybercraft.common.block.ComponentBoxBlock;
 import com.rena.cybercraft.common.block.ScannerBlock;
+import com.rena.cybercraft.common.item.block.ItemComponentBox;
+import com.rena.cybercraft.common.util.BlockDeferredRegister;
+import com.rena.cybercraft.common.util.DoubleRegistryObject;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -19,10 +22,11 @@ import net.minecraftforge.registries.IForgeRegistry;
 public class BlockInit {
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Cybercraft.MOD_ID);
+    public static final BlockDeferredRegister CUSTOM = new BlockDeferredRegister(Cybercraft.MOD_ID);
 
     public static final RegistryObject<ScannerBlock> SCANNER_BLOCK = BLOCKS.register("scanner", ScannerBlock::new);
     public static final RegistryObject<ChargerBlock> CHARGER_BLOCK = BLOCKS.register("charger", ChargerBlock::new);
-    public static final RegistryObject<ComponentBoxBlock> COMPONENT_BOX = BLOCKS.register("component_box", ComponentBoxBlock::new);
+    public static final DoubleRegistryObject<ComponentBoxBlock, ItemComponentBox> COMPONENT_BOX = CUSTOM.register("component_box", ComponentBoxBlock::new, block -> new ItemComponentBox(block));
 
     @SubscribeEvent
     public static final void registerBlockItems(RegistryEvent.Register<Item> event){

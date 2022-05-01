@@ -43,7 +43,7 @@ public class ModLootTableProvider extends LootTableProvider {
         protected void addTables() {
             dropSelf(BlockInit.SCANNER_BLOCK.get());
             dropSelf(BlockInit.CHARGER_BLOCK.get());
-            dropSelf(BlockInit.COMPONENT_BOX.get());
+            dropSelf(BlockInit.COMPONENT_BOX.getPrimary());
         }
 
         @Override
