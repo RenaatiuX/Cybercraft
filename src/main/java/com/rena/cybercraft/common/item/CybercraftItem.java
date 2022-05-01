@@ -184,7 +184,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
         super.appendHoverText(stack, world, list, flag);
         if (installedStackSize(stack) > 1)
         {
-            list.add(new TranslationTextComponent("cybercraft.tooltip.max_install", installedStackSize(stack)).withStyle(TextFormatting.BLUE));
+            list.add(new TranslationTextComponent("tooltip.cybercraft.max_install", installedStackSize(stack)).withStyle(TextFormatting.BLUE));
         }
 
         boolean hasPowerConsumption = false;

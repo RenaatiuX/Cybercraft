@@ -1,6 +1,6 @@
 package com.rena.cybercraft.common.container;
 
-import com.rena.cybercraft.common.tileentities.TileEntityComponentBox;
+import com.rena.cybercraft.common.tileentities.TileEntityBlueprintArchive;
 import com.rena.cybercraft.core.Tags;
 import com.rena.cybercraft.core.init.ContainerInit;
 import net.minecraft.entity.player.PlayerInventory;
@@ -9,13 +9,13 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 
-public class ComponentBoxContainer extends BaseTeContainer<TileEntityComponentBox>{
-    public ComponentBoxContainer(int id, PlayerInventory inv, TileEntityComponentBox tileEntity) {
-        super(ContainerInit.COMPONENT_BOX_CONTAINER.get(), id, inv, tileEntity);
+public class BlueprintArchiveContainer extends BaseTeContainer<TileEntityBlueprintArchive>{
+    public BlueprintArchiveContainer(int id, PlayerInventory inv, TileEntityBlueprintArchive tileEntity) {
+        super(ContainerInit.BLUEPRINT_ARCHIVE_CONTAINER.get(), id, inv, tileEntity);
     }
 
-    public ComponentBoxContainer(int id, PlayerInventory inv, PacketBuffer buffer) {
-        super(ContainerInit.COMPONENT_BOX_CONTAINER.get(), id, inv, buffer);
+    public BlueprintArchiveContainer(int id, PlayerInventory inv, PacketBuffer buffer) {
+        super(ContainerInit.BLUEPRINT_ARCHIVE_CONTAINER.get(), id, inv, buffer);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class ComponentBoxContainer extends BaseTeContainer<TileEntityComponentBo
         addPlayerInventory(8, 68);
     }
 
-    private static final class ComponentsSlot extends Slot{
+    private static final class ComponentsSlot extends Slot {
 
         public ComponentsSlot(IInventory p_i1824_1_, int p_i1824_2_, int p_i1824_3_, int p_i1824_4_) {
             super(p_i1824_1_, p_i1824_2_, p_i1824_3_, p_i1824_4_);
@@ -32,7 +32,7 @@ public class ComponentBoxContainer extends BaseTeContainer<TileEntityComponentBo
 
         @Override
         public boolean mayPlace(ItemStack stack) {
-            return Tags.Items.COMPONENTS.contains(stack.getItem());
+            return Tags.Items.BLUPRINT_ITEMS.contains(stack.getItem());
         }
     }
 }

@@ -4,6 +4,7 @@ import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.item.ICybercraft;
 import com.rena.cybercraft.common.item.*;
+import com.rena.cybercraft.common.item.block.ItemComponentBox;
 import com.rena.cybercraft.common.util.CybercraftArmorMaterial;
 import com.rena.cybercraft.common.util.CybercraftItemTier;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -91,9 +92,14 @@ public class ItemInit {
 
     //Eye Upgrade
     public static final RegistryObject<CybercraftItem> CYBER_EYES = ITEMS.register("cybereyes",
-            () -> new CybereyesItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.EYES)
+            () -> new CybereyesItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.EYES, CybercraftAPI.QUALITY_MANUFACTURED)
                     .setEssenceCost(8)
                     .setWeight(UNCOMMON));
+    public static final RegistryObject<CybercraftItem> CYBER_EYES_SCAVENGED = ITEMS.register("cybereyes_scavenged",
+            () -> new CybereyesItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.EYES, CybercraftAPI.QUALITY_SCAVENGED)
+                    .setEssenceCost(8)
+                    .setWeight(UNCOMMON));
+
     public static final RegistryObject<CybercraftItem> CYBER_EYE_UPGRADES_NIGHT_VISION = ITEMS.register("cybereye_upgrades_night_vision",
             () -> new CybereyeUpgradeItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.EYES, CybercraftAPI.QUALITY_MANUFACTURED)
                     .setEssenceCost(2)
@@ -534,5 +540,8 @@ public class ItemInit {
 
     public static final RegistryObject<Item> SURGERY = ITEMS.register("surgery_chamber",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
+
+    public static final RegistryObject<Item> COMPONENT_BOX = ITEMS.register("component_box",
+            () -> new ItemComponentBox(BlockInit.COMPONENT_BOX.get(), new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
 
 }
