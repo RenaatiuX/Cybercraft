@@ -1,5 +1,6 @@
 package com.rena.cybercraft;
 
+import com.rena.cybercraft.client.screens.BlueprintArchiveScreen;
 import com.rena.cybercraft.client.screens.ComponentBoxScreen;
 import com.rena.cybercraft.client.screens.ScannerScreen;
 import com.rena.cybercraft.common.config.CybercraftConfig;
@@ -74,6 +75,7 @@ public class Cybercraft {
         event.enqueueWork(() -> {
             ScreenManager.register(ContainerInit.SCANNER_CONTAINER.get(), ScannerScreen::new);
             ScreenManager.register(ContainerInit.COMPONENT_BOX_CONTAINER.get(), ComponentBoxScreen::new);
+            ScreenManager.register(ContainerInit.BLUEPRINT_ARCHIVE_CONTAINER.get(), BlueprintArchiveScreen::new);
             ScreenManager.register(ContainerInit.ITEM_COMPONENT_BOX_CONTAINER.get(), ComponentBoxScreen::new);
 
             RenderTypeLookup.setRenderLayer(BlockInit.SCANNER_BLOCK.get(), RenderType.translucent());

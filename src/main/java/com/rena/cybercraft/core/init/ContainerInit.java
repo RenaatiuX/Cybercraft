@@ -1,6 +1,7 @@
 package com.rena.cybercraft.core.init;
 
 import com.rena.cybercraft.Cybercraft;
+import com.rena.cybercraft.common.container.BlueprintArchiveContainer;
 import com.rena.cybercraft.common.container.ComponentBoxContainer;
 import com.rena.cybercraft.common.container.ItemComponentBoxContainer;
 import com.rena.cybercraft.common.container.ScannerContainer;
@@ -16,5 +17,6 @@ public class ContainerInit {
 
     public static final RegistryObject<ContainerType<ScannerContainer>> SCANNER_CONTAINER = CONTAINERS.register("scanner", () -> IForgeContainerType.create(ScannerContainer::new));
     public static final RegistryObject<ContainerType<ComponentBoxContainer>> COMPONENT_BOX_CONTAINER = CONTAINERS.register("component_box", () -> IForgeContainerType.create(ComponentBoxContainer::new));
+    public static final RegistryObject<ContainerType<BlueprintArchiveContainer>> BLUEPRINT_ARCHIVE_CONTAINER = CONTAINERS.register("blueprint_archive", () -> IForgeContainerType.create(BlueprintArchiveContainer::new));
     public static final RegistryObject<ContainerType<ItemComponentBoxContainer>> ITEM_COMPONENT_BOX_CONTAINER = CONTAINERS.register("item_component_box", () -> IForgeContainerType.create(ItemComponentBoxContainer::new));
 }

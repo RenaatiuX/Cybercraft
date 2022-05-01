@@ -11,9 +11,5 @@
             "south": "cybercraft:blocks/charger_side",
             "west": "cybercraft:blocks/charger_side"
         }
-    },
-    "variants": {
-        "normal": [{}],
-        "inventory": [{}]
     }
 }

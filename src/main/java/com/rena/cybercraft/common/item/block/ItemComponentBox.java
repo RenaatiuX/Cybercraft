@@ -44,7 +44,7 @@ public class ItemComponentBox extends BlockItem{
 
     @Override
     public ActionResultType useOn(ItemUseContext context) {
-        if (!context.getLevel().isClientSide() && context.getPlayer().isShiftKeyDown()){
+        if (!context.getLevel().isClientSide() && context.getPlayer().isCrouching()){
             openGui(context.getPlayer(), context.getLevel(), context.getItemInHand());
             return ActionResultType.SUCCESS;
         }

@@ -132,7 +132,6 @@ public class ItemInit {
             () -> new CybereyeUpgradeItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.EYES, CybercraftAPI.QUALITY_SCAVENGED)
                     .setEssenceCost(1)
                     .setWeight(UNCOMMON));
-
     public static final RegistryObject<CybercraftItem> CYBER_EYE_UPGRADES_ZOOM = ITEMS.register("cybereye_upgrades_zoom",
             () -> new CybereyeUpgradeItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.EYES, CybercraftAPI.QUALITY_MANUFACTURED)
                     .setEssenceCost(1)
@@ -541,7 +540,6 @@ public class ItemInit {
     public static final RegistryObject<Item> SURGERY = ITEMS.register("surgery_chamber",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
 
-    public static final RegistryObject<Item> COMPONENT_BOX = ITEMS.register("component_box",
-            () -> new ItemComponentBox(BlockInit.COMPONENT_BOX.get(), new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
+
 
 }
