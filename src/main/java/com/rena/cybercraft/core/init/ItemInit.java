@@ -541,7 +541,4 @@ public class ItemInit {
     public static final RegistryObject<Item> SURGERY = ITEMS.register("surgery_chamber",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
 
-    public static final RegistryObject<Item> COMPONENT_BOX = ITEMS.register("component_box",
-            () -> new ItemComponentBox(BlockInit.COMPONENT_BOX.get(), new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
-
 }
