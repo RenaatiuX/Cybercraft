@@ -14,6 +14,7 @@ import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.util.Constants;
 
 public class TileEntityComponentBox extends LockableLootTileEntity{
 
@@ -82,6 +83,22 @@ public class TileEntityComponentBox extends LockableLootTileEntity{
         nbt.put("Items", nbtTagList);
         nbt.putInt("Size", items.size());
         return nbt;
+    }
+
+    public void loadForgeItems(CompoundNBT nbt){
+        int size = nbt.contains("Size", Constants.NBT.TAG_INT) ? nbt.getInt("Size") : items.size();
+        items = NonNullList.withSize(size, ItemStack.EMPTY);
+        ListNBT tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
+        for (int i = 0; i < tagList.size(); i++)
+        {
+            CompoundNBT itemTags = tagList.getCompound(i);
+            int slot = itemTags.getInt("Slot");
+
+            if (slot >= 0 && slot < items.size())
+            {
+                items.set(slot, ItemStack.of(itemTags));
+            }
+        }
     }
 
     @Override

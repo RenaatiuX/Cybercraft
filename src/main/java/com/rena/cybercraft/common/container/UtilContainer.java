@@ -10,6 +10,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
+import org.lwjgl.system.CallbackI;
 
 import java.util.Objects;
 
@@ -41,6 +44,20 @@ public abstract class UtilContainer extends Container {
         }
         return Index;
     }
+    protected int addHorizontalSlots(IItemHandler handler, int Index, int x, int y, int amount,
+                                     int distanceBetweenSlots, IItemHandlerSlotProvider provider) {
+        for (int i = 0; i < amount; i++) {
+            addSlot(provider.createSlot(handler, Index, x, y));
+            Index++;
+            x += distanceBetweenSlots;
+        }
+        return Index;
+    }
+
+    protected int addHorizontalSlots(IItemHandler handler, int Index, int x, int y, int amount,
+                                     int distanceBetweenSlots) {
+     return addHorizontalSlots(handler, Index, x, y, amount, distanceBetweenSlots, (inv, index, lambdaX, lambdaY) -> new SlotItemHandler(inv, index, lambdaX, lambdaY));
+    }
 
     protected int addSlotField(IInventory handler, int StartIndex, int x, int y, int horizontalAmount,
                                int horizontalDistance, int verticalAmount, int VerticalDistance) {
@@ -60,6 +77,20 @@ public abstract class UtilContainer extends Container {
         return StartIndex;
     }
 
+    protected int addSlotField(IItemHandler handler, int StartIndex, int x, int y, int horizontalAmount,
+                               int horizontalDistance, int verticalAmount, int VerticalDistance, IItemHandlerSlotProvider provider) {
+        for (int i = 0; i < verticalAmount; i++) {
+            StartIndex = addHorizontalSlots(handler, StartIndex, x, y, horizontalAmount, horizontalDistance, provider);
+            y += VerticalDistance;
+        }
+        return StartIndex;
+    }
+
+    protected int addSlotField(IItemHandler handler, int StartIndex, int x, int y, int horizontalAmount,
+                               int horizontalDistance, int verticalAmount, int VerticalDistance) {
+       return addSlotField(handler, StartIndex, x, y, horizontalAmount, horizontalDistance, verticalAmount, VerticalDistance, (inv, index, lX, lY) -> new SlotItemHandler(inv, index, lX, lY));
+    }
+
     protected void addPlayerInventory(int x, int y) {
         // the Rest
         addSlotField(playerInventory, 9, x, y, 9, 18, 3, 18);
@@ -70,6 +101,10 @@ public abstract class UtilContainer extends Container {
 
     public static interface ISlotProvider{
         Slot createSlot(IInventory inv,int index, int x, int y);
+    }
+
+    public interface IItemHandlerSlotProvider{
+        Slot createSlot(IItemHandler inv, int index, int x, int y);
     }
 
     protected static class LockedSlot extends Slot {

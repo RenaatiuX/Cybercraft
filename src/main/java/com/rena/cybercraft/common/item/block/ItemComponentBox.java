@@ -4,6 +4,7 @@ import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.common.container.ComponentBoxContainer;
 import com.rena.cybercraft.common.container.ItemComponentBoxContainer;
 import com.rena.cybercraft.common.tileentities.TileEntityComponentBox;
+import com.rena.cybercraft.common.util.WorldUtil;
 import com.rena.cybercraft.core.init.BlockInit;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,16 +17,20 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
@@ -40,7 +45,31 @@ public class ItemComponentBox extends BlockItem{
     @Override
     public ActionResultType useOn(ItemUseContext context) {
         if (!context.getLevel().isClientSide() && context.getPlayer().isShiftKeyDown()){
-            NetworkHooks.openGui((ServerPlayerEntity) context.getPlayer(), new INamedContainerProvider() {
+            openGui(context.getPlayer(), context.getLevel(), context.getItemInHand());
+            return ActionResultType.SUCCESS;
+        }
+        ActionResultType type = super.useOn(context);
+        TileEntityComponentBox te = WorldUtil.getTileEntity(TileEntityComponentBox.class, context.getLevel(), context.getClickedPos());
+        if (te != null){
+            ItemStackHandler handler = (ItemStackHandler) context.getItemInHand().getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElseThrow(IllegalStateException::new);
+            te.loadForgeItems(handler.serializeNBT());
+            System.out.println("nbt copied");
+        }
+        return type;
+    }
+
+    @Override
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+        if (!world.isClientSide()){
+            openGui(player, world, player.getItemInHand(hand));
+            return ActionResult.success(player.getItemInHand(hand));
+        }
+        return super.use(world, player, hand);
+    }
+
+    private void openGui(PlayerEntity player, World world, ItemStack holdSTack) {
+        if (!world.isClientSide()) {
+            NetworkHooks.openGui((ServerPlayerEntity) player, new INamedContainerProvider() {
                 @Override
                 public ITextComponent getDisplayName() {
                     return new TranslationTextComponent("container." + Cybercraft.MOD_ID + ".component_box");
@@ -49,12 +78,10 @@ public class ItemComponentBox extends BlockItem{
                 @Nullable
                 @Override
                 public Container createMenu(int id, PlayerInventory inv, PlayerEntity player) {
-                    return new ItemComponentBoxContainer(id, inv, context.getItemInHand().getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElseThrow(IllegalStateException::new));
+                    return new ItemComponentBoxContainer(id, inv, holdSTack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElseThrow(IllegalStateException::new));
                 }
             }, buf -> buf.writeVarInt(TileEntityComponentBox.CONTAINER_SIZE));
-            return ActionResultType.SUCCESS;
         }
-        return super.useOn(context);
     }
 
     @Nullable
@@ -77,7 +104,7 @@ public class ItemComponentBox extends BlockItem{
         @Override
         public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
             if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-                return (LazyOptional<T>) LazyOptional.of(() -> handler);
+                return LazyOptional.of(() -> handler).cast();
             return null;
         }
 

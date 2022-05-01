@@ -47,6 +47,7 @@ public class Cybercraft {
 
         ItemInit.ITEMS.register(modEventBus);
         BlockInit.BLOCKS.register(modEventBus);
+        BlockInit.CUSTOM.register(modEventBus);
         EffectInit.EFFECT.register(modEventBus);
 
         TileEntityTypeInit.TES.register(modEventBus);
@@ -73,6 +74,7 @@ public class Cybercraft {
         event.enqueueWork(() -> {
             ScreenManager.register(ContainerInit.SCANNER_CONTAINER.get(), ScannerScreen::new);
             ScreenManager.register(ContainerInit.COMPONENT_BOX_CONTAINER.get(), ComponentBoxScreen::new);
+            ScreenManager.register(ContainerInit.ITEM_COMPONENT_BOX_CONTAINER.get(), ComponentBoxScreen::new);
 
             RenderTypeLookup.setRenderLayer(BlockInit.SCANNER_BLOCK.get(), RenderType.translucent());
 

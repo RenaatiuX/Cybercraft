@@ -3,16 +3,17 @@ package com.rena.cybercraft.client.screens;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.common.container.ComponentBoxContainer;
+import com.rena.cybercraft.common.container.UtilContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
-public class ComponentBoxScreen extends ContainerScreen<ComponentBoxContainer> {
+public class ComponentBoxScreen extends ContainerScreen<UtilContainer> {
     public static final ResourceLocation TEXTURE = Cybercraft.modLoc("textures/gui/component_box.png");
 
-    public ComponentBoxScreen(ComponentBoxContainer p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
+    public ComponentBoxScreen(UtilContainer p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
         super(p_i51105_1_, p_i51105_2_, p_i51105_3_);
     }
 
