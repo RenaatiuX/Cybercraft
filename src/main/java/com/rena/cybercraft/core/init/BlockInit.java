@@ -1,6 +1,7 @@
 package com.rena.cybercraft.core.init;
 
 import com.rena.cybercraft.Cybercraft;
+import com.rena.cybercraft.common.block.BlueprintArchiveBlock;
 import com.rena.cybercraft.common.block.ChargerBlock;
 import com.rena.cybercraft.common.block.ComponentBoxBlock;
 import com.rena.cybercraft.common.block.ScannerBlock;
@@ -26,6 +27,7 @@ public class BlockInit {
 
     public static final RegistryObject<ScannerBlock> SCANNER_BLOCK = BLOCKS.register("scanner", ScannerBlock::new);
     public static final RegistryObject<ChargerBlock> CHARGER_BLOCK = BLOCKS.register("charger", ChargerBlock::new);
+    public static final RegistryObject<BlueprintArchiveBlock> BLUEPRINT_ARCHIVE_block = BLOCKS.register("blueprint_archive", BlueprintArchiveBlock::new);
     public static final DoubleRegistryObject<ComponentBoxBlock, ItemComponentBox> COMPONENT_BOX = CUSTOM.register("component_box", ComponentBoxBlock::new, block -> new ItemComponentBox(block));
 
     @SubscribeEvent

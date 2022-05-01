@@ -14,9 +14,11 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -35,15 +37,45 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ItemComponentBox extends BlockItem{
+public class ItemComponentBox extends CybercraftItemBlock{
 
     public ItemComponentBox(Block b) {
         super(b, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB));
     }
 
     @Override
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
+
+        if (!world.isClientSide) {
+            NetworkHooks.openGui((ServerPlayerEntity) player, new SimpleNamedContainerProvider((w, p, pl) -> new ComponentBoxContainer(w, pl, )), buf -> buf.writeVarInt(TileEntityComponentBox.CONTAINER_SIZE));
+        }
+        return new ActionResult<>(ActionResultType.PASS, itemStack);
+    }
+
+    @Override
     public ActionResultType useOn(ItemUseContext context) {
-        if (!context.getLevel().isClientSide() && context.getPlayer().isShiftKeyDown()){
+        PlayerEntity player = context.getPlayer();
+
+        if (player.isShiftKeyDown())
+        {
+            ActionResultType res = super.useOn(context);
+            if (res == ActionResultType.SUCCESS && player.isCreative())
+            {
+                player.inventory.items.set(player.inventory.selected, ItemStack.EMPTY);
+            }
+            return res;
+        }
+        else
+        {
+            NetworkHooks.openGui((ServerPlayerEntity) player, new SimpleNamedContainerProvider((w, p, pl) -> new ComponentBoxContainer(w, pl, )), buf -> buf.writeVarInt(TileEntityComponentBox.CONTAINER_SIZE));
+        }
+        return ActionResultType.SUCCESS;
+    }
+
+    /*@Override
+    public ActionResultType useOn(ItemUseContext context) {
+        if (!context.getLevel().isClientSide() && context.getPlayer().isCrouching()){
             openGui(context.getPlayer(), context.getLevel(), context.getItemInHand());
             return ActionResultType.SUCCESS;
         }
@@ -116,5 +148,5 @@ public class ItemComponentBox extends BlockItem{
         public void deserializeNBT(CompoundNBT nbt) {
             handler.deserializeNBT(nbt);
         }
-    }
+    }*/
 }
