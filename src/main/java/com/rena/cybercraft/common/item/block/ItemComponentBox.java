@@ -53,6 +53,6 @@ public class ItemComponentBox extends CybercraftItemBlock{
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> text, ITooltipFlag tooltip) {
         text.add(new TranslationTextComponent(I18n.get("cybercraft.tooltip.component_box")).withStyle(TextFormatting.GRAY));
-        text.add(new TranslationTextComponent(I18n.get("cybercrft.tooltip.component_box2")).withStyle(TextFormatting.GRAY));
+        text.add(new TranslationTextComponent(I18n.get("cybercraft.tooltip.component_box2")).withStyle(TextFormatting.GRAY));
     }
 }
