@@ -44,36 +44,6 @@ public class ItemComponentBox extends CybercraftItemBlock{
     }
 
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
-        ItemStack itemStack = player.getItemInHand(hand);
-
-        if (!world.isClientSide) {
-            NetworkHooks.openGui((ServerPlayerEntity) player, new SimpleNamedContainerProvider((w, p, pl) -> new ComponentBoxContainer(w, pl, )), buf -> buf.writeVarInt(TileEntityComponentBox.CONTAINER_SIZE));
-        }
-        return new ActionResult<>(ActionResultType.PASS, itemStack);
-    }
-
-    @Override
-    public ActionResultType useOn(ItemUseContext context) {
-        PlayerEntity player = context.getPlayer();
-
-        if (player.isShiftKeyDown())
-        {
-            ActionResultType res = super.useOn(context);
-            if (res == ActionResultType.SUCCESS && player.isCreative())
-            {
-                player.inventory.items.set(player.inventory.selected, ItemStack.EMPTY);
-            }
-            return res;
-        }
-        else
-        {
-            NetworkHooks.openGui((ServerPlayerEntity) player, new SimpleNamedContainerProvider((w, p, pl) -> new ComponentBoxContainer(w, pl, )), buf -> buf.writeVarInt(TileEntityComponentBox.CONTAINER_SIZE));
-        }
-        return ActionResultType.SUCCESS;
-    }
-
-    /*@Override
     public ActionResultType useOn(ItemUseContext context) {
         if (!context.getLevel().isClientSide() && context.getPlayer().isCrouching()){
             openGui(context.getPlayer(), context.getLevel(), context.getItemInHand());
@@ -148,5 +118,5 @@ public class ItemComponentBox extends CybercraftItemBlock{
         public void deserializeNBT(CompoundNBT nbt) {
             handler.deserializeNBT(nbt);
         }
-    }*/
+    }
 }

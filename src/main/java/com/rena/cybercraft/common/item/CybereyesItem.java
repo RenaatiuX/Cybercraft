@@ -48,7 +48,7 @@ public class CybereyesItem extends CybercraftItem {
 
     @Override
     public boolean canHoldQuality(Quality quality) {
-        return false;
+        return true;
     }
 
     @SubscribeEvent
