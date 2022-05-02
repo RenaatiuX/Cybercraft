@@ -49,15 +49,15 @@ public class LungsUpgradeItem extends CybercraftItem{
             if ( !itemStackCompressedOxygen.isEmpty()
                     && !entityPlayer.isCreative() )
             {
-                MatrixStack res = event.getMatrixStack();
-                res.pushPose();
+                MatrixStack matrixStack = event.getMatrixStack();
+                matrixStack.pushPose();
                 int air = getAir(itemStackCompressedOxygen);
 
                 Minecraft.getInstance().getTextureManager().bind(AbstractGui.GUI_ICONS_LOCATION);
 
-                res.enableBlend();
-                int left = res.getScaledWidth() / 2 + 91;
-                int top = res.getScaledHeight() - 49 - 8;
+                RenderSystem.enableBlend();
+                int left = Minecraft.getInstance().getWindow().getWidth() / 2 + 91;
+                int top = Minecraft.getInstance().getWindow().getHeight() - 49 - 8;
 
                 float r = 1.0F;
                 float b = 1.0F;
@@ -87,7 +87,7 @@ public class LungsUpgradeItem extends CybercraftItem{
 
                 RenderSystem.color3f(1.0F, 1.0F, 1.0F);
                 //GlStateManager.disableBlend();
-                res.popPose();
+                matrixStack.popPose();
             }
         }
     }

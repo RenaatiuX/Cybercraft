@@ -23,7 +23,9 @@ public class DenseBatteryItem extends CybercraftItem implements ISpecialBattery 
     {
 
         return other.getItem() == ItemInit.LOWER_ORGANS_UPGRADES_BATTERY.get()
-                && stack.getDamageValue() == LowerOrgansUpgradeItem.META_BATTERY;
+                && other.getItem() == ItemInit.LOWER_ORGANS_UPGRADES_METABOLIC.get()
+                && other.getItem() == ItemInit.LOWER_ORGANS_UPGRADES_ADRENALINE.get()
+                && stack.getItem() == ItemInit.LOWER_ORGANS_UPGRADES_BATTERY.get();
     }
 
     @Override

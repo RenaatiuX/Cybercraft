@@ -24,11 +24,6 @@ import java.util.*;
 
 public class LowerOrgansUpgradeItem extends CybercraftItem implements IMenuItem {
 
-    public static final int META_LIVER_FILTER = 0;
-    public static final int META_METABOLIC_GENERATOR = 1;
-    public static final int META_BATTERY = 2;
-    public static final int META_ADRENALINE_PUMP = 3;
-
     public LowerOrgansUpgradeItem(Properties properties, EnumSlot slots, Quality q) {
         super(properties, slots, q);
         MinecraftForge.EVENT_BUS.register(this);
