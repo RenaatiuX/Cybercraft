@@ -23,7 +23,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.CombatTracker;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.IndirectEntityDamageSource;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -34,9 +37,6 @@ import java.util.Set;
 import java.util.UUID;
 
 public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
-
-    private static final int META_WIRED_REFLEXES          = 0;
-    private static final int META_MUSCLE_REPLACEMENTS     = 1;
 
     private static final UUID idMuscleSpeedAttribute = UUID.fromString("f0ab4766-4be1-11e6-beb8-9e71128cae77");
     private static final UUID idMuscleDamageAttribute = UUID.fromString("f63d6916-4be1-11e6-beb8-9e71128cae77");
@@ -96,7 +96,7 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
         ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityLivingBase);
         if (cyberwareUserData == null) return;
 
-        ItemStack itemStackWiredReflexes = cyberwareUserData.getCybercraft(getCachedStack(META_WIRED_REFLEXES));
+        ItemStack itemStackWiredReflexes = cyberwareUserData.getCybercraft(ItemInit.MUSCLE_REFLEXES.get());
         int rank = itemStackWiredReflexes.getCount();
         if ( rank > 1
                 && EnableDisableHelper.isEnabled(itemStackWiredReflexes)
@@ -104,11 +104,11 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
         {
             PlayerEntity entityPlayer = (PlayerEntity) entityLivingBase;
             if ( event.getSource() instanceof EntityDamageSource
-                    && !(event.getSource() instanceof EntityDamageSourceIndirect) )
+                    && !(event.getSource() instanceof IndirectEntityDamageSource) )
             {
                 EntityDamageSource source = (EntityDamageSource) event.getSource();
-                Entity attacker = source.getTrueSource();
-                int lastAttacked = ReflectionHelper.getPrivateValue(CombatTracker.class, entityPlayer.getCombatTracker(), 2);
+                Entity attacker = source.getEntity();
+                int lastAttacked = ForgeHooks.getPrivateValue(CombatTracker.class, entityPlayer.getCombatTracker(), 2);
 
                 if (entityPlayer.tickCount - lastAttacked > 120)
                 {
@@ -176,13 +176,13 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
     private Set<UUID> setIsSpeedPowered = new HashSet<>();
     private Set<UUID> setIsStrengthPowered = new HashSet<>();
 
-    /*@SubscribeEvent(priority= EventPriority.NORMAL)
+    @SubscribeEvent(priority= EventPriority.NORMAL)
     public void handleLivingUpdate(CybercraftUpdateEvent event)
     {
         LivingEntity entityLivingBase = event.getEntityLiving();
         ICybercraftUserData cyberwareUserData = event.getCybercrafteUserData();
 
-        ItemStack itemStackMuscleReplacement = cyberwareUserData.getCybercraft(getCachedStack(META_MUSCLE_REPLACEMENTS));
+        ItemStack itemStackMuscleReplacement = cyberwareUserData.getCybercraft(ItemInit.MUSCLE_REPLACEMENTS.get());
         if (!itemStackMuscleReplacement.isEmpty())
         {
             boolean wasPowered = setIsStrengthPowered.contains(entityLivingBase.getUUID());
@@ -193,9 +193,9 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
             {
                 if ( !entityLivingBase.isInWater()
                         && entityLivingBase.isOnGround()
-                        && entityLivingBase.moveForward > 0 )
+                        && entityLivingBase.zza > 0 )
                 {
-                    entityLivingBase.moveRelative(0F, 0.0F,.5F, 0.075F);
+                    entityLivingBase.moveRelative(0F, new Vector3d(0.0F,.5F, 0.075F));
                 }
 
                 if (!wasPowered)
@@ -218,7 +218,7 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
 
         if (entityLivingBase.tickCount % 20 == 0)
         {
-            ItemStack itemStackWiredReflexes = cyberwareUserData.getCybercraft(getCachedStack(META_WIRED_REFLEXES));
+            ItemStack itemStackWiredReflexes = cyberwareUserData.getCybercraft(ItemInit.MUSCLE_REFLEXES.get());
             if ( !itemStackWiredReflexes.isEmpty()
                     && EnableDisableHelper.isEnabled(itemStackWiredReflexes) )
             {
@@ -243,7 +243,7 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
                 setIsSpeedPowered.remove(entityLivingBase.getUUID());
             }
         }
-    }*/
+    }
 
     @Override
     public int getPowerConsumption(ItemStack stack)

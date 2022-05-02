@@ -30,11 +30,6 @@ import java.util.UUID;
 
 public class HeartUpgradeItem extends CybercraftItem {
 
-    /*public static final int META_INTERNAL_DEFIBRILLATOR = 0;
-    public static final int META_PLATELET_DISPATCHER = 1;
-    public static final int META_STEM_CELL_SYNTHESIZER = 2;
-    public static final int META_CARDIOVASCULAR_COUPLER = 3;*/
-
     private static Map<UUID, Integer> timesPlatelets = new HashMap<>();
 
     public HeartUpgradeItem(Properties properties, EnumSlot slots, Quality q) {
@@ -137,14 +132,6 @@ public class HeartUpgradeItem extends CybercraftItem {
                 }
             }
         }
-		else
-		{
-			if (timesMedkit.containsKey(entityLivingBase.getUUID()))
-			{
-				timesMedkit.remove(entityLivingBase);
-				damageMedkit.remove(entityLivingBase);
-			}
-		}
     }
 
     private static Map<UUID, Boolean> isPlateletWorking = new HashMap<>();

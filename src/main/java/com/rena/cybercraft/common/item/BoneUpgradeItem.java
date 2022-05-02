@@ -22,10 +22,6 @@ import java.util.UUID;
 
 public class BoneUpgradeItem extends CybercraftItem {
 
-    public static final int META_LACING = 0;
-    public static final int META_FLEX = 1;
-    public static final int META_BATTERY= 2;
-
     public static final int MAX_STACK_SIZE_LACING = 5;
 
     private static final UUID idBoneHealthAttribute = UUID.fromString("8bce997a-4c3a-11e6-beb8-9e71128cae77");

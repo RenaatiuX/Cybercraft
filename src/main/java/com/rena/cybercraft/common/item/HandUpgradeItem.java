@@ -32,10 +32,6 @@ import java.util.UUID;
 
 public class HandUpgradeItem extends CybercraftItem implements IMenuItem {
 
-    public static final int META_CRAFT_HANDS = 0;
-    public static final int META_CLAWS = 1;
-    public static final int META_MINING = 2;
-
     private final Item tool_level;
 
     private static final UUID isClawsStrengthAttribute = UUID.fromString("63c32801-94fb-40d4-8bd2-89135c1e44b1");

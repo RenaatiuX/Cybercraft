@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -26,10 +27,6 @@ import java.util.Map;
 import java.util.UUID;
 
 public class FootUpgradeItem extends CybercraftItem implements IMenuItem {
-
-    public static final int META_SPURS = 0;
-    public static final int META_AQUA = 1;
-    public static final int META_WHEELS = 2;
 
     public FootUpgradeItem(Properties properties, EnumSlot slot, Quality q) {
         super(properties, slot, q);
@@ -67,7 +64,7 @@ public class FootUpgradeItem extends CybercraftItem implements IMenuItem {
     private Map<UUID, Integer> mapCountdownWheelsPowered = new HashMap<>();
     private Map<UUID, Float> mapStepHeight = new HashMap<>();
 
-    /*@SubscribeEvent(priority= EventPriority.NORMAL)
+    @SubscribeEvent(priority= EventPriority.NORMAL)
     public void handleLivingUpdate(CybercraftUpdateEvent event)
     {
         LivingEntity entityLivingBase = event.getEntityLiving();
@@ -76,15 +73,15 @@ public class FootUpgradeItem extends CybercraftItem implements IMenuItem {
         if ( !entityLivingBase.isOnGround()
                 && entityLivingBase.isInWater() )
         {
-            ItemStack itemStackAqua = cyberwareUserData.getCybercraft(getCachedStack(META_AQUA));
+            ItemStack itemStackAqua = cyberwareUserData.getCybercraft(ItemInit.FOOT_UPGRADES_AQUA.get());
             if (!itemStackAqua.isEmpty())
             {
                 int numLegs = 0;
-                if (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_LEFT_CYBER_LEG)))
+                if (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMB_LEG_LEFT.get()))
                 {
                     numLegs++;
                 }
-                if (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_RIGHT_CYBER_LEG)))
+                if (cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMB_LEG_RIGHT.get()))
                 {
                     numLegs++;
                 }
@@ -97,7 +94,7 @@ public class FootUpgradeItem extends CybercraftItem implements IMenuItem {
                 {
                     if (entityLivingBase.zza > 0)
                     {
-                        entityLivingBase.moveRelative(0F, 0F, numLegs * 0.4F, 0.075F);
+                        entityLivingBase.moveRelative(0F, new Vector3d(0F, numLegs * 0.4F, 0.075F));
                     }
                 }
 
@@ -109,7 +106,7 @@ public class FootUpgradeItem extends CybercraftItem implements IMenuItem {
             mapIsAquaPowered.remove(entityLivingBase.getUUID());
         }
 
-        ItemStack itemStackWheels = cyberwareUserData.getCybercraft(getCachedStack(META_WHEELS));
+        ItemStack itemStackWheels = cyberwareUserData.getCybercraft(ItemInit.FOOT_UPGRADES_WHEELS.get());
         if (!itemStackWheels.isEmpty())
         {
             boolean wasPowered = getCountdownWheelsPowered(entityLivingBase) > 0;
@@ -151,7 +148,7 @@ public class FootUpgradeItem extends CybercraftItem implements IMenuItem {
 
             mapCountdownWheelsPowered.put(entityLivingBase.getUUID(), countdownWheelsPowered);
         }
-    }*/
+    }
 
     private int getCountdownWheelsPowered(LivingEntity entityLivingBase)
     {

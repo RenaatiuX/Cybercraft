@@ -18,9 +18,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class LegUpgradeItem extends CybercraftItem {
 
-    private static final int META_JUMP_BOOST = 0;
-    private static final int META_FALL_DAMAGE = 1;
-
     public LegUpgradeItem(Properties properties, EnumSlot slot, Quality q) {
         super(properties, slot, q);
         MinecraftForge.EVENT_BUS.register(this);

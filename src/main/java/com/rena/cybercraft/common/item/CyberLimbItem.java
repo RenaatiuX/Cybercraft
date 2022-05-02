@@ -26,11 +26,6 @@ import java.util.Set;
 
 public class CyberLimbItem extends CybercraftItem implements ICybercraft.ISidedLimb {
 
-    public static final int META_LEFT_CYBER_ARM = 0;
-    public static final int META_RIGHT_CYBER_ARM = 1;
-    public static final int META_LEFT_CYBER_LEG = 2;
-    public static final int META_RIGHT_CYBER_LEG = 3;
-
     private Set<Integer> didFall = new HashSet<>();
     private final EnumSide side;
 

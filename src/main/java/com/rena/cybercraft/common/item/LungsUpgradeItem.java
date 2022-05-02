@@ -1,20 +1,23 @@
 package com.rena.cybercraft.common.item;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.CybercraftUpdateEvent;
 import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.client.ClientUtils;
 import com.rena.cybercraft.common.util.LibConstants;
 import com.rena.cybercraft.core.init.ItemInit;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -27,15 +30,12 @@ import java.util.UUID;
 
 public class LungsUpgradeItem extends CybercraftItem{
 
-    private static final int META_COMPRESSED_OXYGEN       = 0;
-    private static final int META_HYPEROXYGENATION_BOOST  = 1;
-
     public LungsUpgradeItem(Properties properties, EnumSlot slots, Quality q) {
         super(properties, slots, q);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    /*@OnlyIn(Dist.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onDrawScreenPost(RenderGameOverlayEvent.Post event)
     {
@@ -45,17 +45,17 @@ public class LungsUpgradeItem extends CybercraftItem{
             ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityPlayer);
             if (cyberwareUserData == null) return;
 
-            ItemStack itemStackCompressedOxygen = cyberwareUserData.getCybercraft(getCachedStack(META_COMPRESSED_OXYGEN));
+            ItemStack itemStackCompressedOxygen = cyberwareUserData.getCybercraft(ItemInit.LUNGS_OXYGEN.get());
             if ( !itemStackCompressedOxygen.isEmpty()
                     && !entityPlayer.isCreative() )
             {
-                GlStateManager.pushMatrix();
+                MatrixStack res = event.getMatrixStack();
+                res.pushPose();
                 int air = getAir(itemStackCompressedOxygen);
 
-                Minecraft.getInstance().getTextureManager().bind(Gui.ICONS);
+                Minecraft.getInstance().getTextureManager().bind(AbstractGui.GUI_ICONS_LOCATION);
 
-                MatrixStack res = event.getMatrixStack();
-                GlStateManager.enableBlend();
+                res.enableBlend();
                 int left = res.getScaledWidth() / 2 + 91;
                 int top = res.getScaledHeight() - 49 - 8;
 
@@ -63,14 +63,14 @@ public class LungsUpgradeItem extends CybercraftItem{
                 float b = 1.0F;
                 float g = 1.0F;
 
-                if (entityPlayer.isInsideOfMaterial(Material.WATER))
+                if (entityPlayer.isEyeInFluid(FluidTags.WATER))
                 {
                     while (air > 0)
                     {
                         r += 1.0F;
                         b -= 0.25F;
                         g += 0.25F;
-                        GlStateManager.color(r, g, b);
+                        RenderSystem.color3f(r, g, b);
                         int drawAir = Math.min(300, air);
                         int full = MathHelper.ceil((drawAir - 2) * 10.0D / 300.0D);
                         int partial = MathHelper.ceil(drawAir * 10.0D / 300.0D) - full;
@@ -85,22 +85,22 @@ public class LungsUpgradeItem extends CybercraftItem{
                     }
                 }
 
-                GlStateManager.color(1.0F, 1.0F, 1.0F);
+                RenderSystem.color3f(1.0F, 1.0F, 1.0F);
                 //GlStateManager.disableBlend();
-                GlStateManager.popMatrix();
+                res.popPose();
             }
         }
-    }*/
+    }
 
     private Map<UUID, Boolean> mapIsOxygenPowered = new HashMap<>();
 
-    /*@SubscribeEvent
+    @SubscribeEvent
     public void handleLivingUpdate(CybercraftUpdateEvent event)
     {
         LivingEntity entityLivingBase = event.getEntityLiving();
         ICybercraftUserData cyberwareUserData = event.getCybercrafteUserData();
 
-        ItemStack itemStackCompressedAir = cyberwareUserData.getCybercraft(getCachedStack(META_COMPRESSED_OXYGEN));
+        ItemStack itemStackCompressedAir = cyberwareUserData.getCybercraft(ItemInit.LUNGS_OXYGEN.get());
         if (!itemStackCompressedAir.isEmpty())
         {
             int air = getAir(itemStackCompressedAir);
@@ -116,7 +116,7 @@ public class LungsUpgradeItem extends CybercraftItem{
             }
         }
 
-        ItemStack itemStackHyperoxygenationBoost = cyberwareUserData.getCybercraft(getCachedStack(META_HYPEROXYGENATION_BOOST));
+        ItemStack itemStackHyperoxygenationBoost = cyberwareUserData.getCybercraft(ItemInit.LUNGS_HYPEROXYGENATION.get());
         if (!itemStackHyperoxygenationBoost.isEmpty())
         {
             if ((entityLivingBase.isSprinting() || entityLivingBase instanceof MobEntity) && !entityLivingBase.isInWater() && entityLivingBase.isOnGround())
@@ -128,13 +128,13 @@ public class LungsUpgradeItem extends CybercraftItem{
                         : wasPowered;
                 if (isPowered)
                 {
-                    entityLivingBase.moveRelative(0F, 0.0F, .2F * ranks, 0.075F);
+                    entityLivingBase.moveRelative(0F, new Vector3d(0.0F, .2F * ranks, 0.075F));
                 }
 
                 mapIsOxygenPowered.put(entityLivingBase.getUUID(), isPowered);
             }
         }
-    }*/
+    }
 
     private boolean getIsOxygenPowered(LivingEntity entityLivingBase)
     {

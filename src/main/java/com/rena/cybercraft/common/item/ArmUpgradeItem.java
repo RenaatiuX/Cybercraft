@@ -5,6 +5,7 @@ import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.core.init.ItemInit;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.BowItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.MinecraftForge;
@@ -19,6 +20,10 @@ public class ArmUpgradeItem extends CybercraftItem{
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    @Override
+    public NonNullList<Item> requiredInstalledItems() {
+        return NonNullList.of(ItemInit.CYBER_LIMB_ARM_LEFT.get(), ItemInit.CYBER_LIMB_ARM_RIGHT.get());
+    }
 
     @SubscribeEvent
     public void useBow(LivingEntityUseItemEvent.Tick event)

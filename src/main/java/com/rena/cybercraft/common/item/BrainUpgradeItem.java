@@ -40,13 +40,6 @@ import java.util.*;
 
 public class BrainUpgradeItem extends CybercraftItem implements IMenuItem {
 
-    public static final int META_CORTICAL_STACK = 0;
-    public static final int META_ENDER_JAMMER = 1;
-    public static final int META_CONSCIOUSNESS_TRANSMITTER = 2;
-    public static final int META_NEURAL_CONTEXTUALIZER = 3;
-    public static final int META_THREAT_MATRIX = 4;
-    public static final int META_RADIO= 5;
-
     public BrainUpgradeItem(Properties properties, EnumSlot slots, Quality q) {
         super(properties, slots, q);
         MinecraftForge.EVENT_BUS.register(this);

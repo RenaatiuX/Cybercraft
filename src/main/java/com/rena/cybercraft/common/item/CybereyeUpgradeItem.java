@@ -27,6 +27,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -35,14 +36,9 @@ import java.util.List;
 
 public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IHudjack {
 
-    public static final int META_NIGHT_VISION = 0;
-    public static final int META_UNDERWATER_VISION = 1;
-    public static final int META_HUDJACK = 2;
-    public static final int META_TARGETING = 3;
-    public static final int META_ZOOM = 4;
-
     public CybereyeUpgradeItem(Properties properties, EnumSlot slot, Quality q) {
         super(properties, slot, q);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override
@@ -62,7 +58,7 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
     private static List<LivingEntity> entitiesInRange = new ArrayList<>(16);
     private static final float HIGHLIGHT_RANGE = 25F;
 
-    /*@SubscribeEvent
+    @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public void handleHighlight(TickEvent.RenderTickEvent event)
     {
@@ -75,13 +71,13 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
 
             ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityPlayer);
             if (cyberwareUserData == null) return;
-            ItemStack itemStackTargeting = cyberwareUserData.getCybercraft(getCachedStack(META_TARGETING));
+            ItemStack itemStackTargeting = cyberwareUserData.getCybercraft(ItemInit.CYBER_EYE_UPGRADES_TARGETING.get());
             cache_isHighlighting = !itemStackTargeting.isEmpty()
                     && EnableDisableHelper.isEnabled(itemStackTargeting);
             if (cache_isHighlighting)
             {
-                cache_aabbHighlight = new AxisAlignedBB(entityPlayer.posX - HIGHLIGHT_RANGE, entityPlayer.posY - HIGHLIGHT_RANGE, entityPlayer.posZ - HIGHLIGHT_RANGE,
-                        entityPlayer.posX + entityPlayer.width + HIGHLIGHT_RANGE, entityPlayer.posY + entityPlayer.height + HIGHLIGHT_RANGE, entityPlayer.posZ + entityPlayer.width + HIGHLIGHT_RANGE);
+                cache_aabbHighlight = new AxisAlignedBB(entityPlayer.getX() - HIGHLIGHT_RANGE, entityPlayer.getY() - HIGHLIGHT_RANGE, entityPlayer.getZ() - HIGHLIGHT_RANGE,
+                        entityPlayer.getX() + entityPlayer.getBbWidth() + HIGHLIGHT_RANGE, entityPlayer.getY() + entityPlayer.getBbHeight() + HIGHLIGHT_RANGE, entityPlayer.getZ() + entityPlayer.getBbWidth() + HIGHLIGHT_RANGE);
             }
         }
 
@@ -111,7 +107,7 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
                 }
             }
         }
-    }*/
+    }
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
@@ -185,7 +181,7 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
     private static double sensitivity = 0D;
     private static PlayerEntity player = null;
 
-    /*@SubscribeEvent
+    @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public void tickStart(TickEvent.ClientTickEvent event)
     {
@@ -204,7 +200,7 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
 
             ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityPlayer);
             if ( cyberwareUserData != null
-                    && cyberwareUserData.isCybercraftInstalled(getCachedStack(META_ZOOM)) )
+                    && cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_EYE_UPGRADES_ZOOM.get()) )
             {
                 player = entityPlayer;
 
@@ -269,7 +265,7 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
             }
 
         }
-    }*/
+    }
 
 
     @Override
