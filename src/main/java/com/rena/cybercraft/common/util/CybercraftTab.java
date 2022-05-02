@@ -48,12 +48,11 @@ public class CybercraftTab extends ItemGroup {
                         if (!stack.isEmpty()) {
                             if (CybercraftAPI.isCybercraft(stack)) {
                                 ICybercraft ware = CybercraftAPI.getCybercraft(stack);
-                                if (ware.canHoldQuality(q)) {
-                                    stack = new ItemStack(ware.withQuality(q));
+                                if (ware.getQuality() == q) {
+                                    ICybercraftTabItem.EnumCategory cat = ((ICybercraftTabItem) stack.getItem()).getCategory(stack);
+                                    subLists.get(cat).add(stack);
                                 }
                             }
-                            ICybercraftTabItem.EnumCategory cat = ((ICybercraftTabItem) stack.getItem()).getCategory(stack);
-                            subLists.get(cat).add(stack);
                         }
                     } else {
                         unsorted.add(new ItemStack(item));
