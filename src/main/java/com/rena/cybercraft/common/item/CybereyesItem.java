@@ -32,10 +32,6 @@ public class CybereyesItem extends CybercraftItem {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    public CybereyesItem(Properties properties, EnumSlot slots) {
-        this(properties, slots, null);
-    }
-
     @Override
     public boolean isEssential(ItemStack stack) {
         return true;

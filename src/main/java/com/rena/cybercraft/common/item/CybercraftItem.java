@@ -181,7 +181,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
-        super.appendHoverText(stack, world, list, flag);
+
         if (installedStackSize(stack) > 1)
         {
             list.add(new TranslationTextComponent("tooltip.cybercraft.max_install", installedStackSize(stack)).withStyle(TextFormatting.BLUE));
@@ -240,7 +240,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
         if (getCapacity(stack) > 0)
         {
             String toTranslate = hasCustomCapacityMessage(stack) ? "cybercraft.tooltip." + this.getRegistryName().getPath() + ".capacity" : "cybercraft.tooltip.capacity";
-            list.add(new TranslationTextComponent(toTranslate, getCapacity(stack)));
+            list.add(new TranslationTextComponent(toTranslate, getCapacity(stack)).withStyle(TextFormatting.GREEN));
         }
 
 
@@ -274,5 +274,6 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
             list.add(new TranslationTextComponent(essenceCostNegative ? "cybercraft.tooltip.essence" : "cybercraft.tooltip.essence_add").append(toAddEssence).withStyle(TextFormatting.DARK_PURPLE));
         }
 
+        super.appendHoverText(stack, world, list, flag);
     }
 }
