@@ -6,8 +6,8 @@ modId="cybercraft" #mandatory
 version="1.0" #mandatory
 displayName="Cybercraft" #mandatory
 logoFile="" #optional
-credits="" #optional
-authors="the One and only RenatiuX" #optional
+credits="The One and only RenatiuX" #optional
+authors="An_Sar and Flaxbeard, creators of this great mod" #optional
 description='''
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
