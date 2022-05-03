@@ -11,6 +11,7 @@ import com.rena.cybercraft.common.util.NNLUtil;
 import com.rena.cybercraft.core.init.ItemInit;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.PointOfView;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -204,7 +205,7 @@ public class CybereyeUpgradeItem extends CybercraftItem implements IMenuItem, IH
             {
                 player = entityPlayer;
 
-                if (mc.options.cameraType == 0)
+                if (mc.options.cameraType == PointOfView.FIRST_PERSON)
                 {
                     switch (zoomSettingOn)
                     {

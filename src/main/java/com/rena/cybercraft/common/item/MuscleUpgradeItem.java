@@ -108,7 +108,9 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
             {
                 EntityDamageSource source = (EntityDamageSource) event.getSource();
                 Entity attacker = source.getEntity();
-                int lastAttacked = ForgeHooks.getPrivateValue(CombatTracker.class, entityPlayer.getCombatTracker(), 2);
+                //i don't know if this is ok
+                //ReflectionHelper.getPrivateValue(CombatTracker.class, entityPlayer.getCombatTracker(), 2); this is the method of 1.12.2
+                int lastAttacked = entityPlayer.getCombatTracker().lastDamageTime;
 
                 if (entityPlayer.tickCount - lastAttacked > 120)
                 {

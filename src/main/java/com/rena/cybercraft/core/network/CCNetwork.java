@@ -21,6 +21,7 @@ public class CCNetwork {
         PACKET_HANDLER.registerMessage(CHANNEL_INDEX++, UpdateHudColorPacket.class, UpdateHudColorPacket::write, UpdateHudColorPacket::read, UpdateHudColorPacket::handle);
         PACKET_HANDLER.registerMessage(CHANNEL_INDEX++, CybercraftSyncPacket.class, CybercraftSyncPacket::write, CybercraftSyncPacket::read, CybercraftSyncPacket::handle);
         PACKET_HANDLER.registerMessage(CHANNEL_INDEX++, ParticlePacket.class, ParticlePacket::write, ParticlePacket::read, ParticlePacket::handle);
+        PACKET_HANDLER.registerMessage(CHANNEL_INDEX++, SwitchHeldItemAndRotationPacket.class, SwitchHeldItemAndRotationPacket::write, SwitchHeldItemAndRotationPacket::read, SwitchHeldItemAndRotationPacket::handle);
     }
 
     public static void sendTo(Object message, ServerPlayerEntity player) {
