@@ -26,257 +26,18 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.rena.cybercraft.api.CybercraftAPI.withMetaData;
-
 public class CybercraftUserDataImpl implements ICybercraftUserData{
-    @Override
-    public NonNullList<ItemStack> getInstalledCybercraft(EnumSlot slot) {
-        return null;
-    }
 
-    @Override
-    public void setInstalledCybercraft(LivingEntity livingEntity, EnumSlot slot, List<ItemStack> cybercraft) {
-
-    }
-
-    @Override
-    public void setInstalledCybercraft(LivingEntity livingEntity, EnumSlot slot, NonNullList<ItemStack> cybercraft) {
-
-    }
-
-    @Override
-    public boolean isCybercraftInstalled(Item cybercraft) {
-        return false;
-    }
-
-    @Override
-    public int getCybercraftRank(ItemStack cybercraft) {
-        return 0;
-    }
-
-    @Override
-    public CompoundNBT serializeNBT() {
-        return null;
-    }
-
-    @Override
-    public void deserializeNBT(CompoundNBT tagCompound) {
-
-    }
-
-    @Override
-    public boolean hasEssential(EnumSlot slot) {
-        return false;
-    }
-
-    @Override
-    public void setHasEssential(EnumSlot slot, boolean hasLeft, boolean hasRight) {
-
-    }
-
-    @Override
-    public ItemStack getCybercraft(Item cybercraft) {
-        return null;
-    }
-
-    @Override
-    public void updateCapacity() {
-
-    }
-
-    @Override
-    public void resetBuffer() {
-
-    }
-
-    @Override
-    public void addPower(int amount, ItemStack inputter) {
-
-    }
-
-    @Override
-    public boolean isAtCapacity(ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    public boolean isAtCapacity(ItemStack stack, int buffer) {
-        return false;
-    }
-
-    @Override
-    public float getPercentFull() {
-        return 0;
-    }
-
-    @Override
-    public int getCapacity() {
-        return 0;
-    }
-
-    @Override
-    public int getStoredPower() {
-        return 0;
-    }
-
-    @Override
-    public int getProduction() {
-        return 0;
-    }
-
-    @Override
-    public int getConsumption() {
-        return 0;
-    }
-
-    @Override
-    public boolean usePower(ItemStack stack, int amount) {
-        return false;
-    }
-
-    @Override
-    public List<ItemStack> getPowerOutages() {
-        return null;
-    }
-
-    @Override
-    public List<Integer> getPowerOutageTimes() {
-        return null;
-    }
-
-    @Override
-    public void setImmune() {
-
-    }
-
-    @Override
-    public boolean usePower(ItemStack stack, int amount, boolean isPassive) {
-        return false;
-    }
-
-    @Override
-    public boolean hasEssential(EnumSlot slot, ICybercraft.ISidedLimb.EnumSide side) {
-        return false;
-    }
-
-    @Override
-    public void resetWare(LivingEntity livingEntity) {
-
-    }
-
-    @Override
-    public int getNumActiveItems() {
-        return 0;
-    }
-
-    @Override
-    public List<ItemStack> getActiveItems() {
-        return null;
-    }
-
-    @Override
-    public void removeHotkey(int i) {
-
-    }
-
-    @Override
-    public void addHotkey(int i, ItemStack stack) {
-
-    }
-
-    @Override
-    public ItemStack getHotkey(int i) {
-        return null;
-    }
-
-    @Override
-    public Iterable<Integer> getHotkeys() {
-        return null;
-    }
-
-    @Override
-    public List<ItemStack> getHudjackItems() {
-        return null;
-    }
-
-    @Override
-    public void setHudData(CompoundNBT tagCompound) {
-
-    }
-
-    @Override
-    public CompoundNBT getHudData() {
-        return null;
-    }
-
-    @Override
-    public boolean hasOpenedRadialMenu() {
-        return false;
-    }
-
-    @Override
-    public void setOpenedRadialMenu(boolean hasOpenedRadialMenu) {
-
-    }
-
-    @Override
-    public void setHudColor(int color) {
-
-    }
-
-    @Override
-    public void setHudColor(float[] color) {
-
-    }
-
-    @Override
-    public int getHudColorHex() {
-        return 0;
-    }
-
-    @Override
-    public float[] getHudColor() {
-        return new float[0];
-    }
-
-    @Override
-    public int getMaxTolerance(@Nonnull LivingEntity livingEntity) {
-        return 0;
-    }
-
-    @Override
-    public void setTolerance(@Nonnull LivingEntity livingEntity, int amount) {
-
-    }
-
-    @Override
-    public int getTolerance(@Nonnull LivingEntity livingEntity) {
-        return 0;
-    }
-
-    @Override
-    public int getEssence() {
-        return 0;
-    }
-
-    @Override
-    public void setEssence(int essence) {
-
-    }
-
-    @Override
-    public int getMaxEssence() {
-        return 0;
-    }
-
-    /*public static final Capability.IStorage<ICybercraftUserData> STORAGE = new CybercraftUserDataStorage();
+    public static final Capability.IStorage<ICybercraftUserData> STORAGE = new CybercraftUserDataStorage();
 
     private NonNullList<NonNullList<ItemStack>> cyberwaresBySlot = NonNullList.create();
     private boolean[] missingEssentials = new boolean[EnumSlot.values().length * 2];
@@ -287,6 +48,7 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
     private int power_consumption = 0;
     private int power_lastConsumption = 0;
     private int power_capacity = 0;
+
     private Map<ItemStack, Integer> power_buffer = new HashMap<>();
     private Map<ItemStack, Integer> power_lastBuffer = new HashMap<>();
     private NonNullList<ItemStack> nnlPowerOutages = NonNullList.create();
@@ -302,8 +64,8 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
     private int hudColor = 0x00FFFF;
     private float[] hudColorFloat = new float[] { 0.0F, 1.0F, 1.0F };
 
-    public CybercraftUserDataImpl(){
-
+    public CybercraftUserDataImpl()
+    {
         hudData = new CompoundNBT();
         for (EnumSlot slot : EnumSlot.values())
         {
@@ -315,7 +77,6 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
             cyberwaresBySlot.add(nnlCyberwaresInSlot);
         }
         resetWare(null);
-
     }
 
     @Override
@@ -431,7 +192,7 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
             if ( inputter.hasTag()
                     || inputter.getCount() != 1 )
             {
-                stack = withMetaData(new ItemStack(inputter.getItem(), 1), inputter.getDamageValue());
+                stack = new ItemStack(inputter.getItem(), 1, inputter.getItemDamage());
             }
             else
             {
@@ -482,7 +243,7 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
 
         if (!canGiveOut)
         {
-            if (FMLCommonHandler.instance().getSide() == Side.CLIENT)
+            if (FMLCommonHandler.instance().getSide() == Dist.CLIENT)
             {
                 setOutOfPower(stack);
             }
@@ -607,9 +368,8 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
         missingEssentials[slot.ordinal() * 2 + 1] = !hasRight;
     }
 
-
     @Override
-    public void setInstalledCybercraft(LivingEntity entityLivingBase, EnumSlot slot, @Nonnull List<ItemStack> cyberwaresToInstall)
+    public void setInstalledCybercraft(LivingEntity livingEntity, EnumSlot slot, @Nonnull List<ItemStack> cyberwaresToInstall)
     {
         while (cyberwaresToInstall.size() > LibConstants.WARE_PER_SLOT)
         {
@@ -619,7 +379,7 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
         {
             cyberwaresToInstall.add(ItemStack.EMPTY);
         }
-        setInstalledCybercraft(entityLivingBase, slot, NNLUtil.fromArray(cyberwaresToInstall.toArray(new ItemStack[0])));
+        setInstalledCybercraft(livingEntity, slot, NNLUtil.fromArray(cyberwaresToInstall.toArray(new ItemStack[0])));
     }
 
     @Override
@@ -730,9 +490,8 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
     }
 
     @Override
-    public boolean isCybercraftInstalled(ItemStack cyberware)
-    {
-        return getCybercraftRank(cyberware) > 0;
+    public boolean isCybercraftInstalled(Item cybercraft) {
+        return getCybercraftRank(cybercraft) > 0;
     }
 
     @Override
@@ -749,7 +508,7 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
     }
 
     @Override
-    public ItemStack getCybercraft(ItemStack cyberware)
+    public ItemStack getCybercraft(Item cyberware)
     {
         for (ItemStack itemStack : getInstalledCybercraft(CybercraftAPI.getCybercraft(cyberware).getSlot(cyberware)))
         {
@@ -764,8 +523,7 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
     }
 
     @Override
-    public CompoundNBT serializeNBT()
-    {
+    public CompoundNBT serializeNBT() {
         CompoundNBT tagCompound = new CompoundNBT();
         ListNBT listSlots = new ListNBT();
 
@@ -779,17 +537,17 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
                 {
                     cyberware.save(tagCompoundCyberware);
                 }
-                listCyberwares.appendTag(tagCompoundCyberware);
+                listCyberwares.add(tagCompoundCyberware);
             }
-            listSlots.appendTag(listCyberwares);
+            listSlots.add(listCyberwares);
         }
 
-        tagCompound.put("cybercraft", listSlots);
+        tagCompound.put("cyberware", listSlots);
 
         ListNBT listEssentials = new ListNBT();
         for (boolean missingEssential : missingEssentials)
         {
-            listEssentials.appendTag(new ByteNBT((byte) (missingEssential ? 1 : 0)));
+            listEssentials.add(new ByteNBT((byte) (missingEssential ? 1 : 0)));
         }
         tagCompound.put("discard", listEssentials);
         tagCompound.put("powerBuffer", serializeMap(power_buffer));
@@ -819,7 +577,7 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
             }
             tagCompoundEntry.putInt("value", map.get(stack));
 
-            listMap.appendTag(tagCompoundEntry);
+            listMap.add(tagCompoundEntry);
         }
 
         return listMap;
@@ -845,8 +603,7 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT tagCompound)
-    {
+    public void deserializeNBT(CompoundNBT tagCompound) {
         power_buffer = deserializeMap(tagCompound.getList("powerBuffer", Constants.NBT.TAG_COMPOUND));
         power_capacity = tagCompound.getInt("powerCap");
         power_lastBuffer = deserializeMap((ListNBT) tagCompound.get("powerBufferLast"));
@@ -868,7 +625,7 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
             missingEssentials[indexEssential] = ((ByteNBT) listEssentials.get(indexEssential)).getAsByte() > 0;
         }
 
-        ListNBT listSlots = (ListNBT) tagCompound.get("cybercraft");
+        ListNBT listSlots = (ListNBT) tagCompound.get("cyberware");
         for (int indexBodySlot = 0; indexBodySlot < listSlots.tagCount(); indexBodySlot++)
         {
             EnumSlot slot = EnumSlot.values()[indexBodySlot];
@@ -897,26 +654,26 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
         setHudColor(color);
 
         updateCapacity();
+
     }
 
     private static class CybercraftUserDataStorage implements Capability.IStorage<ICybercraftUserData>
     {
+        @Nullable
         @Override
-        public INBT writeNBT(Capability<ICybercraftUserData> capability, ICybercraftUserData cyberwareUserData, Direction side)
-        {
-            return cyberwareUserData.serializeNBT();
+        public INBT writeNBT(Capability<ICybercraftUserData> capability, ICybercraftUserData instance, Direction side) {
+            return instance.serializeNBT();
         }
 
         @Override
-        public void readNBT(Capability<ICybercraftUserData> capability, ICybercraftUserData cyberwareUserData, Direction side, INBT nbt)
-        {
-            if (nbt instanceof CompoundNBT)
+        public void readNBT(Capability<ICybercraftUserData> capability, ICybercraftUserData instance, Direction side, INBT nbt) {
+            if(nbt instanceof CompoundNBT)
             {
-                cyberwareUserData.deserializeNBT((CompoundNBT) nbt);
+                instance.deserializeNBT((CompoundNBT)nbt);
             }
             else
             {
-                throw new IllegalStateException("Cybercraft INBT should be a CompoundNBT!");
+                throw new IllegalStateException("Cyberware NBT should be a NBTTagCompound!");
             }
         }
     }
@@ -927,16 +684,17 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
 
         private final ICybercraftUserData cyberwareUserData = new CybercraftUserDataImpl();
 
+
+        @Nonnull
         @Override
-        public boolean hasCapability(@Nonnull Capability<?> capability, Direction facing)
-        {
-            return capability == CybercraftAPI.CYBERCRAFT_CAPABILITY;
+        public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+            return cap == CybercraftAPI.CYBERCRAFT_CAPABILITY;
         }
 
+        @Nonnull
         @Override
-        public <T> T getCapability(@Nonnull Capability<T> capability, Direction facing)
-        {
-            if (capability == CybercraftAPI.CYBERCRAFT_CAPABILITY)
+        public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap) {
+            if (cap == CybercraftAPI.CYBERCRAFT_CAPABILITY)
             {
                 return CybercraftAPI.CYBERCRAFT_CAPABILITY.cast(cyberwareUserData);
             }
@@ -945,15 +703,13 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
         }
 
         @Override
-        public CompoundNBT serializeNBT()
-        {
+        public CompoundNBT serializeNBT() {
             return cyberwareUserData.serializeNBT();
         }
 
         @Override
-        public void deserializeNBT(CompoundNBT tagCompound)
-        {
-            cyberwareUserData.deserializeNBT(tagCompound);
+        public void deserializeNBT(CompoundNBT nbt) {
+            cyberwareUserData.deserializeNBT(nbt);
         }
     }
 
@@ -973,8 +729,8 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
     }
 
     @Override
-    public void resetBuffer()
-    {
+    public void resetBuffer() {
+
         canGiveOut = true;
         storePower(power_lastBuffer);
         power_lastBuffer = power_buffer;
@@ -985,6 +741,7 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
         power_lastProduction = power_production;
         power_production = 0;
         power_consumption = 0;
+
     }
 
     @Override
@@ -1019,7 +776,7 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
     @Override
     public int getMaxTolerance(@Nonnull LivingEntity entityLivingBase)
     {
-        return (int) entityLivingBase.getAttributes().getInstance(CybercraftAPI.TOLERANCE_ATTR).getBaseValue();
+        return (int) entityLivingBase.getAttributeMap().getAttributeInstance(CybercraftAPI.TOLERANCE_ATTR).getAttributeValue();
     }
 
     @Override
@@ -1033,8 +790,6 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
     {
         missingEssence = getMaxTolerance(entityLivingBase) - amount;
     }
-
-
 
     @Override
     public int getNumActiveItems()
@@ -1151,5 +906,8 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
     public int getConsumption()
     {
         return power_lastConsumption;
-    }*/
+    }
+
+
 }
+
