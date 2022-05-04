@@ -87,7 +87,7 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
         return stack.getItem() == ItemInit.MUSCLE_REFLEXES.get() ? 3 : 1;
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public void handleHurt(LivingHurtEvent event)
     {
         if (event.isCanceled()) return;
@@ -173,7 +173,7 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
                 }
             }
         }
-    }
+    }*/
 
     private Set<UUID> setIsSpeedPowered = new HashSet<>();
     private Set<UUID> setIsStrengthPowered = new HashSet<>();

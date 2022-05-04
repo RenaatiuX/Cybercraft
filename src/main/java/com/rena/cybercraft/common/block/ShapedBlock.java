@@ -9,7 +9,6 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
-import sun.security.provider.SHA;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,5 +1,6 @@
 package com.rena.cybercraft.common.item;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.CybercraftUpdateEvent;
 import com.rena.cybercraft.api.ICybercraftUserData;
@@ -92,36 +93,38 @@ public class VanillaWares {
         @SubscribeEvent
         public void onDrawScreenPost(RenderGameOverlayEvent.Pre event)
         {
+            MatrixStack matrixStack = event.getMatrixStack();
             if (event.getType() == RenderGameOverlayEvent.ElementType.CROSSHAIRS)
             {
                 PlayerEntity entityPlayer = Minecraft.getInstance().player;
                 ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityPlayer);
                 if ( cyberwareUserData != null
-                        && cyberwareUserData.isCybercraftInstalled(itemStackSpiderEye) )
+                        && cyberwareUserData.isCybercraftInstalled(Items.SPIDER_EYE) )
                 {
-                    GlStateManager.translate(0, event.getResolution().getScaledHeight() / 5, 0);
+                    matrixStack.translate(0, event.getMatrixStack().getScaledHeight() / 5, 0);
                 }
             }
-        }*/
+        }
 
 
-        /*@OnlyIn(Dist.CLIENT)
+        @OnlyIn(Dist.CLIENT)
         @SubscribeEvent
         public void onDrawScreenPost(RenderGameOverlayEvent.Post event)
         {
+            MatrixStack matrixStack = event.getMatrixStack();
             if (event.getType() == RenderGameOverlayEvent.ElementType.CROSSHAIRS)
             {
                 PlayerEntity entityPlayer = Minecraft.getInstance().player;
                 ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityPlayer);
                 if ( cyberwareUserData != null
-                        && cyberwareUserData.isCybercraftInstalled(itemStackSpiderEye) )
+                        && cyberwareUserData.isCybercraftInstalled(Items.SPIDER_EYE) )
                 {
                     GlStateManager.translate(0, -event.getResolution().getScaledHeight() / 5, 0);
                 }
             }
-        }*/
+        }
 
-        /*@SubscribeEvent
+        @SubscribeEvent
         @OnlyIn(Dist.CLIENT)
         public void handleSpiderVision(TickEvent.ClientTickEvent event)
         {
@@ -131,7 +134,7 @@ public class VanillaWares {
 
             ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityPlayer);
             if ( cyberwareUserData != null
-                    && cyberwareUserData.isCybercraftInstalled(itemStackSpiderEye) )
+                    && cyberwareUserData.isCybercraftInstalled(Items.SPIDER_EYE) )
             {
                 if (Minecraft.getInstance().entityRenderer.getShaderGroup() == null)
                 {

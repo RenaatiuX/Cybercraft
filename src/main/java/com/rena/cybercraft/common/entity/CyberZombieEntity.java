@@ -4,6 +4,9 @@ import com.rena.cybercraft.api.CybercraftUserDataImpl;
 import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.core.init.ItemInit;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -35,6 +38,10 @@ public class CyberZombieEntity extends ZombieEntity {
     {
         super.defineSynchedData();
         entityData.set(CYBER_VARIANT, 0);
+    }
+
+    public static AttributeModifierMap.MutableAttribute createAttributes() {
+        return MonsterEntity.createMonsterAttributes().add(Attributes.FOLLOW_RANGE, 35.0D).add(Attributes.MOVEMENT_SPEED, 0.23F).add(Attributes.ATTACK_DAMAGE, 4.0D).add(Attributes.ARMOR, 4.0D);
     }
 
    /* @Override

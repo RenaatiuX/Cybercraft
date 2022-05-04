@@ -12,7 +12,7 @@ public class EngineeringSwitchArchivePacket {
     private boolean direction;
     private boolean isComponent;
 
-    public EngineeringSwitchArchivePacket(BlockPos pos, PlayerEntity entityPlayer, boolean direction, boolean isComponent)
+    /*public EngineeringSwitchArchivePacket(BlockPos pos, PlayerEntity entityPlayer, boolean direction, boolean isComponent)
     {
         this.dimensionId = entityPlayer.level.dimensionType.getDimension();
         this.entityId = entityPlayer.getId();
@@ -42,6 +42,6 @@ public class EngineeringSwitchArchivePacket {
         packet.dimensionId = buf.readInt();
 
         return new EngineeringSwitchArchivePacket(packet.pos, entityId, direction, isComponent);
-    }
+    }*/
 
 }

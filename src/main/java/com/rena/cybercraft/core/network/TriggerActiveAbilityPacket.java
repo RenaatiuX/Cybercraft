@@ -6,7 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 
-public class TriggerActiveAbilityPacket implements Runnable{
+public class TriggerActiveAbilityPacket /*implements Runnable*/{
 
     private ItemStack stack;
 
@@ -17,7 +17,7 @@ public class TriggerActiveAbilityPacket implements Runnable{
         this.stack = stack;
     }
 
-    public static void write(TriggerActiveAbilityPacket packet, PacketBuffer buf) {
+    /*public static void write(TriggerActiveAbilityPacket packet, PacketBuffer buf) {
         buf.writeItemStack(packet.stack, false);
 
     }
@@ -34,5 +34,5 @@ public class TriggerActiveAbilityPacket implements Runnable{
         {
             CybercraftAPI.useActiveItem(entityPlayer, cyberwareUserData.getCybercraft(stack));
         }
-    }
+    }*/
 }

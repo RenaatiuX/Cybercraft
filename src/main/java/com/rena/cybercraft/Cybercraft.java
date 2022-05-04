@@ -4,6 +4,7 @@ import com.rena.cybercraft.client.screens.BlueprintArchiveScreen;
 import com.rena.cybercraft.client.screens.ComponentBoxScreen;
 import com.rena.cybercraft.client.screens.ScannerScreen;
 import com.rena.cybercraft.common.config.CybercraftConfig;
+import com.rena.cybercraft.common.entity.CyberZombieEntity;
 import com.rena.cybercraft.common.util.CybercraftTab;
 import com.rena.cybercraft.core.init.*;
 import com.rena.cybercraft.core.network.CCNetwork;
@@ -14,6 +15,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -50,6 +52,7 @@ public class Cybercraft {
         BlockInit.BLOCKS.register(modEventBus);
         BlockInit.CUSTOM.register(modEventBus);
         EffectInit.EFFECT.register(modEventBus);
+        EntityTypeInit.ENTITY_TYPES.register(modEventBus);
 
         TileEntityTypeInit.TES.register(modEventBus);
         ContainerInit.CONTAINERS.register(modEventBus);
@@ -58,6 +61,7 @@ public class Cybercraft {
         //Our listener for setup, it will pick up on anything put into setup and notify Forge of it
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::ClientSetup);
+        modEventBus.addListener(this::registerEntityAttributes);
 
 
 
@@ -81,6 +85,10 @@ public class Cybercraft {
             RenderTypeLookup.setRenderLayer(BlockInit.SCANNER_BLOCK.get(), RenderType.translucent());
 
         });
+    }
+
+    private void registerEntityAttributes(EntityAttributeCreationEvent event) {
+        event.put(EntityTypeInit.CYBER_ZOMBIE.get(), CyberZombieEntity.createAttributes().build());
     }
 
 }
