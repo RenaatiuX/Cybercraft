@@ -1,9 +1,14 @@
 package com.rena.cybercraft.common.entity;
 
+import com.rena.cybercraft.api.AddRandomCyberwareEvent;
 import com.rena.cybercraft.api.CybercraftUserDataImpl;
 import com.rena.cybercraft.common.config.CybercraftConfig;
+import com.rena.cybercraft.common.util.LibConstants;
 import com.rena.cybercraft.core.init.ItemInit;
+import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.MonsterEntity;
@@ -17,6 +22,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nonnull;
 
@@ -44,53 +50,28 @@ public class CyberZombieEntity extends ZombieEntity {
         return MonsterEntity.createMonsterAttributes().add(Attributes.FOLLOW_RANGE, 35.0D).add(Attributes.MOVEMENT_SPEED, 0.23F).add(Attributes.ATTACK_DAMAGE, 4.0D).add(Attributes.ARMOR, 4.0D);
     }
 
-   /* @Override
+   @Override
     public void tick() {
-        if ( !hasRandomWare
-                && !level.isClientSide )
-        {
-            if ( !isBrute()
-                    && level.random.nextFloat() < (LibConstants.NATURAL_BRUTE_CHANCE / 100F) )
-            {
+        if ( !hasRandomWare && !level.isClientSide ) {
+            if ( !isBrute() && level.random.nextFloat() < (LibConstants.NATURAL_BRUTE_CHANCE / 100F) ) {
                 setBrute();
             }
-            CyberwareDataHandler.addRandomCyberware(this, isBrute());
-            if (isBrute())
-            {
-                this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier("Brute Bonus", 6D, 0));
-                this.getAttribute(Attributes.ATTACK_DAMAGE).addPermanentModifier(new AttributeModifier("Brute Bonus", 1D, 0));
+            if (!hasRandomWare)
+                this.hasRandomWare = MinecraftForge.EVENT_BUS.post(new AddRandomCyberwareEvent(this, isBrute()));
+            if (isBrute()) {
+                this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier("Brute Bonus", 6D, AttributeModifier.Operation.ADDITION));
+                this.getAttribute(Attributes.ATTACK_DAMAGE).addPermanentModifier(new AttributeModifier("Brute Bonus", 1D, AttributeModifier.Operation.ADDITION));
             }
             setHealth(getMaxHealth());
             hasRandomWare = true;
         }
-        if ( isBrute()
-                && height != (1.95F * 1.2F) )
-        {
-            setSizeNormal(0.6F * 1.2F, 1.95F * 1.2F);
-        }
         super.tick();
-    }*/
+    }
 
-   /* protected void setSizeNormal(float width, float height)
-    {
-        if ( width != this.width
-                || height != this.height )
-        {
-            float widthPrevious = this.width;
-            this.width = width;
-            this.height = height;
-            AxisAlignedBB axisalignedbb = getEntityBoundingBox();
-            setEntityBoundingBox(new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ,
-                    axisalignedbb.minX + width, axisalignedbb.minY + height, axisalignedbb.minZ + width ));
-
-            if ( this.width > widthPrevious
-                    && !firstUpdate
-                    && !level.isClientSide )
-            {
-                move(MoverType.SELF, this.getDeltaMovement());
-            }
-        }
-    }*/
+    @Override
+    public EntitySize getDimensions(Pose pose) {
+        return isBrute() && getEyeHeight() != (1.95F * 1.2F) ? getDimensions(pose).scale(1.2f) : super.getDimensions(pose);
+    }
 
     @Override
     public void addAdditionalSaveData(CompoundNBT tagCompound) {
