@@ -541,7 +541,7 @@ public class ItemInit {
     public static final RegistryObject<Item> SURGERY = ITEMS.register("surgery_chamber",
             () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
 
-    //Entity
+    //Entities
     public static final RegistryObject<Item> CYBER_ZOMBIE_SPAWN_EGG = ITEMS.register("cyber_zombie_sparn_egg",
             ()-> new CybercraftSpawnEgg(EntityTypeInit.CYBER_ZOMBIE, 44975, 7969893, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
 
