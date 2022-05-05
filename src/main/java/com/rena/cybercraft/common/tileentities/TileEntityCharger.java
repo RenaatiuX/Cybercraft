@@ -5,6 +5,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.util.text.ITextComponent;
@@ -12,8 +13,17 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 public class TileEntityCharger extends LockableTileEntity implements ITickableTileEntity, IEnergyStorage {
 
+    private PowerContainer container = new PowerContainer();
+    private boolean last = false;
+
     public TileEntityCharger() {
         super(TileEntityTypeInit.CHARGER_TE.get());
+    }
+
+
+    @Override
+    public CompoundNBT serializeNBT() {
+        return super.serializeNBT();
     }
 
     @Override

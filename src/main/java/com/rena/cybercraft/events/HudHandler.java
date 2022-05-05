@@ -27,7 +27,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import javax.jws.Oneway;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
