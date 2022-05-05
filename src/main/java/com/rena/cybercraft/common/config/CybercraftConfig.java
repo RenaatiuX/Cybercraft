@@ -1,6 +1,16 @@
 package com.rena.cybercraft.common.config;
 
+import com.google.common.collect.Lists;
+import com.rena.cybercraft.api.CybercraftAPI;
+import com.rena.cybercraft.api.item.ICybercraft;
+import com.rena.cybercraft.core.init.ItemInit;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.ForgeConfigSpec;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CybercraftConfig {
 
@@ -28,6 +38,7 @@ public class CybercraftConfig {
         public final ForgeConfigSpec.BooleanValue enableCyberZombies, isDimensionBlacklist, applyDimensionToSpawning, applyDimensionToBeacon, addClothes;
         public final ForgeConfigSpec.IntValue cyberZombieWeight, cyberZombieMinPack, cyberZombieMaxPack;
         public final ForgeConfigSpec.DoubleValue cyberZombieDropRarity, clothDropRarity;
+        public final Map<ICybercraft.EnumSlot, ForgeConfigSpec.ConfigValue<List<? extends ItemStack>>> startItems = new HashMap<>();
 
         C_Mobs(ForgeConfigSpec.Builder builder){
             builder.push("Mobs").comment("Config for the Cyberzombies");
@@ -44,6 +55,9 @@ public class CybercraftConfig {
             addClothes = builder.define("Add Cybercraft clothing to mobs", true);
             cyberZombieDropRarity = builder.defineInRange("Percent chance a CyberZombie drops a Cybercraft", 50F, 0F, 100F);
             clothDropRarity = builder.defineInRange("Percent chance a Cybercrafr clothing is dropped", 50F, 0F, 100F);
+            builder.push("Starting Items  per slot");
+            builder.comment("Eyes");
+            startItems.put(ICybercraft.EnumSlot.EYES, builder.defineList("items", NonNullList.of(new ItemStack(ItemInit.EYES.get())), item -> item instanceof ItemStack && CybercraftAPI.isCybercraft((ItemStack) item)));
             builder.pop();
         }
     }
