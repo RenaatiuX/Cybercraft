@@ -28,6 +28,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -87,6 +88,7 @@ public class EssentialsMissingHandler {
         }
     }
 
+    /*
     @SubscribeEvent(priority= EventPriority.LOWEST)
     public void handleMissingEssentials(CybercraftUpdateEvent event)
     {
@@ -155,7 +157,7 @@ public class EssentialsMissingHandler {
             if (numMissingLegsVisible == 2)
             {
                 entityLivingBase.height = 1.8F - (10F / 16F);
-                ((PlayerEntity) entityLivingBase).eyeHeight = entityLivingBase.getEyeHeight() - (10F / 16F);
+                ((PlayerEntity) entityLivingBase).Eye = entityLivingBase.getEyeHeight() - (10F / 16F);
                 AxisAlignedBB axisalignedbb = entityLivingBase.getBoundingBox();
                 entityLivingBase.setBoundingBox(new AxisAlignedBB(
                         axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ,
@@ -229,6 +231,7 @@ public class EssentialsMissingHandler {
             timesLungs.remove(entityLivingBase.getId());
         }
     }
+     */
 
     private boolean last(boolean remote, LivingEntity entityLivingBase)
     {
@@ -283,7 +286,8 @@ public class EssentialsMissingHandler {
 
             if (numMissingLegs == 2)
             {
-                entityLivingBase.motionY = 0.2F;
+                Vector3d motion = entityLivingBase.getDeltaMovement();
+                entityLivingBase.setDeltaMovement(new Vector3d(motion.x, 0.2f, motion.z));
             }
         }
     }
@@ -388,10 +392,10 @@ public class EssentialsMissingHandler {
                 RenderSystem.enableBlend();
                 RenderSystem.color4f(1.0F, 1.0F, 1.0F, 0.9F);
                 Minecraft.getInstance().getTextureManager().bind(BLACK_PX);
-                ClientUtils.drawTexturedModalRect(0, 0, 0, 0, Minecraft.getInstance().displayWidth, Minecraft.getInstance().displayHeight);
+                ClientUtils.drawTexturedModalRect(0, 0, 0, 0, Minecraft.getInstance().getWindow().getWidth(), Minecraft.getInstance().getWindow().getHeight());
                 matrixStack.popPose();
             }
-
+            /*
             if (TileEntitySurgery.workingOnPlayer)
             {
                 float trans = 1.0F;
@@ -411,6 +415,7 @@ public class EssentialsMissingHandler {
                 RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
                 RenderSystem.disableBlend();
             }
+             */
         }
     }
 

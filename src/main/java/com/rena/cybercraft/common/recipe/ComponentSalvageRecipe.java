@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.rena.cybercraft.common.item.BlueprintItem;
+import com.rena.cybercraft.core.init.RecipeInit;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
@@ -92,7 +93,7 @@ public class ComponentSalvageRecipe implements IRecipe<IInventory> {
 
     @Override
     public IRecipeType<?> getType() {
-        return null;
+        return RecipeInit.COMPONENT_UPGRADE_RECIPE;
     }
 
     public static JsonElement getJsonElement(JsonObject obj, String name) {

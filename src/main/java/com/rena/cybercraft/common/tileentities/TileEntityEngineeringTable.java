@@ -1,13 +1,20 @@
 package com.rena.cybercraft.common.tileentities;
 
 import com.rena.cybercraft.Cybercraft;
+import com.rena.cybercraft.common.item.BlueprintItem;
+import com.rena.cybercraft.common.recipe.ComponentSalvageRecipe;
+import com.rena.cybercraft.core.Tags;
+import com.rena.cybercraft.core.init.RecipeInit;
 import com.rena.cybercraft.core.init.TileEntityTypeInit;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableLootTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
@@ -18,8 +25,9 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 
-public class TileEntityEngineeringTable extends LockableLootTileEntity implements ISidedInventory {
+public class TileEntityEngineeringTable extends LockableLootTileEntity implements ISidedInventory, ITickableTileEntity {
 
     private static final int[] SLOTS_UP = new int[]{2,3,4,5,6,7};
     private static final int[] SLOTS_DOWN = new int[]{1, 9};
@@ -30,6 +38,21 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
 
     public TileEntityEngineeringTable() {
         super(TileEntityTypeInit.ENGINEERING_TABLE.get());
+    }
+
+    @Override
+    public void tick() {
+        if (!level.isClientSide()){
+
+        }
+    }
+    @Nullable
+    private ComponentSalvageRecipe getSalvageRecipe(){
+        return this.level.getRecipeManager().getRecipeFor(RecipeInit.COMPONENT_UPGRADE_RECIPE, new Inventory(getItem(0)), this.level).orElse(null);
+    }
+    @Nullable
+    private ComponentSalvageRecipe getBlueprintRecipe(){
+        return this.level.getRecipeManager().getRecipeFor(RecipeInit.COMPONENT_UPGRADE_RECIPE, getComponentInventory(), this.level).orElse(null);
     }
 
     @Override
@@ -67,13 +90,26 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
     }
 
     @Override
+    public boolean canPlaceItem(int slot, ItemStack stack) {
+        if (slot == 1)
+            return stack.getItem() == Items.PAPER;
+        if (slot == 9)
+            return false;
+        if (slot == 8)
+            return stack.getItem() instanceof BlueprintItem;
+        if (Arrays.stream(SLOTS_UP).anyMatch(index -> index == slot))
+            return Tags.Items.COMPONENTS.contains(stack.getItem());
+        return super.canPlaceItem(slot, stack);
+    }
+
+    @Override
     public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction side) {
         return this.canPlaceItem(slot, stack);
     }
 
     @Override
     public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
-        return true;
+        return slot != 0 && slot != 1;
     }
 
     @Override
@@ -94,5 +130,13 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         for (int x = 0; x < itemHandler.length; x++)
             itemHandler[x].invalidate();
         super.invalidateCaps();
+    }
+
+    public IInventory getComponentInventory(){
+        IInventory ret = new Inventory(6);
+        for (int i = 2;i<8;i++){
+            ret.setItem(i, this.getItem(i));
+        }
+        return ret;
     }
 }
