@@ -5,18 +5,22 @@ import com.rena.cybercraft.client.screens.ComponentBoxScreen;
 import com.rena.cybercraft.client.screens.ScannerScreen;
 import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.entity.CyberZombieEntity;
+import com.rena.cybercraft.common.item.CybercraftSpawnEgg;
 import com.rena.cybercraft.common.util.CybercraftTab;
 import com.rena.cybercraft.core.init.*;
 import com.rena.cybercraft.core.network.CCNetwork;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -89,6 +93,16 @@ public class Cybercraft {
 
     private void registerEntityAttributes(EntityAttributeCreationEvent event) {
         event.put(EntityTypeInit.CYBER_ZOMBIE.get(), CyberZombieEntity.createAttributes().build());
+    }
+
+    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class RegistriesDE {
+
+        @SubscribeEvent
+        public static void onRegisterEntities(RegistryEvent.Register<EntityType<?>> event) {
+            CybercraftSpawnEgg.initSpawnEggs();
+        }
+
     }
 
 }

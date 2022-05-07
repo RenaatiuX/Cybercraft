@@ -1,6 +1,8 @@
 package com.rena.cybercraft.events;
 
 import com.google.common.collect.HashMultimap;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.CybercraftUpdateEvent;
@@ -85,7 +87,7 @@ public class EssentialsMissingHandler {
         }
     }
 
-    /*@SubscribeEvent(priority= EventPriority.LOWEST)
+    @SubscribeEvent(priority= EventPriority.LOWEST)
     public void handleMissingEssentials(CybercraftUpdateEvent event)
     {
         LivingEntity entityLivingBase = event.getEntityLiving();
@@ -134,14 +136,14 @@ public class EssentialsMissingHandler {
             numMissingLegsVisible++;
         }
 
-        ItemStack legLeft = cyberwareUserData.getCybercraft(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_LEFT_CYBER_LEG));
+        ItemStack legLeft = cyberwareUserData.getCybercraft(ItemInit.CYBER_LIMB_LEG_LEFT.get());
         if ( !legLeft.isEmpty()
                 && !CyberLimbItem.isPowered(legLeft) )
         {
             numMissingLegs++;
         }
 
-        ItemStack legRight = cyberwareUserData.getCybercraft(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_RIGHT_CYBER_LEG));
+        ItemStack legRight = cyberwareUserData.getCybercraft(ItemInit.CYBER_LIMB_LEG_RIGHT.get());
         if ( !legRight.isEmpty()
                 && !CyberLimbItem.isPowered(legRight) )
         {
@@ -157,7 +159,7 @@ public class EssentialsMissingHandler {
                 AxisAlignedBB axisalignedbb = entityLivingBase.getBoundingBox();
                 entityLivingBase.setBoundingBox(new AxisAlignedBB(
                         axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ,
-                        axisalignedbb.minX + entityLivingBase.width, axisalignedbb.minY + entityLivingBase.height, axisalignedbb.minZ + entityLivingBase.width));
+                        axisalignedbb.minX + entityLivingBase.getBbWidth(), axisalignedbb.minY + entityLivingBase.getBbHeight(), axisalignedbb.minZ + entityLivingBase.getBbWidth()));
 
                 if (entityLivingBase.level.isClientSide)
                 {
@@ -175,7 +177,7 @@ public class EssentialsMissingHandler {
                 AxisAlignedBB axisalignedbb = entityLivingBase.getBoundingBox();
                 entityLivingBase.setBoundingBox(new AxisAlignedBB(
                         axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ,
-                        axisalignedbb.minX + entityLivingBase.width, axisalignedbb.minY + entityLivingBase.height, axisalignedbb.minZ + entityLivingBase.width ));
+                        axisalignedbb.minX + entityLivingBase.getBbWidth(), axisalignedbb.minY + entityLivingBase.getBbHeight(), axisalignedbb.minZ + entityLivingBase.getBbWidth() ));
 
                 if (entityLivingBase.level.isClientSide)
                 {
@@ -218,7 +220,7 @@ public class EssentialsMissingHandler {
         {
             if (getLungsTime(entityLivingBase) >= 20)
             {
-                timesLungs.put(entityLivingBase.getId(), entityLivingBase.hurt);
+                timesLungs.put(entityLivingBase.getId(), entityLivingBase.tickCount);
                 entityLivingBase.hurt(DamageSource.DROWN, 2F);
             }
         }
@@ -267,13 +269,13 @@ public class EssentialsMissingHandler {
                 numMissingLegs++;
             }
 
-            ItemStack legLeft = cyberwareUserData.getCybercraft(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_LEFT_CYBER_LEG));
+            ItemStack legLeft = cyberwareUserData.getCybercraft(ItemInit.CYBER_LIMB_LEG_LEFT.get());
             if (!legLeft.isEmpty() && !CyberLimbItem.isPowered(legLeft))
             {
                 numMissingLegs++;
             }
 
-            ItemStack legRight = cyberwareUserData.getCybercraft(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_RIGHT_CYBER_LEG));
+            ItemStack legRight = cyberwareUserData.getCybercraft(ItemInit.CYBER_LIMB_LEG_RIGHT.get());
             if (!legRight.isEmpty() && !CyberLimbItem.isPowered(legRight))
             {
                 numMissingLegs++;
@@ -352,8 +354,6 @@ public class EssentialsMissingHandler {
         }
     }
 
-    public static final ResourceLocation BLACK_PX = new ResourceLocation(Cybercraft.MOD_ID + ":textures/gui/blackpx.png");
-
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public void overlayPre(TickEvent.ClientTickEvent event)
@@ -372,6 +372,8 @@ public class EssentialsMissingHandler {
     @OnlyIn(Dist.CLIENT)
     public void overlayPre(RenderGameOverlayEvent.Pre event)
     {
+        MatrixStack matrixStack = event.getMatrixStack();
+
         if (event.getType() == RenderGameOverlayEvent.ElementType.ALL)
         {
             PlayerEntity entityPlayer = Minecraft.getInstance().player;
@@ -382,12 +384,12 @@ public class EssentialsMissingHandler {
                     && !cyberwareUserData.hasEssential(ICybercraft.EnumSlot.EYES)
                     && !entityPlayer.isCreative() )
             {
-                GlStateManager.pushMatrix();
-                GlStateManager.enableBlend();
-                GlStateManager.color(1.0F, 1.0F, 1.0F, 0.9F);
-                Minecraft.getMinecraft().getTextureManager().bindTexture(BLACK_PX);
+                matrixStack.pushPose();
+                RenderSystem.enableBlend();
+                RenderSystem.color4f(1.0F, 1.0F, 1.0F, 0.9F);
+                Minecraft.getInstance().getTextureManager().bind(BLACK_PX);
                 ClientUtils.drawTexturedModalRect(0, 0, 0, 0, Minecraft.getInstance().displayWidth, Minecraft.getInstance().displayHeight);
-                GlStateManager.popMatrix();
+                matrixStack.popPose();
             }
 
             if (TileEntitySurgery.workingOnPlayer)
@@ -402,12 +404,12 @@ public class EssentialsMissingHandler {
                 {
                     trans = (80F - ticks) / 20F;
                 }
-                GlStateManager.enableBlend();
-                GlStateManager.color(1.0F, 1.0F, 1.0F, trans);
+                RenderSystem.enableBlend();
+                RenderSystem.color4f(1.0F, 1.0F, 1.0F, trans);
                 Minecraft.getInstance().getTextureManager().bind(BLACK_PX);
                 ClientUtils.drawTexturedModalRect(0, 0, 0, 0, Minecraft.getInstance().displayWidth, Minecraft.getInstance().displayHeight);
-                GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-                GlStateManager.disableBlend();
+                RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+                RenderSystem.disableBlend();
             }
         }
     }
@@ -486,14 +488,14 @@ public class EssentialsMissingHandler {
         ICybercraft.ISidedLimb.EnumSide correspondingOffHand = ((offHand == HandSide.RIGHT) ? ICybercraft.ISidedLimb.EnumSide.RIGHT : ICybercraft.ISidedLimb.EnumSide.LEFT);
 
         boolean leftUnpowered = false;
-        ItemStack armLeft = cyberwareUserData.getCybercraft(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_LEFT_CYBER_ARM));
+        ItemStack armLeft = cyberwareUserData.getCybercraft(ItemInit.CYBER_LIMB_ARM_LEFT.get());
         if (!armLeft.isEmpty() && !CyberLimbItem.isPowered(armLeft))
         {
             leftUnpowered = true;
         }
 
         boolean rightUnpowered = false;
-        ItemStack armRight = cyberwareUserData.getCybercraft(ItemInit.CYBER_LIMBS.get().getCachedStack(CyberLimbItem.META_RIGHT_CYBER_ARM));
+        ItemStack armRight = cyberwareUserData.getCybercraft(ItemInit.CYBER_LIMB_ARM_RIGHT.get());
         if (!armRight.isEmpty() && !CyberLimbItem.isPowered(armRight))
         {
             rightUnpowered = true;
@@ -507,6 +509,6 @@ public class EssentialsMissingHandler {
         {
             event.setCanceled(true);
         }
-    }*/
+    }
 
 }
