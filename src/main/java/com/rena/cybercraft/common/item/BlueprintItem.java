@@ -67,6 +67,10 @@ public class BlueprintItem extends Item implements IBlueprint {
         }
     }
 
+
+    /**
+     * saves the stack to a new BlueprintItem and returns the BlueprintItem
+     */
     public static ItemStack getBlueprintForItem(ItemStack stack)
     {
         if (!stack.isEmpty() && CybercraftAPI.canDeconstruct(stack))
@@ -91,6 +95,13 @@ public class BlueprintItem extends Item implements IBlueprint {
         {
             return ItemStack.EMPTY;
         }
+    }
+
+    public static ItemStack getItemFromBlueprint(ItemStack blueprint){
+        if (blueprint.hasTag() && blueprint.getTag().contains("blueprintItem")){
+            return ItemStack.of(blueprint.getTag().getCompound("blueprintItem"));
+        }
+        return ItemStack.EMPTY;
     }
 
     @Override

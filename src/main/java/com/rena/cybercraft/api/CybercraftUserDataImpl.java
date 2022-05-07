@@ -27,6 +27,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -93,7 +94,11 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
         for (EnumSlot slot : EnumSlot.values())
         {
             NonNullList<ItemStack> nnlCyberwaresInSlot = NonNullList.create();
-            List<? extends ItemStack> startItems = CybercraftConfig.C_MOBS.startItems.get(slot).get();
+            NonNullList<ItemStack> startItems = NonNullList.create();
+            for (String s : CybercraftConfig.C_MOBS.startItems.get(slot).get()){
+                startItems.add(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(s))));
+                System.out.println(s);
+            }
             for (ItemStack startItem : startItems) {
                 nnlCyberwaresInSlot.add(startItem.copy());
             }

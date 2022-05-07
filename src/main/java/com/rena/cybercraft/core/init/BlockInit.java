@@ -1,10 +1,9 @@
 package com.rena.cybercraft.core.init;
 
 import com.rena.cybercraft.Cybercraft;
-import com.rena.cybercraft.common.block.BlueprintArchiveBlock;
-import com.rena.cybercraft.common.block.ChargerBlock;
-import com.rena.cybercraft.common.block.ComponentBoxBlock;
-import com.rena.cybercraft.common.block.ScannerBlock;
+import com.rena.cybercraft.api.item.ICybercraft;
+import com.rena.cybercraft.common.block.*;
+import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.item.block.ItemComponentBox;
 import com.rena.cybercraft.common.util.BlockDeferredRegister;
 import com.rena.cybercraft.common.util.DoubleRegistryObject;
@@ -28,6 +27,7 @@ public class BlockInit {
     public static final RegistryObject<ScannerBlock> SCANNER_BLOCK = BLOCKS.register("scanner", ScannerBlock::new);
     public static final RegistryObject<ChargerBlock> CHARGER_BLOCK = BLOCKS.register("charger", ChargerBlock::new);
     public static final RegistryObject<BlueprintArchiveBlock> BLUEPRINT_ARCHIVE_block = BLOCKS.register("blueprint_archive", BlueprintArchiveBlock::new);
+    public static final RegistryObject<EngineeringTableBlock> ENGINEERING_TABLE = BLOCKS.register("engineering_table", EngineeringTableBlock::new);
     public static final DoubleRegistryObject<ComponentBoxBlock, ItemComponentBox> COMPONENT_BOX = CUSTOM.register("component_box", ComponentBoxBlock::new, block -> new ItemComponentBox(block));
 
     @SubscribeEvent
@@ -36,5 +36,8 @@ public class BlockInit {
         BLOCKS.getEntries().stream().map(RegistryObject::get).forEach(block -> {
             registry.register(new BlockItem(block, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)).setRegistryName(block.getRegistryName()));
         });
+        for (String s : CybercraftConfig.C_MOBS.startItems.get(ICybercraft.EnumSlot.EYES).get()){
+            System.out.println(s);
+        }
     }
 }
