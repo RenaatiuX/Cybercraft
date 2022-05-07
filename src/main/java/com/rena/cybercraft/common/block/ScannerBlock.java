@@ -4,6 +4,7 @@ import com.rena.cybercraft.common.tileentities.TileEntityScanner;
 import com.rena.cybercraft.common.util.WorldUtil;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
@@ -47,5 +48,10 @@ public class ScannerBlock extends Block {
         }
 
         return ActionResultType.SUCCESS;
+    }
+
+    @Override
+    public BlockRenderType getRenderShape(BlockState p_149645_1_) {
+        return BlockRenderType.MODEL;
     }
 }

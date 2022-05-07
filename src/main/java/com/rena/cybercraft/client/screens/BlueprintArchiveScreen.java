@@ -30,4 +30,10 @@ public class BlueprintArchiveScreen extends ContainerScreen<BlueprintArchiveCont
         int middleY = (this.height - this.imageHeight) / 2;
         this.blit(stack, middleX, middleY, 0, 0, 175, 149);
     }
+
+    @Override
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(matrixStack);
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
+    }
 }

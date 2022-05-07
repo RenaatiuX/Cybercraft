@@ -45,9 +45,10 @@ public class BlueprintArchiveBlock extends Block {
             TileEntityBlueprintArchive te = WorldUtil.getTileEntity(TileEntityBlueprintArchive.class, world, pos);
             if (te != null){
                 NetworkHooks.openGui((ServerPlayerEntity) player, te, pos);
+                return ActionResultType.CONSUME;
             }
         }
-        return super.use(state, world, pos, player, hand, hit);
+        return ActionResultType.SUCCESS;
     }
 
     @Override

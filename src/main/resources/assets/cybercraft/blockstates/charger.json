@@ -1,15 +1,7 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "minecraft:cube",
-        "textures": {
-            "particle": "cybercraft:blocks/surgery_chamber_top",
-            "down": "cybercraft:blocks/surgery_chamber_top",
-            "up": "cybercraft:blocks/charger_top",
-            "north": "cybercraft:blocks/charger_side",
-            "east": "cybercraft:blocks/charger_side",
-            "south": "cybercraft:blocks/charger_side",
-            "west": "cybercraft:blocks/charger_side"
+    "variants": {
+        "": {
+            "model": "cybercraft:block/charger"
         }
     }
 }

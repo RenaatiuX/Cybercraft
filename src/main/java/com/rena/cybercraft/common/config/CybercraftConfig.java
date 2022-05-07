@@ -31,7 +31,7 @@ public class CybercraftConfig {
 
     }
 
-    private static final class C_Mobs{
+    public static final class C_Mobs{
         public final ForgeConfigSpec.BooleanValue enableCyberZombies, isDimensionBlacklist, applyDimensionToSpawning, applyDimensionToBeacon, addClothes;
         public final ForgeConfigSpec.IntValue cyberZombieWeight, cyberZombieMinPack, cyberZombieMaxPack;
         public final ForgeConfigSpec.DoubleValue cyberZombieDropRarity, clothDropRarity;
@@ -60,7 +60,7 @@ public class CybercraftConfig {
         }
     }
 
-    private static final class C_Other{
+    public static final class C_Other{
         public final ForgeConfigSpec.BooleanValue surgeryCrafting, enableKatana, enableClothes, render;
         public final ForgeConfigSpec.IntValue testlaPerPower, fistMiningLevel;
 
@@ -89,7 +89,7 @@ public class CybercraftConfig {
 
     }
 
-    private static final class C_Gamerules{
+    public static final class C_Gamerules{
         public final ForgeConfigSpec.BooleanValue defaultDrop, defaultKeep;
         public final ForgeConfigSpec.DoubleValue dropChance;
 
@@ -105,7 +105,7 @@ public class CybercraftConfig {
         }
     }
 
-    private static final class C_Machines{
+    public static final class C_Machines{
         public final ForgeConfigSpec.DoubleValue engineeringChance, scannerChance, scannerChanceAddl;
         public final ForgeConfigSpec.IntValue scannerTime;
 
@@ -121,7 +121,7 @@ public class CybercraftConfig {
         }
     }
 
-    private static final class C_Hud{
+    public static final class C_Hud{
         public final ForgeConfigSpec.BooleanValue enableFloat;
         public final ForgeConfigSpec.DoubleValue hudjackFloat, hudlensFloat;
 

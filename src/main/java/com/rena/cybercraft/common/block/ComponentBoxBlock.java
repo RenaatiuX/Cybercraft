@@ -52,9 +52,10 @@ public class ComponentBoxBlock extends ShapedBlock {
             TileEntityComponentBox te = WorldUtil.getTileEntity(TileEntityComponentBox.class, world, pos);
             if (te != null){
                 NetworkHooks.openGui((ServerPlayerEntity) player, te, pos);
+                return ActionResultType.CONSUME;
             }
         }
-        return super.use(state, world, pos, player, hand, hit);
+        return ActionResultType.SUCCESS;
     }
 
     @Override

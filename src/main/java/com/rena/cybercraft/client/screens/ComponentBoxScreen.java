@@ -31,5 +31,9 @@ public class ComponentBoxScreen extends ContainerScreen<UtilContainer> {
         this.blit(stack, middleX, middleY, 0, 0, 175, 149);
     }
 
-
+    @Override
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(matrixStack);
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
+    }
 }

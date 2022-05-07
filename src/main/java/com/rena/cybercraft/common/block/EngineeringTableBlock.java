@@ -4,6 +4,7 @@ import com.rena.cybercraft.common.tileentities.TileEntityEngineeringTable;
 import com.rena.cybercraft.core.init.BlockInit;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
@@ -26,5 +27,10 @@ public class EngineeringTableBlock extends Block {
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new TileEntityEngineeringTable();
+    }
+
+    @Override
+    public BlockRenderType getRenderShape(BlockState p_149645_1_) {
+        return BlockRenderType.MODEL;
     }
 }

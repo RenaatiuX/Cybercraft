@@ -534,13 +534,6 @@ public class ItemInit {
             () -> new BlueprintItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB).stacksTo(1)));
 
 
-    //Table
-    public static final RegistryObject<Item> ENGINEERING_TABLE = ITEMS.register("engineering_table",
-            () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
-
-    public static final RegistryObject<Item> SURGERY = ITEMS.register("surgery_chamber",
-            () -> new Item(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
-
     //Entities
     public static final RegistryObject<Item> CYBER_ZOMBIE_SPAWN_EGG = ITEMS.register("cyber_zombie_sparn_egg",
             ()-> new CybercraftSpawnEgg(EntityTypeInit.CYBER_ZOMBIE, 44975, 7969893, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)));
