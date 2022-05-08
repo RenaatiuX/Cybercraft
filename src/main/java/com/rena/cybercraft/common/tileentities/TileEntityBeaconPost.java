@@ -52,12 +52,12 @@ public class TileEntityBeaconPost extends TileEntity {
         return 16384.0D;
     }
 
-    /*public void setMasterLoc(BlockPos start)
+    public void setMasterLoc(BlockPos start)
     {
         this.master = start;
-        level.notifyBlockUpdate(worldPosition, level.getBlockState(getBlockPos()), level.getBlockState(getBlockPos()), 2);
-        this.markDirty();
-    }*/
+        level.sendBlockUpdated(worldPosition, level.getBlockState(getBlockPos()), level.getBlockState(getBlockPos()), 2);
+        this.setChanged();
+    }
 
     @Override
     public boolean isRemoved() {

@@ -8,16 +8,20 @@ import com.rena.cybercraft.common.tileentities.TileEntitySurgery;
 import com.rena.cybercraft.common.util.WorldUtil;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -42,6 +46,11 @@ public class SurgeryBlock extends Block {
     }
 
     @Override
+    public BlockRenderType getRenderShape(BlockState p_149645_1_) {
+        return BlockRenderType.MODEL;
+    }
+
+    @Override
     public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         if(!world.isClientSide){
             TileEntitySurgery te = WorldUtil.getTileEntity(TileEntitySurgery.class, world, pos);
@@ -51,11 +60,33 @@ public class SurgeryBlock extends Block {
                 player.getAttribute(CybercraftAPI.TOLERANCE_ATTR).setBaseValue(CybercraftConfig.C_ESSENCE.essence.get());
 
                 ICybercraftUserData cybercraftUserData = CybercraftAPI.getCapabilityOrNull(player);
-               // te.updatePlayerSlots(player, cybercraftUserData);
-                NetworkHooks.openGui((ServerPlayerEntity) player, te, pos);
+                //te.updatePlayerSlots(player, cybercraftUserData);
+                //NetworkHooks.openGui((ServerPlayerEntity) player, te, pos);
                 return ActionResultType.CONSUME;
             }
         }
         return ActionResultType.SUCCESS;
     }
+
+    @Override
+    public void onRemove(BlockState blockState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!blockState.is(newState.getBlock())) {
+            TileEntity tileentity = world.getBlockEntity(pos);
+
+            if (tileentity instanceof TileEntitySurgery
+                    && !world.isClientSide()) {
+                TileEntitySurgery surgery = (TileEntitySurgery) tileentity;
+
+                for (int indexSlot = 0; indexSlot < surgery.slots.getSlots(); indexSlot++) {
+                    ItemStack stack = surgery.slots.getStackInSlot(indexSlot);
+                    if (!stack.isEmpty()) {
+                        InventoryHelper.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
+                    }
+                }
+            }
+
+            super.onRemove(blockState, world, pos, newState, isMoving);
+        }
+    }
+
 }

@@ -1,11 +1,18 @@
 package com.rena.cybercraft.common.block;
 
+import com.rena.cybercraft.common.tileentities.TileEntityBeaconPost;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
@@ -32,6 +39,98 @@ public class BeaconPostBlock extends ContainerBlock {
     protected BeaconPostBlock(Properties properties) {
         super(properties);
     }
+
+    @Override
+    public void setPlacedBy(World world, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, ItemStack itemStack) {
+
+        BlockPos complete = complete(world, blockPos);
+
+        if (complete != null)
+        {
+
+        }
+    }
+
+    private BlockPos complete(World world, BlockPos pos)
+    {
+        for (int y = -9; y <= 0; y++)
+        {
+            for (int x = -1; x <= 1; x++)
+            {
+                for (int z = -1; z <= 1; z++)
+                {
+                    BlockPos start = pos.offset(x, y, z);
+
+                    BlockPos result = complete(world, pos, start);
+                    if (result != null)
+                    {
+                        return result;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private BlockPos complete(World world, BlockPos pos, BlockPos start)
+    {
+        for (int y = 0; y <= 9; y++)
+        {
+            for (int x = -1; x <= 1; x++)
+            {
+                for (int z = -1; z <= 1; z++)
+                {
+                    if (y > 3 && (x != 0 || z != 0))
+                    {
+                        continue;
+                    }
+
+                    BlockPos newPos = start.offset(x, y, z);
+
+                    BlockState state = world.getBlockState(newPos);
+                    Block block = state.getBlock();
+                    if (block != this || state.getValue(TRANSFORMED) != 0)
+                    {
+                        return null;
+                    }
+                }
+            }
+        }
+        for (int y = 0; y <= 9; y++)
+        {
+            for (int x = -1; x <= 1; x++)
+            {
+                for (int z = -1; z <= 1; z++)
+                {
+                    if (y > 3 && (x != 0 || z != 0))
+                    {
+                        continue;
+                    }
+
+                    BlockPos newPos = start.offset(x, y, z);
+
+
+                    if (newPos.equals(start))
+                    {
+                        world.setBlock(newPos, world.getBlockState(newPos).setValue(TRANSFORMED, 2), 2);
+
+                        TileEntityBeaconPost post = (TileEntityBeaconPost) world.getBlockEntity(newPos);
+                    }
+                    else
+                    {
+                        world.setBlock(newPos, world.getBlockState(newPos).setValue(TRANSFORMED, 1), 2);
+
+                        TileEntityBeaconPost post = (TileEntityBeaconPost) world.getBlockEntity(newPos);
+                        post.setMasterLoc(start);
+                    }
+                }
+            }
+        }
+        return start;
+    }
+
+
 
     @Nullable
     @Override

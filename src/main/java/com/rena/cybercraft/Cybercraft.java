@@ -96,7 +96,7 @@ public class Cybercraft {
     }
 
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-    public static class RegistriesDE {
+    public static class RegistriesCybercraft {
 
         @SubscribeEvent
         public static void onRegisterEntities(RegistryEvent.Register<EntityType<?>> event) {
