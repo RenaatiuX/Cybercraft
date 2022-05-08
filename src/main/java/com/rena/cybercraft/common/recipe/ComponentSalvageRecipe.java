@@ -5,33 +5,31 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import com.rena.cybercraft.common.item.BlueprintItem;
+import com.rena.cybercraft.core.Tags;
 import com.rena.cybercraft.core.init.RecipeInit;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class ComponentSalvageRecipe implements IRecipe<IInventory> {
 
-    public static final  Serializer SERIALIZER = new Serializer();
+    public static final Serializer SERIALIZER = new Serializer();
     private final ImmutableList<ItemStack> components;
     private final ResourceLocation id;
     private final ItemStack upgrade;
@@ -45,22 +43,40 @@ public class ComponentSalvageRecipe implements IRecipe<IInventory> {
     /**
      * this matches method works in two directions, either in ur inventory are all components in order to build with a blueprint a upgrade,
      * or u have the upgrade and want to find all components to it.
+     * not nbt-sensitive
      */
     @Override
     public boolean matches(IInventory inv, World world) {
-        int j = 0;
         boolean hasBlueprint = false;
+        Map<Item, Integer> itemCount = new HashMap<>();
         for (int i = 0; i < inv.getContainerSize(); i++) {
-            if (ItemStack.matches(inv.getItem(i), components.get(j))) {
-                j++;
-            } else if (inv.getItem(i).getItem() instanceof BlueprintItem && ItemStack.matches(BlueprintItem.getItemFromBlueprint(inv.getItem(i)), this.upgrade.copy())) {
-                hasBlueprint = true;
-            } else if (ItemStack.matches(inv.getItem(i), this.upgrade)) {
+            if (inv.getItem(i).isEmpty())
+                continue;
+            else if (ItemStack.matches(inv.getItem(i), this.upgrade)) {
                 return true;
             }
+            if (Tags.Items.COMPONENTS.contains(inv.getItem(i).getItem())) {
+                if (itemCount.containsKey(inv.getItem(i).getItem()))
+                    itemCount.put(inv.getItem(i).getItem(), itemCount.get(inv.getItem(i).getItem()) + inv.getItem(i).getCount());
+                else
+                    itemCount.put(inv.getItem(i).getItem(), inv.getItem(i).getCount());
+            }
+            if (inv.getItem(i).getItem() instanceof BlueprintItem && ItemStack.matches(BlueprintItem.getItemFromBlueprint(inv.getItem(i)), this.upgrade.copy())) {
+                hasBlueprint = true;
+            }
         }
-        return j == components.size() - 1 && hasBlueprint;
+        int count = 0;
+        for (ItemStack stack : components) {
+            for (Map.Entry<Item, Integer> entry : itemCount.entrySet()) {
+                if (ItemStack.matches(stack, new ItemStack(entry.getKey(), entry.getValue()))){
+                    count++;
+                }
+            }
+
+        }
+        return count == components.size() - 1 && hasBlueprint;
     }
+
 
     @Override
     public ItemStack assemble(IInventory inv) {
@@ -129,7 +145,7 @@ public class ComponentSalvageRecipe implements IRecipe<IInventory> {
         @Override
         public void toNetwork(PacketBuffer buffer, ComponentSalvageRecipe recipe) {
             buffer.writeInt(recipe.components.size());
-            for (ItemStack stack : recipe.components){
+            for (ItemStack stack : recipe.components) {
                 buffer.writeItem(stack);
             }
             buffer.writeItem(recipe.upgrade);

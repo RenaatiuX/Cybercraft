@@ -1,15 +1,15 @@
 package com.rena.cybercraft.common.tileentities;
 
 import com.rena.cybercraft.Cybercraft;
+import com.rena.cybercraft.common.config.CybercraftConfig;
+import com.rena.cybercraft.common.container.EngineeringTableContainer;
 import com.rena.cybercraft.common.item.BlueprintItem;
 import com.rena.cybercraft.common.recipe.ComponentSalvageRecipe;
 import com.rena.cybercraft.core.Tags;
 import com.rena.cybercraft.core.init.RecipeInit;
 import com.rena.cybercraft.core.init.TileEntityTypeInit;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.*;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -46,13 +46,39 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
 
         }
     }
+
+    public void salvage(){
+        if (!level.isClientSide() && !getItem(0).isEmpty()){
+            ComponentSalvageRecipe recipe = getSalvageRecipe();
+            if (recipe != null){
+                Inventory components = getComponentInventory();
+                for (ItemStack stack : recipe.getComponents()) {
+                    ItemStack added = components.addItem(stack);
+                    if (!added.isEmpty()){
+                        InventoryHelper.dropItemStack(this.level, this.getBlockPos().getX(), this.getBlockPos().getY() + 1.0f, this.getBlockPos().getZ(), stack);
+                    }
+                }
+                this.removeItem(0, 1);
+                ItemStack blueprint = BlueprintItem.getBlueprintForItem(this.getItem(0));
+                if (this.level.random.nextDouble() < CybercraftConfig.C_MACHINES.engineeringChance.get() && !getItem(1).isEmpty() &&
+                        (getItem(8).isEmpty() ||ItemStack.matches(blueprint, getItem(8)))){
+                    this.setItem(8, blueprint);
+                    this.removeItem(1, 1);
+                }
+            }
+        }
+    }
+
+    /**
+     * just makes recipe gathering faster
+     */
     @Nullable
     private ComponentSalvageRecipe getSalvageRecipe(){
         return this.level.getRecipeManager().getRecipeFor(RecipeInit.COMPONENT_UPGRADE_RECIPE, new Inventory(getItem(0)), this.level).orElse(null);
     }
     @Nullable
     private ComponentSalvageRecipe getBlueprintRecipe(){
-        return this.level.getRecipeManager().getRecipeFor(RecipeInit.COMPONENT_UPGRADE_RECIPE, getComponentInventory(), this.level).orElse(null);
+        return this.level.getRecipeManager().getRecipeFor(RecipeInit.COMPONENT_UPGRADE_RECIPE, this, this.level).orElse(null);
     }
 
     @Override
@@ -71,8 +97,8 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
     }
 
     @Override
-    protected Container createMenu(int p_213906_1_, PlayerInventory p_213906_2_) {
-        return null;
+    protected Container createMenu(int id, PlayerInventory inv) {
+        return new EngineeringTableContainer(id, inv, this);
     }
 
     @Override
@@ -132,8 +158,8 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         super.invalidateCaps();
     }
 
-    public IInventory getComponentInventory(){
-        IInventory ret = new Inventory(6);
+    public Inventory getComponentInventory(){
+        Inventory ret = new Inventory(6);
         for (int i = 2;i<8;i++){
             ret.setItem(i, this.getItem(i));
         }

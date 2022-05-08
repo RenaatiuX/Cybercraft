@@ -15,6 +15,7 @@ import net.minecraftforge.items.SlotItemHandler;
 import org.lwjgl.system.CallbackI;
 
 import java.util.Objects;
+import java.util.function.Predicate;
 
 public abstract class UtilContainer extends Container {
 
@@ -105,6 +106,20 @@ public abstract class UtilContainer extends Container {
 
     public interface IItemHandlerSlotProvider{
         Slot createSlot(IItemHandler inv, int index, int x, int y);
+    }
+
+    protected static class FilterSlot extends Slot{
+
+        private final Predicate<ItemStack> filter;
+        public FilterSlot(IInventory inv, int index, int x, int y, Predicate<ItemStack> filter) {
+            super(inv, index, x, y);
+            this.filter = filter;
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            return filter.test(stack);
+        }
     }
 
     protected static class LockedSlot extends Slot {
