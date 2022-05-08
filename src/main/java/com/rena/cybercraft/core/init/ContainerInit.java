@@ -1,10 +1,7 @@
 package com.rena.cybercraft.core.init;
 
 import com.rena.cybercraft.Cybercraft;
-import com.rena.cybercraft.common.container.BlueprintArchiveContainer;
-import com.rena.cybercraft.common.container.ComponentBoxContainer;
-import com.rena.cybercraft.common.container.ItemComponentBoxContainer;
-import com.rena.cybercraft.common.container.ScannerContainer;
+import com.rena.cybercraft.common.container.*;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fml.RegistryObject;
@@ -19,4 +16,5 @@ public class ContainerInit {
     public static final RegistryObject<ContainerType<ComponentBoxContainer>> COMPONENT_BOX_CONTAINER = CONTAINERS.register("component_box", () -> IForgeContainerType.create(ComponentBoxContainer::new));
     public static final RegistryObject<ContainerType<BlueprintArchiveContainer>> BLUEPRINT_ARCHIVE_CONTAINER = CONTAINERS.register("blueprint_archive", () -> IForgeContainerType.create(BlueprintArchiveContainer::new));
     public static final RegistryObject<ContainerType<ItemComponentBoxContainer>> ITEM_COMPONENT_BOX_CONTAINER = CONTAINERS.register("item_component_box", () -> IForgeContainerType.create(ItemComponentBoxContainer::new));
+    public static final RegistryObject<ContainerType<EngineeringTableContainer>> ENGINEERING_TABLE_CONTAINER = CONTAINERS.register("engineering_table", () -> IForgeContainerType.create(EngineeringTableContainer::new));
 }

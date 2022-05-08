@@ -19,7 +19,7 @@ public class ModRecipeProvider extends RecipeProvider {
 
     private void makeComponentsSalvaging(Consumer<IFinishedRecipe> consumer){
         EngineeringTableRecipeBuilder.create(ItemInit.CYBER_EYES.get())
-                .addComponent(ItemInit.COMPONENT_PLATING.get())
+                .addComponent(ItemInit.COMPONENT_PLATING.get(), 5, 0.5f)
                 .addComponent(ItemInit.COMPONENT_FIBER_OPTICS.get())
                 .addComponent(ItemInit.COMPONENT_SYNTHNERVES.get())
                 .unlockedBy("hasItem", has(ItemInit.CYBER_EYES.get()))

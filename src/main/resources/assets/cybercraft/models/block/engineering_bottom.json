@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "cybercraft:block/surgery_chamber_top",
+    "down": "cybercraft:block/surgery_chamber_top",
+    "up": "cybercraft:block/surgery_chamber_top",
+    "north": "cybercraft:block/engineering_bottom_side2",
+    "east": "cybercraft:block/engineering_bottom_side1",
+    "west": "cybercraft:block/engineering_bottom_side1",
+    "south": "cybercraft:block/engineering_bottom_side2"
+  }
+}

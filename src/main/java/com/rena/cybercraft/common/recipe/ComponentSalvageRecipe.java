@@ -33,11 +33,13 @@ public class ComponentSalvageRecipe implements IRecipe<IInventory> {
     private final ImmutableList<ItemStack> components;
     private final ResourceLocation id;
     private final ItemStack upgrade;
+    private final float[] probabilities;
 
-    public ComponentSalvageRecipe(ResourceLocation id, ItemStack upgrade, List<ItemStack> components) {
+    public ComponentSalvageRecipe(ResourceLocation id, ItemStack upgrade, List<ItemStack> components, float[] probabilities) {
         this.components = ImmutableList.copyOf(components);
         this.id = id;
         this.upgrade = upgrade;
+        this.probabilities = probabilities;
     }
 
     /**
@@ -52,7 +54,7 @@ public class ComponentSalvageRecipe implements IRecipe<IInventory> {
         for (int i = 0; i < inv.getContainerSize(); i++) {
             if (inv.getItem(i).isEmpty())
                 continue;
-            else if (ItemStack.matches(inv.getItem(i), this.upgrade)) {
+            else if (inv.getItem(i).getItem() ==  this.upgrade.getItem() && inv.getItem(i).getCount() >= this.upgrade.getCount()) {
                 return true;
             }
             if (Tags.Items.COMPONENTS.contains(inv.getItem(i).getItem())) {
@@ -85,6 +87,10 @@ public class ComponentSalvageRecipe implements IRecipe<IInventory> {
 
     public ImmutableList<ItemStack> getComponents() {
         return components;
+    }
+
+    public float[] getProbabilities() {
+        return probabilities;
     }
 
     @Override
@@ -123,11 +129,15 @@ public class ComponentSalvageRecipe implements IRecipe<IInventory> {
         public ComponentSalvageRecipe fromJson(ResourceLocation id, JsonObject json) {
             JsonArray comps = json.getAsJsonArray("components");
             List<ItemStack> components = Lists.newArrayList();
+            float[] probabilities = new float[comps.size()];
+            int i = 0;
             for (JsonElement element : comps) {
                 components.add(CraftingHelper.getItemStack(element.getAsJsonObject(), true));
+                probabilities[i] = JSONUtils.getAsFloat(element.getAsJsonObject(),"probability", 0.15f);
+                i++;
             }
             ItemStack upgrade = CraftingHelper.getItemStack(getJsonElement(json, "output").getAsJsonObject(), true);
-            return new ComponentSalvageRecipe(id, upgrade, components);
+            return new ComponentSalvageRecipe(id, upgrade, components, probabilities);
         }
 
         @Nullable
@@ -135,18 +145,21 @@ public class ComponentSalvageRecipe implements IRecipe<IInventory> {
         public ComponentSalvageRecipe fromNetwork(ResourceLocation id, PacketBuffer buffer) {
             int size = buffer.readInt();
             List<ItemStack> components = Lists.newArrayList();
+            float[] probabilities = new float[size];
             for (int i = 0; i < size; i++) {
                 components.add(buffer.readItem());
+                probabilities[i] = buffer.readFloat();
             }
             ItemStack result = buffer.readItem();
-            return new ComponentSalvageRecipe(id, result, components);
+            return new ComponentSalvageRecipe(id, result, components, probabilities);
         }
 
         @Override
         public void toNetwork(PacketBuffer buffer, ComponentSalvageRecipe recipe) {
             buffer.writeInt(recipe.components.size());
-            for (ItemStack stack : recipe.components) {
-                buffer.writeItem(stack);
+            for (int i = 0;i<recipe.components.size();i++) {
+                buffer.writeItem(recipe.components.get(i));
+                buffer.writeFloat(recipe.probabilities[i]);
             }
             buffer.writeItem(recipe.upgrade);
         }

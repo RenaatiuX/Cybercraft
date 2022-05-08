@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 
 public class ScannerBlock extends Block {
     public ScannerBlock() {
-        super(AbstractBlock.Properties.of(Material.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(1).strength(7f, 3f).requiresCorrectToolForDrops());
+        super(AbstractBlock.Properties.of(Material.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(1).strength(7f, 3f).requiresCorrectToolForDrops().noOcclusion());
     }
 
     @Override

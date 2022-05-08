@@ -23,6 +23,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -35,6 +36,7 @@ public class EngineeringTableRecipeBuilder {
         return new EngineeringTableRecipeBuilder(new ItemStack(upgradeToSalvage, count));
     }
     private final List<ItemStack> components = Lists.newArrayList();
+    private final ArrayList<Float> probabilities = Lists.newArrayList();
     private final ItemStack toSalvage;
     private Advancement.Builder advancement;
     public EngineeringTableRecipeBuilder(ItemStack upgradeToSalvage){
@@ -42,12 +44,21 @@ public class EngineeringTableRecipeBuilder {
     }
 
     public EngineeringTableRecipeBuilder addComponent(IItemProvider component, int count){
-        components.add(new ItemStack(component, count));
-        return this;
+       return addComponent(component, count, 0.15f);
     }
 
     public EngineeringTableRecipeBuilder addComponent(IItemProvider component){
        return addComponent(component, 1);
+    }
+
+    public EngineeringTableRecipeBuilder addComponent(IItemProvider component, int count, float probabilty){
+        components.add(new ItemStack(component, count));
+        probabilities.add(probabilty);
+        return this;
+    }
+
+    public EngineeringTableRecipeBuilder addComponent(IItemProvider component, float probability){
+        return addComponent(component, 1, probability);
     }
     public EngineeringTableRecipeBuilder unlockedBy(String name, ICriterionInstance criteria) {
         this.advancement = Advancement.Builder.advancement();
@@ -74,28 +85,30 @@ public class EngineeringTableRecipeBuilder {
         }
         if (this.advancement != null) {
             this.advancement.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(IRequirementsStrategy.OR);
-            consumer.accept(new Result(id, this.components, this.toSalvage, this.advancement, new ResourceLocation(id.getNamespace(), "recipes/" + this.toSalvage.getItem().getItemCategory().getRecipeFolderName() + "/" + id.getPath())));
+            consumer.accept(new Result(id, this.components, this.toSalvage, probabilities, this.advancement, new ResourceLocation(id.getNamespace(), "recipes/" + this.toSalvage.getItem().getItemCategory().getRecipeFolderName() + "/" + id.getPath())));
         }else{
-            consumer.accept(new Result(id, this.components, this.toSalvage));
+            consumer.accept(new Result(id, this.components, this.toSalvage, probabilities));
         }
     }
 
     public class Result implements IFinishedRecipe{
         private final ResourceLocation id, advancementId;
         private final List<ItemStack> components;
+        private final List<Float> probabilities;
         private final ItemStack crafter;
         private final Advancement.Builder advancement;
 
-        public Result(ResourceLocation id, List<ItemStack> components, ItemStack crafter, Advancement.Builder advancement, ResourceLocation advancementId) {
+        public Result(ResourceLocation id, List<ItemStack> components, ItemStack crafter,List<Float> probabilities, Advancement.Builder advancement, ResourceLocation advancementId) {
             this.id = id;
             this.advancementId = advancementId;
             this.components = components;
             this.crafter = crafter;
             this.advancement = advancement;
+            this.probabilities = probabilities;
         }
 
-        public Result(ResourceLocation id, List<ItemStack> components, ItemStack crafter) {
-           this(id, components, crafter, null, null);
+        public Result(ResourceLocation id, List<ItemStack> components, ItemStack crafter, List<Float> probabilities) {
+           this(id, components, crafter,probabilities, null, null);
         }
 
 
@@ -104,8 +117,12 @@ public class EngineeringTableRecipeBuilder {
             json.add("output", parseItemStack(this.crafter));
 
             JsonArray array = new JsonArray();
-            for (ItemStack stack : this.components){
-                array.add(parseItemStack(stack));
+            for (int i = 0;i<components.size();i++){
+                JsonObject obj = parseItemStack(components.get(i));
+                float prob = probabilities.get(i);
+                if (prob != 0.15f)
+                    obj.addProperty("probability", prob);
+                array.add(obj);
             }
             json.add("components", array);
 

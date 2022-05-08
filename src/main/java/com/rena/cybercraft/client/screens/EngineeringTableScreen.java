@@ -23,7 +23,9 @@ public class EngineeringTableScreen extends ContainerScreen<EngineeringTableCont
     @Override
     protected void init() {
         super.init();
-        this.addButton(new SalvageButton(39, 34, this::onSalvage));
+        int middleX = (this.width - this.imageWidth) / 2;
+        int middleY = (this.height - this.imageHeight) / 2;
+        this.addButton(new SalvageButton(middleX + 39, middleY + 34, this::onSalvage));
     }
 
     @Override
@@ -45,7 +47,7 @@ public class EngineeringTableScreen extends ContainerScreen<EngineeringTableCont
         }
 
         @Override
-        public void render(MatrixStack matrixStack, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
+        public void renderButton(MatrixStack matrixStack, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
             if (this.visible){
                 if (this.isHovered){
                     Minecraft.getInstance().textureManager.bind(TEXTURE);

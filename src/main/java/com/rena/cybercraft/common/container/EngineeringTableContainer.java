@@ -20,12 +20,12 @@ public class EngineeringTableContainer extends BaseTeContainer<TileEntityEnginee
 
     @Override
     public void init() {
-        addPlayerInventory(8, 83);
-        addSlot(new Slot(this.tileEntity, 0, 15, 19));
-        addSlot(new FilterSlot(this.tileEntity, 1, 15, 52, stack -> stack.getItem() == Items.PAPER));
-        addSlotField(this.tileEntity, 2, 71, 16, 2, 18, 3, 18,
+        addPlayerInventory(8, 84);
+        addSlot(new Slot(this.tileEntity, 0, 15, 20));
+        addSlot(new FilterSlot(this.tileEntity, 1, 15, 53, stack -> stack.getItem() == Items.PAPER));
+        addSlotField(this.tileEntity, 2, 71, 17, 2, 18, 3, 18,
                 (inv, index, x, y) -> new FilterSlot(inv, index, x, y, stack -> Tags.Items.COMPONENTS.contains(stack.getItem())));
-        addSlot(new FilterSlot(this.tileEntity, 8, 115, 52, stack -> stack.getItem() instanceof BlueprintItem));
-        addSlot(new LockedSlot(this.tileEntity, 9, 146, 22));
+        addSlot(new FilterSlot(this.tileEntity, 8, 115, 53, stack -> stack.getItem() instanceof BlueprintItem));
+        addSlot(new LockedSlot(this.tileEntity, 9, 145, 21));
     }
 }

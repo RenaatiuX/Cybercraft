@@ -1,5 +1,6 @@
 package com.rena.cybercraft;
 
+import com.rena.cybercraft.client.renderer.tileentity.TileEntityEngineeringRender;
 import com.rena.cybercraft.client.screens.BlueprintArchiveScreen;
 import com.rena.cybercraft.client.screens.ComponentBoxScreen;
 import com.rena.cybercraft.client.screens.EngineeringTableScreen;
@@ -23,6 +24,7 @@ import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -89,6 +91,8 @@ public class Cybercraft {
             ScreenManager.register(ContainerInit.ENGINEERING_TABLE_CONTAINER.get(), EngineeringTableScreen::new);
 
             RenderTypeLookup.setRenderLayer(BlockInit.SCANNER_BLOCK.get(), RenderType.translucent());
+
+            ClientRegistry.bindTileEntityRenderer(TileEntityTypeInit.ENGINEERING_TABLE.get(), TileEntityEngineeringRender::new);
 
         });
     }
