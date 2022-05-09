@@ -101,10 +101,10 @@ public class EngineeringTableBlock extends RotatableBlock {
             TileEntityEngineeringTable te = WorldUtil.getTileEntity(TileEntityEngineeringTable.class, world, tePos);
             if (te != null){
                 NetworkHooks.openGui((ServerPlayerEntity) player, te, tePos);
-                return ActionResultType.SUCCESS;
+                return ActionResultType.CONSUME;
             }
         }
-        return super.use(state, world, pos, player, hand, hit);
+        return ActionResultType.SUCCESS;
     }
 
     @Override

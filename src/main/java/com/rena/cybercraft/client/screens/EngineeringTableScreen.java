@@ -40,6 +40,13 @@ public class EngineeringTableScreen extends ContainerScreen<EngineeringTableCont
         CCNetwork.PACKET_HANDLER.sendToServer(new EngineeringDestroyPacket(menu.getTileEntity().getBlockPos()));
     }
 
+    @Override
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float p_230430_4_) {
+        this.renderBackground(matrixStack);
+        super.render(matrixStack, mouseX, mouseY, p_230430_4_);
+        this.renderTooltip(matrixStack, mouseX, mouseY);
+    }
+
     protected static class SalvageButton extends Button {
 
         public SalvageButton(int x, int y, IPressable onPress) {

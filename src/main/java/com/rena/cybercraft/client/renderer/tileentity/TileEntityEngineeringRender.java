@@ -1,8 +1,7 @@
 package com.rena.cybercraft.client.renderer.tileentity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.rena.cybercraft.common.block.EngineeringTableBlock;
-import com.rena.cybercraft.common.block.RotatableBlock;
+import com.rena.cybercraft.client.model.block.EngineeringModel;
 import com.rena.cybercraft.common.tileentities.TileEntityEngineeringTable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -16,12 +15,15 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 
 public class TileEntityEngineeringRender extends TileEntityRenderer<TileEntityEngineeringTable> {
+
+    private static EngineeringModel MODEL = new EngineeringModel();
+    private static String TEXTURE = "cybercraft:textures/models/engineering.png";
+
     public TileEntityEngineeringRender(TileEntityRendererDispatcher p_i226006_1_) {
         super(p_i226006_1_);
     }

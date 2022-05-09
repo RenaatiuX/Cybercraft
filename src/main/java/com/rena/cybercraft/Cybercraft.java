@@ -11,6 +11,7 @@ import com.rena.cybercraft.common.item.CybercraftSpawnEgg;
 import com.rena.cybercraft.common.util.CybercraftTab;
 import com.rena.cybercraft.core.init.*;
 import com.rena.cybercraft.core.network.CCNetwork;
+import com.rena.cybercraft.events.loot.NeuropozyneAdditionModifier;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -19,6 +20,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -32,6 +34,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.annotation.Nonnull;
 
 @Mod(Cybercraft.MOD_ID)
 public class Cybercraft {
@@ -107,6 +111,37 @@ public class Cybercraft {
         @SubscribeEvent
         public static void onRegisterEntities(RegistryEvent.Register<EntityType<?>> event) {
             CybercraftSpawnEgg.initSpawnEggs();
+        }
+        @SubscribeEvent
+        public static void registerModifierSerializers(@Nonnull final RegistryEvent.Register<GlobalLootModifierSerializer<?>> event){
+
+            event.getRegistry().registerAll(
+                    new NeuropozyneAdditionModifier.Serializer().setRegistryName
+                            (new ResourceLocation(Cybercraft.MOD_ID, "neuropozyne_in_abandoned_mineshaft")),
+                    new NeuropozyneAdditionModifier.Serializer().setRegistryName
+                            (new ResourceLocation(Cybercraft.MOD_ID, "neuropozyne_in_simple_dungeon")),
+                    new NeuropozyneAdditionModifier.Serializer().setRegistryName
+                            (new ResourceLocation(Cybercraft.MOD_ID, "neuropozyne_in_stronghold_crossing")),
+                    new NeuropozyneAdditionModifier.Serializer().setRegistryName
+                            (new ResourceLocation(Cybercraft.MOD_ID, "neuropozyne_in_stronghold_corridor")),
+                    new NeuropozyneAdditionModifier.Serializer().setRegistryName
+                            (new ResourceLocation(Cybercraft.MOD_ID, "neuropozyne_in_stronghold_library")),
+                    new NeuropozyneAdditionModifier.Serializer().setRegistryName
+                            (new ResourceLocation(Cybercraft.MOD_ID, "neuropozyne_in_desert_pyramid")),
+                    new NeuropozyneAdditionModifier.Serializer().setRegistryName
+                            (new ResourceLocation(Cybercraft.MOD_ID, "neuropozyne_in_jungle_temple")),
+                    new NeuropozyneAdditionModifier.Serializer().setRegistryName
+                            (new ResourceLocation(Cybercraft.MOD_ID, "neuropozyne_in_buried_treasure")),
+                    new NeuropozyneAdditionModifier.Serializer().setRegistryName
+                            (new ResourceLocation(Cybercraft.MOD_ID, "neuropozyne_in_shipwreck_treasure")),
+                    new NeuropozyneAdditionModifier.Serializer().setRegistryName
+                            (new ResourceLocation(Cybercraft.MOD_ID, "neuropozyne_in_shipwreck_map")),
+                    new NeuropozyneAdditionModifier.Serializer().setRegistryName
+                            (new ResourceLocation(Cybercraft.MOD_ID, "neuropozyne_in_shipwreck_supply")),
+                    new NeuropozyneAdditionModifier.Serializer().setRegistryName
+                            (new ResourceLocation(Cybercraft.MOD_ID, "neuropozyne_in_ruined_portal"))
+            );
+
         }
 
     }

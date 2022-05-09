@@ -3,21 +3,16 @@ package com.rena.cybercraft.events;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.item.ICybercraft;
 import com.rena.cybercraft.api.item.IDeconstructable;
-import com.rena.cybercraft.core.init.BlockInit;
-import com.rena.cybercraft.core.init.ItemInit;
-import net.minecraft.client.GameSettings;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.*;
-import net.minecraft.loot.functions.SetCount;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -28,7 +23,7 @@ public class MiscHandler {
 
     public static final MiscHandler INSTANCE = new MiscHandler();
 
-   /* @SubscribeEvent(priority = EventPriority.LOWEST)
+    /*@SubscribeEvent(priority = EventPriority.LOWEST)
     @OnlyIn(Dist.CLIENT)
     public void handleCybercraftTooltip(ItemTooltipEvent event)
     {
@@ -36,19 +31,18 @@ public class MiscHandler {
         if (CybercraftAPI.isCybercraft(stack))
         {
             ICybercraft ware = CybercraftAPI.getCybercraft(stack);
-            ICybercraft.Quality quality = ware.getQuality(stack);
+            ICybercraft.Quality quality = ware.getQuality();
 
 
-            GameSettings settings = Minecraft.getInstance().options;
-            if (settings.isDown(settings.keyBindSneak))
+            if (Screen.hasShiftDown())
             {
-                List<String> info = ware.getInfo(stack);
+                List<ITextComponent> info = ware.getInfo(stack);
                 if (info != null)
                 {
                     event.getToolTip().addAll(info);
                 }
 
-                NonNullList<NonNullList<ItemStack>> requirements = ware.required(stack);
+                NonNullList<Item> requirements = ware.requiredInstalledItems();
                 if (requirements.size() > 0)
                 {
                     String joined = "";
@@ -62,7 +56,7 @@ public class MiscHandler {
                             {
                                 toAdd += " " + I18n.get("cybercraft.tooltip.joiner_or") + " ";
                             }
-                            toAdd += I18n.get(requirements.get(indexRequirement).get(indexSubRequirement).getTranslationKey() + ".name");
+                            toAdd += I18n.get(requirements.get(indexRequirement).get(indexSubRequirement).getDisplayName() + ".name");
 
                         }
 
@@ -99,47 +93,5 @@ public class MiscHandler {
                 event.getToolTip().add(new TranslationTextComponent(I18n.get("cybercraft.tooltip.can_deconstruct")).withStyle(TextFormatting.DARK_GRAY));
             }
         }
-    }
-
-    @SubscribeEvent
-    public void handleNeuropozynePopulation(LootTableLoadEvent event)
-    {
-        if ( event.getName() == LootTables.SIMPLE_DUNGEON
-                || event.getName() == LootTables.ABANDONED_MINESHAFT
-                || event.getName() == LootTables.STRONGHOLD_CROSSING
-                || event.getName() == LootTables.STRONGHOLD_CORRIDOR
-                || event.getName() == LootTables.STRONGHOLD_LIBRARY
-                || event.getName() == LootTables.DESERT_PYRAMID
-                || event.getName() == LootTables.JUNGLE_TEMPLE
-                || event.getName() == LootTables.BURIED_TREASURE
-                || event.getName() == LootTables.SHIPWRECK_TREASURE
-                || event.getName() == LootTables.RUINED_PORTAL)
-        {
-            LootTable table = event.getTable();
-            LootPool main = event.getTable().getPool("main");
-            if (main != null)
-            {
-                LootCondition[] lc = new LootCondition[0];
-                LootFunction[] lf = new LootFunction[] { new SetCount(lc, new RandomValueRange(16F, 64F)) };
-                main.addRandomItems(new LootEntryItem(ItemInit.NEUROPOZYNE.get(), 15, 0, lf, lc, "cybercraft:neuropozyne"));
-            }
-        }
-
-        if (event.getName() == LootTables.NETHER_BRIDGE
-                || event.getName() == LootTables.BASTION_OTHER
-                || event.getName() == LootTables.BASTION_BRIDGE
-                || event.getName() == LootTables.BASTION_HOGLIN_STABLE
-                || event.getName() == LootTables.BASTION_TREASURE)
-        {
-            LootTable table = event.getTable();
-            LootPool main = event.getTable().getPool("main");
-            if (main != null)
-            {
-                LootCondition[] lc = new LootCondition[0];
-                LootFunction[] lf = new LootFunction[0];
-                main.addRandomItems(new LootEntryItem(Item.byBlock(BlockInit.CHARGER_BLOCK.get()), 15, 0, lf, lc, "cybercraft:surgery_apparatus")); //it must be changed by the surgery block
-            }
-        }
     }*/
-
 }

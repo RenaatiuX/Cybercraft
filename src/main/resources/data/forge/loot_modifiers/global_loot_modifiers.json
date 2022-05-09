@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "entries": [
+    "cybercraft:neuropozyne_in_abandoned_mineshaft",
+    "cybercraft:neuropozyne_in_simple_dungeon",
+    "cybercraft:neuropozyne_in_stronghold_crossing",
+    "cybercraft:neuropozyne_in_stronghold_corridor",
+    "cybercraft:neuropozyne_in_stronghold_library",
+    "cybercraft:neuropozyne_in_desert_pyramid",
+    "cybercraft:neuropozyne_in_jungle_temple",
+    "cybercraft:neuropozyne_in_buried_treasure",
+    "cybercraft:neuropozyne_in_shipwreck_treasure",
+    "cybercraft:neuropozyne_in_shipwreck_map",
+    "cybercraft:neuropozyne_in_shipwreck_supply",
+    "cybercraft:neuropozyne_in_ruined_portal"
+  ]
+}

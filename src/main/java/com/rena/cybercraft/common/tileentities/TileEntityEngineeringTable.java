@@ -8,7 +8,6 @@ import com.rena.cybercraft.common.recipe.ComponentSalvageRecipe;
 import com.rena.cybercraft.core.Tags;
 import com.rena.cybercraft.core.init.RecipeInit;
 import com.rena.cybercraft.core.init.TileEntityTypeInit;
-import com.rena.cybercraft.core.network.CCNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -40,6 +39,8 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
     private boolean isGuiOpen;
     private int numPlayerOpenGui = 0;
     private Item prevItem = null;
+    public float clickedTime = -100F;
+    private int time;
     protected LazyOptional<IItemHandlerModifiable>[] itemHandler = SidedInvWrapper.create(this, Direction.DOWN, Direction.UP, Direction.NORTH);
 
     NonNullList<ItemStack> items = NonNullList.withSize(10, ItemStack.EMPTY);
@@ -227,4 +228,5 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         }
         return true;
     }
+
 }
