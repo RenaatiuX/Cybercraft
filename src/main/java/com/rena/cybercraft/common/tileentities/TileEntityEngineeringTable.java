@@ -12,6 +12,7 @@ import com.rena.cybercraft.core.Tags;
 import com.rena.cybercraft.core.init.RecipeInit;
 import com.rena.cybercraft.core.init.TileEntityTypeInit;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.*;
@@ -20,40 +21,48 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.particles.ItemParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
-public class TileEntityEngineeringTable extends LockableLootTileEntity implements ISidedInventory, ITickableTileEntity {
+public class TileEntityEngineeringTable extends LockableLootTileEntity implements ISidedInventory, ITickableTileEntity{
 
     private static final int[] SLOTS_UP = new int[]{2, 3, 4, 5, 6, 7};
     private static final int[] SLOTS_DOWN = new int[]{1, 9};
     private static final int[] SLOTS_SIDE = new int[]{0, 8};
-    protected boolean isGuiOpen;
+    public static final double MAX_HEIGHT = 1.5f, MIN_HEIGHT = 1.1f;
+    protected boolean isGuiOpen = false;
     private int numPlayerOpenGui = 0;
     private Item prevItem = null;
-    private double cooldown = TileEntityEngineeringRender.MAX_HEIGHT;
-    private boolean playAnimation = false;
+    private double cooldown = MAX_HEIGHT;
+    private double heightY = MAX_HEIGHT;
+    private boolean playAnimation = false, up = false;
     protected LazyOptional<IItemHandlerModifiable>[] itemHandler = SidedInvWrapper.create(this, Direction.DOWN, Direction.UP, Direction.NORTH);
 
     NonNullList<ItemStack> items = NonNullList.withSize(10, ItemStack.EMPTY);
 
     public TileEntityEngineeringTable() {
         super(TileEntityTypeInit.ENGINEERING_TABLE.get());
+        this.setChanged();
     }
 
     @Override
@@ -61,9 +70,9 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         if (!level.isClientSide()) {
             if (playAnimation) {
                 cooldown -= 0.01d;
-                double distance = TileEntityEngineeringRender.MAX_HEIGHT - (TileEntityEngineeringRender.MAX_HEIGHT - TileEntityEngineeringRender.MIN_HEIGHT) * 2;
+                double distance = MAX_HEIGHT - (MAX_HEIGHT - MIN_HEIGHT) * 2;
                 if (cooldown <= distance) {
-                    cooldown = TileEntityEngineeringRender.MAX_HEIGHT;
+                    cooldown = MAX_HEIGHT;
                     playAnimation = false;
                 }
             }
@@ -73,15 +82,23 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
                     setItem(9, recipe.getResultItem().copy());
                 }
             }
+            if (level.hasNeighborSignal(this.getBlockPos()) || level.hasNeighborSignal(this.getBlockPos().above())){
+                if (!isPlayAnimation())
+                    salvage();
+            }
         }
+        bothSidedLogic();
     }
 
     public void salvage() {
         if (!level.isClientSide() && !getItem(0).isEmpty()) {
             ComponentSalvageRecipe recipe = getSalvageRecipe();
             Inventory components = getComponentInventory();
-            if (recipe != null && !isFull(components) && !playAnimation) {
+            if (recipe != null && !isFull(components) && (up || !isPlayAnimation())) {
                 this.playAnimation = true;
+                this.heightY = MAX_HEIGHT;
+                up = false;
+                blockUpdate();
                 for (int i = 0; i < recipe.getComponents().size(); i++) {
                     if (this.level.random.nextFloat() <= recipe.getProbabilities()[i]) {
                         ItemStack component = recipe.getComponents().get(i);
@@ -102,6 +119,39 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         }
     }
 
+    private void bothSidedLogic(){
+        if (isPlayAnimation()) {
+            if (!up) {
+                heightY -= 0.05f;
+                if (heightY <= MIN_HEIGHT) {
+                    up = true;
+                    if (level.isClientSide()){
+                        smashSounds();
+                    }
+                }
+            } else {
+                heightY += 0.01f;
+                if (heightY >= MAX_HEIGHT) {
+                    up = false;
+                    setPlayAnimation(false);
+                }
+            }
+        }else{
+            heightY = MAX_HEIGHT;
+        }
+    }
+
+    @Override
+    public void setChanged() {
+        super.setChanged();
+        if (this.level != null)
+            blockUpdate();
+    }
+
+    private void blockUpdate(){
+        this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+    }
+
     private boolean checkComponents(ComponentSalvageRecipe recipe) {
         Inventory inv = getComponentInventory();
         NonNullList<ItemStack> components = NNLUtil.deepCopyList(recipe.getComponents());
@@ -119,6 +169,22 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
                 return false;
         }
         return true;
+    }
+
+    @Override
+    public CompoundNBT getUpdateTag() {
+        return this.saveClientData(new CompoundNBT());
+    }
+
+    @Nullable
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(this.getBlockPos(), 0, this.saveClientData(new CompoundNBT()));
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+        this.load(this.level.getBlockState(pkt.getPos()), pkt.getTag());
     }
 
     @Override
@@ -156,13 +222,28 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
     @Override
     public void load(BlockState state, CompoundNBT nbt) {
         super.load(state, nbt);
+        this.playAnimation = nbt.getBoolean("animation");
+        this.up = nbt.getBoolean("up");
+        this.heightY = nbt.getDouble("hammer_height");
         ItemStackHelper.loadAllItems(nbt, items);
     }
 
     @Override
     public CompoundNBT save(CompoundNBT nbt) {
         nbt = super.save(nbt);
+        nbt.putBoolean("animation", this.playAnimation);
+        nbt.putBoolean("up", this.up);
+        nbt.putDouble("hammer_height", this.heightY);
         nbt = ItemStackHelper.saveAllItems(nbt, items);
+        return nbt;
+    }
+
+    private CompoundNBT saveClientData(CompoundNBT nbt){
+        nbt = super.save(nbt);
+        nbt.putBoolean("animation", this.playAnimation);
+        nbt.putBoolean("up", this.up);
+        nbt.putDouble("hammer_height", this.heightY);
+        NNLUtil.saveAllItemsWithEmpty(nbt, items);
         return nbt;
     }
 
@@ -274,13 +355,31 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         return true;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void setPlayAnimation(boolean playAnimation) {
         this.playAnimation = playAnimation;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public boolean isPlayAnimation() {
         return playAnimation;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public double getHeightY() {
+        return heightY;
+    }
+
+    public void smashSounds()
+    {
+        int x = getBlockPos().getX();
+        int y = getBlockPos().getY();
+        int z = getBlockPos().getZ();
+        level.playLocalSound(x, y, z, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 1F, 1F, false);
+        level.playLocalSound(x, y, z, SoundEvents.ITEM_BREAK, SoundCategory.BLOCKS, 1F, .5F, false);
+        for (int index = 0; index < 10; index++)
+        {
+            level.addParticle(new ItemParticleData(ParticleTypes.ITEM, getItem(0)),
+                    x + .5F, y + 1, z + .5F,
+                    .25F * (level.random.nextFloat() - .5F), .1F, .25F * (level.random.nextFloat() - .5F));
+        }
     }
 }

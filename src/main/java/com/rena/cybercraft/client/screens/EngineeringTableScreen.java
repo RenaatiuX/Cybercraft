@@ -44,8 +44,6 @@ public class EngineeringTableScreen extends ContainerScreen<EngineeringTableCont
         CCNetwork.PACKET_HANDLER.sendToServer(new EngineeringDestroyPacket(menu.getTileEntity().getBlockPos()));
         ComponentSalvageRecipe recipe = menu.getTileEntity().getSalvageRecipe();
         Inventory inv = menu.getTileEntity().getComponentInventory();
-        if (recipe != null && !TileEntityEngineeringTable.isFull(inv))
-            menu.getTileEntity().setPlayAnimation(true);
     }
 
     @Override
