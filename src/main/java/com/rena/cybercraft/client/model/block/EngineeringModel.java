@@ -26,7 +26,9 @@ public class EngineeringModel extends Model {
 
 
     @Override
-    public void renderToBuffer(MatrixStack p_225598_1_, IVertexBuilder p_225598_2_, int p_225598_3_, int p_225598_4_, float p_225598_5_, float p_225598_6_, float p_225598_7_, float p_225598_8_) {
-
+    public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder builder, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        head.render(matrixStack, builder, packedLight, packedOverlay);
     }
+
+
 }

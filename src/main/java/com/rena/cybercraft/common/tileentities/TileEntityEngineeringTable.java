@@ -1,10 +1,13 @@
 package com.rena.cybercraft.common.tileentities;
 
+import com.google.common.collect.Lists;
 import com.rena.cybercraft.Cybercraft;
+import com.rena.cybercraft.client.renderer.tileentity.TileEntityEngineeringRender;
 import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.container.EngineeringTableContainer;
 import com.rena.cybercraft.common.item.BlueprintItem;
 import com.rena.cybercraft.common.recipe.ComponentSalvageRecipe;
+import com.rena.cybercraft.common.util.NNLUtil;
 import com.rena.cybercraft.core.Tags;
 import com.rena.cybercraft.core.init.RecipeInit;
 import com.rena.cybercraft.core.init.TileEntityTypeInit;
@@ -23,6 +26,8 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -30,17 +35,19 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class TileEntityEngineeringTable extends LockableLootTileEntity implements ISidedInventory, ITickableTileEntity {
 
     private static final int[] SLOTS_UP = new int[]{2, 3, 4, 5, 6, 7};
     private static final int[] SLOTS_DOWN = new int[]{1, 9};
     private static final int[] SLOTS_SIDE = new int[]{0, 8};
-    private boolean isGuiOpen;
+    protected boolean isGuiOpen;
     private int numPlayerOpenGui = 0;
     private Item prevItem = null;
-    public float clickedTime = -100F;
-    private int time;
+    private double cooldown = TileEntityEngineeringRender.MAX_HEIGHT;
+    private boolean playAnimation = false;
     protected LazyOptional<IItemHandlerModifiable>[] itemHandler = SidedInvWrapper.create(this, Direction.DOWN, Direction.UP, Direction.NORTH);
 
     NonNullList<ItemStack> items = NonNullList.withSize(10, ItemStack.EMPTY);
@@ -52,8 +59,19 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
     @Override
     public void tick() {
         if (!level.isClientSide()) {
-            if (prevItem != getItem(0).getItem()){
-                prevItem = getItem(0).getItem();
+            if (playAnimation) {
+                cooldown -= 0.01d;
+                double distance = TileEntityEngineeringRender.MAX_HEIGHT - (TileEntityEngineeringRender.MAX_HEIGHT - TileEntityEngineeringRender.MIN_HEIGHT) * 2;
+                if (cooldown <= distance) {
+                    cooldown = TileEntityEngineeringRender.MAX_HEIGHT;
+                    playAnimation = false;
+                }
+            }
+            if (!getItem(8).isEmpty()) {
+                ComponentSalvageRecipe recipe = getBlueprintRecipe();
+                if (recipe != null && checkComponents(recipe)) {
+                    setItem(9, recipe.getResultItem().copy());
+                }
             }
         }
     }
@@ -62,7 +80,8 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         if (!level.isClientSide() && !getItem(0).isEmpty()) {
             ComponentSalvageRecipe recipe = getSalvageRecipe();
             Inventory components = getComponentInventory();
-            if (recipe != null && !isFull(components)) {
+            if (recipe != null && !isFull(components) && !playAnimation) {
+                this.playAnimation = true;
                 for (int i = 0; i < recipe.getComponents().size(); i++) {
                     if (this.level.random.nextFloat() <= recipe.getProbabilities()[i]) {
                         ItemStack component = recipe.getComponents().get(i);
@@ -81,6 +100,25 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
                 setComponentInventory(components);
             }
         }
+    }
+
+    private boolean checkComponents(ComponentSalvageRecipe recipe) {
+        Inventory inv = getComponentInventory();
+        NonNullList<ItemStack> components = NNLUtil.deepCopyList(recipe.getComponents());
+        for (int j = 0; j < components.size(); j++) {
+            ItemStack shouldComponent = components.get(j);
+            for (int i = 0; i < inv.getContainerSize(); i++) {
+                ItemStack component = inv.getItem(i);
+                if (shouldComponent.getItem() == component.getItem()) {
+                    shouldComponent.shrink(component.getCount());
+                }
+            }
+        }
+        for (ItemStack stack : components){
+            if (!stack.isEmpty())
+                return false;
+        }
+        return true;
     }
 
     @Override
@@ -106,13 +144,13 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
      * just makes recipe gathering faster
      */
     @Nullable
-    private ComponentSalvageRecipe getSalvageRecipe() {
+    public ComponentSalvageRecipe getSalvageRecipe() {
         return this.level.getRecipeManager().getRecipeFor(RecipeInit.COMPONENT_UPGRADE_RECIPE, new Inventory(getItem(0)), this.level).orElse(null);
     }
 
     @Nullable
-    private ComponentSalvageRecipe getBlueprintRecipe() {
-        return this.level.getRecipeManager().getRecipeFor(RecipeInit.COMPONENT_UPGRADE_RECIPE, this, this.level).orElse(null);
+    public ComponentSalvageRecipe getBlueprintRecipe() {
+        return this.level.getRecipeManager().getRecipeFor(RecipeInit.COMPONENT_UPGRADE_RECIPE, new Inventory(BlueprintItem.getItemFromBlueprint(getItem(8))), this.level).orElse(null);
     }
 
     @Override
@@ -205,14 +243,21 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         super.invalidateCaps();
     }
 
+    /**
+     * gets u the component inventory but keep in mind that this is just a deep copy
+     * if u want any changes to happen on the actual inventory use {@link TileEntityEngineeringTable#setComponentInventory(IInventory)}
+     */
     public Inventory getComponentInventory() {
         Inventory ret = new Inventory(6);
         for (int i = 2; i < 8; i++) {
-            ret.setItem(i - 2, this.getItem(i));
+            ret.setItem(i - 2, this.getItem(i).copy());
         }
         return ret;
     }
 
+    /**
+     * sets the contents of this inventory as components, the inventory should only contain components and must have a size bigger then 6
+     */
     public void setComponentInventory(IInventory inv) {
         if (inv.getContainerSize() <= 6) {
             for (int i = 0; i < inv.getContainerSize(); i++) {
@@ -229,4 +274,13 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         return true;
     }
 
+    @OnlyIn(Dist.CLIENT)
+    public void setPlayAnimation(boolean playAnimation) {
+        this.playAnimation = playAnimation;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public boolean isPlayAnimation() {
+        return playAnimation;
+    }
 }

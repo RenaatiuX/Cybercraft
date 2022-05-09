@@ -1,6 +1,7 @@
 package com.rena.cybercraft.client.renderer.tileentity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.client.model.block.EngineeringModel;
 import com.rena.cybercraft.common.tileentities.TileEntityEngineeringTable;
 import net.minecraft.client.Minecraft;
@@ -13,6 +14,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
@@ -21,9 +23,12 @@ import net.minecraft.world.World;
 
 public class TileEntityEngineeringRender extends TileEntityRenderer<TileEntityEngineeringTable> {
 
-    private static EngineeringModel MODEL = new EngineeringModel();
-    private static String TEXTURE = "cybercraft:textures/models/engineering.png";
+    private static final EngineeringModel MODEL = new EngineeringModel();
+    private static final ResourceLocation TEXTURE = Cybercraft.modLoc("textures/models/engineering.png");
+    public static final double MAX_HEIGHT = 1.8f, MIN_HEIGHT = 1.5f;
 
+    private double heightY = 1.8f;
+    private boolean up = false;
     public TileEntityEngineeringRender(TileEntityRendererDispatcher p_i226006_1_) {
         super(p_i226006_1_);
     }
@@ -49,9 +54,29 @@ public class TileEntityEngineeringRender extends TileEntityRenderer<TileEntityEn
                 default:
                     break;
             }
-            renderItem(te.getItem(0), new double[]{0d, 0.9d, 0d},Vector3f.YP.rotation(rotation), matrixStack, buffer, combinedOverlay, getLightLevel(mc.player.level, te.getBlockPos()), 0.5f);
+            renderItem(te.getItem(0), new double[]{0.5d, 1d, 0.5d},Vector3f.YP.rotationDegrees(rotation), matrixStack, buffer, combinedOverlay, getLightLevel(mc.player.level, te.getBlockPos()), 0.5f);
+            matrixStack.pushPose();
+            if (te.isPlayAnimation()){
+                if (!up) {
+                    heightY -= 0.01f;
+                    if (heightY <= MIN_HEIGHT)
+                        up = true;
+                }else{
+                    heightY += 0.01f;
+                    if (heightY >= MAX_HEIGHT) {
+                        up = false;
+                        te.setPlayAnimation(false);
+                    }
+                }
+            }
+            matrixStack.translate(0.5d,heightY, 0.5d);
+            matrixStack.mulPose(Vector3f.XN.rotationDegrees(180));
+            MODEL.renderToBuffer(matrixStack, buffer.getBuffer(MODEL.renderType(TEXTURE)), combinedLight, combinedOverlay, 0, 0,0, 0);
+            matrixStack.popPose();
         }
     }
+
+
 
     protected int getLightLevel(World world, BlockPos pos) {
         int bLight = world.getBrightness(LightType.BLOCK, pos);
@@ -65,6 +90,7 @@ public class TileEntityEngineeringRender extends TileEntityRenderer<TileEntityEn
         matrixStack.pushPose();
         matrixStack.translate(translation[0], translation[1], translation[2]);
         matrixStack.mulPose(rotation);
+        matrixStack.mulPose(Vector3f.XN.rotationDegrees(90));
         matrixStack.scale(scale, scale, scale);
 
         IBakedModel model = mc.getItemRenderer().getModel(stack, null, null);

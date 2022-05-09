@@ -4,12 +4,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nonnull;
+import java.util.Iterator;
+import java.util.List;
 
 public class NNLUtil {
     public static NonNullList<ItemStack> copyList(NonNullList<ItemStack> nnl){
         NonNullList<ItemStack> nnlCopy = NonNullList.create();
         nnlCopy.addAll(nnl);
         return nnlCopy;
+    }
+
+    public static NonNullList<ItemStack> deepCopyList(Iterable<ItemStack> nnl){
+        NonNullList<ItemStack> copy = NonNullList.create();
+        for (ItemStack stack : nnl){
+            copy.add(stack.copy());
+        }
+        return copy;
     }
 
     public static NonNullList<ItemStack> fromArray(@Nonnull ItemStack[] array){

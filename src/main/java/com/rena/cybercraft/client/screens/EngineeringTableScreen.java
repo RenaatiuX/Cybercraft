@@ -3,12 +3,16 @@ package com.rena.cybercraft.client.screens;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.common.container.EngineeringTableContainer;
+import com.rena.cybercraft.common.recipe.ComponentSalvageRecipe;
+import com.rena.cybercraft.common.tileentities.TileEntityEngineeringTable;
 import com.rena.cybercraft.core.network.CCNetwork;
 import com.rena.cybercraft.core.network.EngineeringDestroyPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -38,6 +42,10 @@ public class EngineeringTableScreen extends ContainerScreen<EngineeringTableCont
 
     private void onSalvage(Button b){
         CCNetwork.PACKET_HANDLER.sendToServer(new EngineeringDestroyPacket(menu.getTileEntity().getBlockPos()));
+        ComponentSalvageRecipe recipe = menu.getTileEntity().getSalvageRecipe();
+        Inventory inv = menu.getTileEntity().getComponentInventory();
+        if (recipe != null && !TileEntityEngineeringTable.isFull(inv))
+            menu.getTileEntity().setPlayAnimation(true);
     }
 
     @Override

@@ -1,13 +1,21 @@
 package com.rena.cybercraft.common.container;
 
+import com.google.common.collect.Lists;
 import com.rena.cybercraft.common.item.BlueprintItem;
 import com.rena.cybercraft.common.tileentities.TileEntityEngineeringTable;
+import com.rena.cybercraft.common.util.NNLUtil;
 import com.rena.cybercraft.core.Tags;
 import com.rena.cybercraft.core.init.ContainerInit;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.NonNullList;
+
+import java.util.LinkedList;
 
 public class EngineeringTableContainer extends BaseTeContainer<TileEntityEngineeringTable> {
     public EngineeringTableContainer(int id, PlayerInventory inv, TileEntityEngineeringTable tileEntity) {
@@ -27,5 +35,32 @@ public class EngineeringTableContainer extends BaseTeContainer<TileEntityEnginee
                 (inv, index, x, y) -> new FilterSlot(inv, index, x, y, stack -> Tags.Items.COMPONENTS.contains(stack.getItem())));
         addSlot(new FilterSlot(this.tileEntity, 8, 115, 53, stack -> stack.getItem() instanceof BlueprintItem));
         addSlot(new LockedSlot(this.tileEntity, 9, 145, 21));
+    }
+
+    private static final class ResultSLot extends LockedSlot {
+
+        private final TileEntityEngineeringTable inv;
+
+        public ResultSLot(TileEntityEngineeringTable inventoryIn, int index, int xPosition, int yPosition) {
+            super(inventoryIn, index, xPosition, yPosition);
+            this.inv = inventoryIn;
+        }
+
+        @Override
+        protected void onQuickCraft(ItemStack stack, int count) {
+            if (getItem().isEmpty())
+                return;
+            NonNullList<ItemStack> comps = NNLUtil.deepCopyList(inv.getBlueprintRecipe().getComponents());
+            for (int k = 0; k < count; k++) {
+                for (int i = 0; i < inv.getContainerSize(); i++) {
+
+                }
+            }
+        }
+
+        @Override
+        public ItemStack onTake(PlayerEntity p_190901_1_, ItemStack p_190901_2_) {
+            return super.onTake(p_190901_1_, p_190901_2_);
+        }
     }
 }

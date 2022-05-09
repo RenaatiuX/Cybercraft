@@ -49,34 +49,15 @@ public class ComponentSalvageRecipe implements IRecipe<IInventory> {
      */
     @Override
     public boolean matches(IInventory inv, World world) {
-        boolean hasBlueprint = false;
-        Map<Item, Integer> itemCount = new HashMap<>();
         for (int i = 0; i < inv.getContainerSize(); i++) {
             if (inv.getItem(i).isEmpty())
                 continue;
             else if (inv.getItem(i).getItem() ==  this.upgrade.getItem() && inv.getItem(i).getCount() >= this.upgrade.getCount()) {
                 return true;
             }
-            if (Tags.Items.COMPONENTS.contains(inv.getItem(i).getItem())) {
-                if (itemCount.containsKey(inv.getItem(i).getItem()))
-                    itemCount.put(inv.getItem(i).getItem(), itemCount.get(inv.getItem(i).getItem()) + inv.getItem(i).getCount());
-                else
-                    itemCount.put(inv.getItem(i).getItem(), inv.getItem(i).getCount());
-            }
-            if (inv.getItem(i).getItem() instanceof BlueprintItem && ItemStack.matches(BlueprintItem.getItemFromBlueprint(inv.getItem(i)), this.upgrade.copy())) {
-                hasBlueprint = true;
-            }
-        }
-        int count = 0;
-        for (ItemStack stack : components) {
-            for (Map.Entry<Item, Integer> entry : itemCount.entrySet()) {
-                if (ItemStack.matches(stack, new ItemStack(entry.getKey(), entry.getValue()))){
-                    count++;
-                }
-            }
 
         }
-        return count == components.size() - 1 && hasBlueprint;
+        return false;
     }
 
 
