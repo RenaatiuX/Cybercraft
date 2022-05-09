@@ -3,15 +3,18 @@ package com.rena.cybercraft.common.tileentities;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.api.item.EnableDisableHelper;
+import com.rena.cybercraft.common.block.BeaconLargeBlock;
 import com.rena.cybercraft.common.item.BrainUpgradeItem;
 import com.rena.cybercraft.common.util.LibConstants;
 import com.rena.cybercraft.core.init.BlockInit;
 import com.rena.cybercraft.core.init.ItemInit;
+import com.rena.cybercraft.core.init.TileEntityTypeInit;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -66,14 +69,15 @@ public class TileEntityBeacon extends TileEntity implements ITickableTileEntity 
         return mapBeaconPositionByDimension.computeIfAbsent(idDimension, k -> new HashMap<>());
     }*/
 
-    public TileEntityBeacon(TileEntityType<?> p_i48289_1_) {
-        super(p_i48289_1_);
+    public TileEntityBeacon() {
+        super(TileEntityTypeInit.BEACON_TE.get());
     }
 
     @Override
     public void tick() {
 
     }
+
 
     /*@Override
     public void tick() {
@@ -99,10 +103,10 @@ public class TileEntityBeacon extends TileEntity implements ITickableTileEntity 
                 BlockState state = level.getBlockState(worldPosition);
                 if (state.getBlock() == BlockInit.RADIO.get())
                 {
-                    boolean ns = state.getValue(BlockBeaconLarge.FACING) == Direction.NORTH
-                            || state.getValue(BlockBeaconLarge.FACING) == Direction.SOUTH;
-                    boolean backwards = state.getValue(BlockBeaconLarge.FACING) == Direction.SOUTH
-                            || state.getValue(BlockBeaconLarge.FACING) == Direction.EAST;
+                    boolean ns = state.getValue(BeaconLargeBlock.FACING) == Direction.NORTH
+                            || state.getValue(BeaconLargeBlock.FACING) == Direction.SOUTH;
+                    boolean backwards = state.getValue(BeaconLargeBlock.FACING) == Direction.SOUTH
+                            || state.getValue(BeaconLargeBlock.FACING) == Direction.EAST;
                     float dist = .2F;
                     float speedMod = .08F;
                     int degrees = 45;
@@ -118,31 +122,29 @@ public class TileEntityBeacon extends TileEntity implements ITickableTileEntity 
                         float backOffsetZ = (backwards ? .4F : -.4F);
 
                         level.addParticle(ParticleTypes.SMOKE,
-                                pos.getX() + .5F + (ns ? xOffset + backOffsetX : backOffsetZ),
-                                pos.getY() + .5F + yOffset,
-                                pos.getZ() + .5F + (ns ? backOffsetZ : xOffset + backOffsetX),
+                                worldPosition.getX() + .5F + (ns ? xOffset + backOffsetX : backOffsetZ),
+                                worldPosition.getY() + .5F + yOffset,
+                                worldPosition.getZ() + .5F + (ns ? backOffsetZ : xOffset + backOffsetX),
                                 ns ? xSpeed : 0,
                                 ySpeed,
-                                ns ? 0 : xSpeed,
-                                255, 255, 255 );
+                                ns ? 0 : xSpeed);
 
                         level.addParticle(ParticleTypes.SMOKE,
-                                pos.getX() + .5F + (ns ? -xOffset + backOffsetX : backOffsetZ),
-                                pos.getY() + .5F + yOffset,
-                                pos.getZ() + .5F + (ns ? backOffsetZ : -xOffset + backOffsetX),
+                                worldPosition.getX() + .5F + (ns ? -xOffset + backOffsetX : backOffsetZ),
+                                worldPosition.getY() + .5F + yOffset,
+                                worldPosition.getZ() + .5F + (ns ? backOffsetZ : -xOffset + backOffsetX),
                                 ns ? -xSpeed : 0,
                                 ySpeed,
-                                ns ? 0 : -xSpeed,
-                                255, 255, 255 );
+                                ns ? 0 : -xSpeed);
 
                         degrees += 18;
                     }
                 }
             }
         }
-    }*/
+    }
 
-    /*private void disable()
+    private void disable()
     {
         Map<BlockPos, Integer> mapBeaconPosition = getBeaconPositionsForTierAndDimension(TIER, level);
         mapBeaconPosition.remove(getBlockPos());
@@ -155,9 +157,9 @@ public class TileEntityBeacon extends TileEntity implements ITickableTileEntity 
         {
             mapBeaconPosition.put(getBlockPos(), LibConstants.BEACON_RANGE);
         }
-    }*/
+    }
 
-    /*@Override
+    @Override
     public boolean isRemoved() {
         disable();
         return super.isRemoved();
@@ -183,7 +185,7 @@ public class TileEntityBeacon extends TileEntity implements ITickableTileEntity 
                 new AxisAlignedBB(posX - LibConstants.BEACON_RANGE_INTERNAL, 0, posZ - LibConstants.BEACON_RANGE_INTERNAL,
                         posX + LibConstants.BEACON_RANGE_INTERNAL, 255, posZ + LibConstants.BEACON_RANGE_INTERNAL) );
 
-        ItemStack itemStackRadioRaw = ItemInit.BRAIN_UPGRADES.get().getCachedStack(BrainUpgradeItem.META_RADIO);
+        Item itemStackRadioRaw = ItemInit.BRAIN_UPGRADES_RADIO.get();
         for (LivingEntity entityInRange : entitiesInRange)
         {
             if (BrainUpgradeItem.isRadioWorking(entityInRange))

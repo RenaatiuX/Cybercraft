@@ -117,11 +117,13 @@
   "block.cybercraft.charger": "Charger",
   "block.cybercraft.component_box": "Component Box",
   "block.cybercraft.blueprint_archive": "Blueprint Archive",
+  "block.cybercraft.engineering_table": "Engineering Table",
 
   "_comment": "Container",
   "container.cybercraft.scanner" : "Scanner",
   "container.cybercraft.component_box": "Component Box",
   "container.cybercraft.blueprint_archive": "Blueprint Archive",
+  "container.cybercraft.engineering_table": "Engineering Table",
 
   "_comment": "Effect",
   "effect.cybercraft.neuropozyne" : "Neuropozyne",

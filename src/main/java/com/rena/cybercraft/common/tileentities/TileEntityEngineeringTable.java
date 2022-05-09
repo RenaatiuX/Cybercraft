@@ -56,7 +56,7 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
     private double cooldown = MAX_HEIGHT;
     private double heightY = MAX_HEIGHT;
     private boolean playAnimation = false, up = false;
-    protected LazyOptional<IItemHandlerModifiable>[] itemHandler = SidedInvWrapper.create(this, Direction.DOWN, Direction.UP, Direction.NORTH);
+    protected LazyOptional<IItemHandlerModifiable>[] itemHandler = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
 
     NonNullList<ItemStack> items = NonNullList.withSize(10, ItemStack.EMPTY);
 

@@ -18,7 +18,12 @@ public class TileEntityBeaconLarge extends TileEntityBeacon implements ITickable
 
     private static int TIER = 3;
 
-    public TileEntityBeaconLarge(TileEntityType<?> p_i48289_1_) {
+    @Override
+    public void tick() {
+
+    }
+
+   /* public TileEntityBeaconLarge(TileEntityType<?> p_i48289_1_) {
         super(p_i48289_1_);
     }
 

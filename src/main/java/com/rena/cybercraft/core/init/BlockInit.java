@@ -29,7 +29,7 @@ public class BlockInit {
     public static final RegistryObject<BlueprintArchiveBlock> BLUEPRINT_ARCHIVE_block = BLOCKS.register("blueprint_archive", BlueprintArchiveBlock::new);
     public static final RegistryObject<EngineeringTableBlock> ENGINEERING_TABLE = BLOCKS.register("engineering_table", EngineeringTableBlock::new);
     public static final DoubleRegistryObject<ComponentBoxBlock, ItemComponentBox> COMPONENT_BOX = CUSTOM.register("component_box", ComponentBoxBlock::new, block -> new ItemComponentBox(block));
-
+    public static final RegistryObject<BeaconBlock> RADIO = BLOCKS.register("beacon", BeaconBlock::new);
     @SubscribeEvent
     public static final void registerBlockItems(RegistryEvent.Register<Item> event){
         final IForgeRegistry<Item> registry = event.getRegistry();
