@@ -1,0 +1,19 @@
+{
+  "type": "cybercraft:component_recipe",
+  "output": {
+    "item": "cybercraft:heart_upgrades_medkit_scavenged"
+  },
+  "components": [
+    {
+      "item": "cybercraft:component_reactor",
+      "count": 5,
+      "probability": 0.5
+    },
+    {
+      "item": "cybercraft:component_fullerene"
+    },
+    {
+      "item": "cybercraft:component_synthnerves"
+    }
+  ]
+}

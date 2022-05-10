@@ -147,7 +147,7 @@
 
   "cybercraft.tooltip.blueprint_archive": "Accessible by Engineering Table if nearby",
   "cybercraft.tooltip.blueprint_archive.0": "Stores Cyberware Blueprints",
-  "cybercraft.tooltip.blueprint_archive.1": "Acessible by Engineering Table if nearby",
+  "cybercraft.tooltip.blueprint_archive.1": "Accessible by Engineering Table if nearby",
   "cybercraft.tooltip.charger.0": "Charges Entities with Cyberware",
   "cybercraft.tooltip.charger.1": "Accepts Forge Energy",
   "cybercraft.tooltip.scanner": "Analyzes Cyberware to create Blueprints",

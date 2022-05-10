@@ -4,6 +4,7 @@ import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.api.item.ICybercraft;
 import com.rena.cybercraft.common.block.*;
 import com.rena.cybercraft.common.config.CybercraftConfig;
+import com.rena.cybercraft.common.item.block.CybercraftItemBlock;
 import com.rena.cybercraft.common.item.block.ItemComponentBox;
 import com.rena.cybercraft.common.util.BlockDeferredRegister;
 import com.rena.cybercraft.common.util.DoubleRegistryObject;
@@ -26,7 +27,7 @@ public class BlockInit {
 
     public static final RegistryObject<ScannerBlock> SCANNER_BLOCK = BLOCKS.register("scanner", ScannerBlock::new);
     public static final RegistryObject<ChargerBlock> CHARGER_BLOCK = BLOCKS.register("charger", ChargerBlock::new);
-    public static final RegistryObject<BlueprintArchiveBlock> BLUEPRINT_ARCHIVE_block = BLOCKS.register("blueprint_archive", BlueprintArchiveBlock::new);
+    public static final RegistryObject<BlueprintArchiveBlock> BLUEPRINT_ARCHIVE_BLOCK = BLOCKS.register("blueprint_archive", BlueprintArchiveBlock::new);
     public static final RegistryObject<EngineeringTableBlock> ENGINEERING_TABLE = BLOCKS.register("engineering_table", EngineeringTableBlock::new);
     public static final DoubleRegistryObject<ComponentBoxBlock, ItemComponentBox> COMPONENT_BOX = CUSTOM.register("component_box", ComponentBoxBlock::new, block -> new ItemComponentBox(block));
     public static final RegistryObject<BeaconBlock> RADIO = BLOCKS.register("beacon", BeaconBlock::new);
@@ -39,5 +40,6 @@ public class BlockInit {
         for (String s : CybercraftConfig.C_MOBS.startItems.get(ICybercraft.EnumSlot.EYES).get()){
             System.out.println(s);
         }
+
     }
 }

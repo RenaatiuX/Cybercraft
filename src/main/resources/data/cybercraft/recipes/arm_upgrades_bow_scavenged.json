@@ -1,0 +1,16 @@
+{
+  "type": "cybercraft:component_recipe",
+  "output": {
+    "item": "cybercraft:arm_upgrades_bow_scavenged"
+  },
+  "components": [
+    {
+      "item": "cybercraft:component_actuator",
+      "count": 5,
+      "probability": 0.5
+    },
+    {
+      "item": "cybercraft:component_plating"
+    }
+  ]
+}

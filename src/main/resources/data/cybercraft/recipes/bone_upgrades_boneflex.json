@@ -1,0 +1,19 @@
+{
+  "type": "cybercraft:component_recipe",
+  "output": {
+    "item": "cybercraft:bone_upgrades_boneflex"
+  },
+  "components": [
+    {
+      "item": "cybercraft:component_reactor",
+      "count": 5,
+      "probability": 0.5
+    },
+    {
+      "item": "cybercraft:component_titanium"
+    },
+    {
+      "item": "cybercraft:component_storage"
+    }
+  ]
+}

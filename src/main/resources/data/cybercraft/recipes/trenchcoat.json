@@ -1,0 +1,22 @@
+{
+  "type": "cybercraft:component_recipe",
+  "output": {
+    "item": "cybercraft:trenchcoat"
+  },
+  "components": [
+    {
+      "item": "minecraft:leather",
+      "count": 8,
+      "probability": 0.5
+    },
+    {
+      "item": "minecraft:ink_sac",
+      "count": 2,
+      "probability": 0.5
+    },
+    {
+      "item": "cybercraft:component_plating",
+      "probability": 0.5
+    }
+  ]
+}

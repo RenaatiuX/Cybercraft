@@ -4,7 +4,6 @@ import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.item.ICybercraft;
 import com.rena.cybercraft.common.item.*;
-import com.rena.cybercraft.common.item.block.ItemComponentBox;
 import com.rena.cybercraft.common.util.CybercraftArmorMaterial;
 import com.rena.cybercraft.common.util.CybercraftItemTier;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -488,28 +487,28 @@ public class ItemInit {
     public static final RegistryObject<CybercraftItem> CYBER_LIMB_ARM_LEFT = ITEMS.register("cyberlimbs_cyberarm_left",
             () -> new CyberLimbItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.ARM, ICybercraft.ISidedLimb.EnumSide.LEFT, CybercraftAPI.QUALITY_MANUFACTURED)
                     .setEssenceCost(15));
-    public static final RegistryObject<CybercraftItem> LIMB_LEFT_SCAVENGED = ITEMS.register("cyberlimbs_cyberarm_left_scavenged",
+    public static final RegistryObject<CybercraftItem> CYBER_LIMB_LEFT_SCAVENGED = ITEMS.register("cyberlimbs_cyberarm_left_scavenged",
             () -> new CyberLimbItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.ARM, ICybercraft.ISidedLimb.EnumSide.LEFT, CybercraftAPI.QUALITY_SCAVENGED)
                     .setEssenceCost(15));
 
     public static final RegistryObject<CybercraftItem> CYBER_LIMB_ARM_RIGHT = ITEMS.register("cyberlimbs_cyberarm_right",
             () -> new CyberLimbItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.ARM, ICybercraft.ISidedLimb.EnumSide.RIGHT, CybercraftAPI.QUALITY_MANUFACTURED)
                     .setEssenceCost(15));
-    public static final RegistryObject<CybercraftItem> LIMB_RIGHT_SCAVENGED = ITEMS.register("cyberlimbs_cyberarm_right_scavenged",
+    public static final RegistryObject<CybercraftItem> CYBER_LIMB_ARM_RIGHT_SCAVENGED = ITEMS.register("cyberlimbs_cyberarm_right_scavenged",
             () -> new CyberLimbItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.ARM, ICybercraft.ISidedLimb.EnumSide.RIGHT, CybercraftAPI.QUALITY_SCAVENGED)
                     .setEssenceCost(15));
 
     public static final RegistryObject<CybercraftItem> CYBER_LIMB_LEG_LEFT = ITEMS.register("cyberlimbs_cyberleg_left",
             () -> new CyberLimbItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.LEG, ICybercraft.ISidedLimb.EnumSide.LEFT, CybercraftAPI.QUALITY_MANUFACTURED)
                     .setEssenceCost(15));
-    public static final RegistryObject<CybercraftItem> CYBER_LEG_LEFT_SCAVENGED = ITEMS.register("cyberlimbs_cyberleg_left_scavenged",
+    public static final RegistryObject<CybercraftItem> CYBER_LIMB_LEG_LEFT_SCAVENGED = ITEMS.register("cyberlimbs_cyberleg_left_scavenged",
             () -> new CyberLimbItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.LEG, ICybercraft.ISidedLimb.EnumSide.LEFT, CybercraftAPI.QUALITY_SCAVENGED)
                     .setEssenceCost(15));
 
     public static final RegistryObject<CybercraftItem> CYBER_LIMB_LEG_RIGHT = ITEMS.register("cyberlimbs_cyberleg_right",
             () -> new CyberLimbItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.LEG, ICybercraft.ISidedLimb.EnumSide.RIGHT, CybercraftAPI.QUALITY_MANUFACTURED)
                     .setEssenceCost(15));
-    public static final RegistryObject<CybercraftItem> CYBER_LEG_RIGHT_SCAVENGED = ITEMS.register("cyberlimbs_cyberleg_right_scavenged",
+    public static final RegistryObject<CybercraftItem> CYBER_LIMB_LEG_RIGHT_SCAVENGED = ITEMS.register("cyberlimbs_cyberleg_right_scavenged",
             () -> new CyberLimbItem(new Item.Properties().tab(Cybercraft.CYBERCRAFTAB), ICybercraft.EnumSlot.LEG, ICybercraft.ISidedLimb.EnumSide.RIGHT, CybercraftAPI.QUALITY_SCAVENGED)
                     .setEssenceCost(15));
 

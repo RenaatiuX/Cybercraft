@@ -1,0 +1,19 @@
+{
+  "type": "cybercraft:component_recipe",
+  "output": {
+    "item": "cybercraft:katana"
+  },
+  "components": [
+    {
+      "item": "minecraft:iron_ingot",
+      "count": 2,
+      "probability": 0.5
+    },
+    {
+      "item": "cybercraft:component_titanium"
+    },
+    {
+      "item": "cybercraft:component_plating"
+    }
+  ]
+}

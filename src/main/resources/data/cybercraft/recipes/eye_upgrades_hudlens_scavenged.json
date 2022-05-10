@@ -1,0 +1,22 @@
+{
+  "type": "cybercraft:component_recipe",
+  "output": {
+    "item": "cybercraft:eye_upgrades_hudlens_scavenged"
+  },
+  "components": [
+    {
+      "item": "cybercraft:component_ssc",
+      "count": 5,
+      "probability": 0.5
+    },
+    {
+      "item": "cybercraft:component_fiberoptics"
+    },
+    {
+      "item": "cybercraft:component_synthnerves"
+    },
+    {
+      "item": "cybercraft:component_fullerene"
+    }
+  ]
+}

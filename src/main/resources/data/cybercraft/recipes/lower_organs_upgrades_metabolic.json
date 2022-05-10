@@ -1,0 +1,19 @@
+{
+  "type": "cybercraft:component_recipe",
+  "output": {
+    "item": "cybercraft:lower_organs_upgrades_metabolic"
+  },
+  "components": [
+    {
+      "item": "cybercraft:component_reactor",
+      "count": 5,
+      "probability": 0.5
+    },
+    {
+      "item": "cybercraft:component_microelectric"
+    },
+    {
+      "item": "cybercraft:component_ssc"
+    }
+  ]
+}

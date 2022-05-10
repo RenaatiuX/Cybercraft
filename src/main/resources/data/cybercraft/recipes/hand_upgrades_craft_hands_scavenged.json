@@ -1,0 +1,19 @@
+{
+  "type": "cybercraft:component_recipe",
+  "output": {
+    "item": "cybercraft:hand_upgrades_craft_hands_scavenged"
+  },
+  "components": [
+    {
+      "item": "cybercraft:component_actuator",
+      "count": 5,
+      "probability": 0.5
+    },
+    {
+      "item": "cybercraft:component_ssc"
+    },
+    {
+      "item": "cybercraft:component_plating"
+    }
+  ]
+}

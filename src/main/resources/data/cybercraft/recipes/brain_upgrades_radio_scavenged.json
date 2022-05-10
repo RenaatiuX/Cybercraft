@@ -1,0 +1,22 @@
+{
+  "type": "cybercraft:component_recipe",
+  "output": {
+    "item": "cybercraft:brain_upgrades_radio_scavenged"
+  },
+  "components": [
+    {
+      "item": "cybercraft:component_titanium",
+      "count": 5,
+      "probability": 0.5
+    },
+    {
+      "item": "cybercraft:component_ssc"
+    },
+    {
+      "item": "cybercraft:component_microelectric"
+    },
+    {
+      "item": "cybercraft:component_fiberoptics"
+    }
+  ]
+}

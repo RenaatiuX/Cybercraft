@@ -1,0 +1,25 @@
+{
+  "type": "cybercraft:component_recipe",
+  "output": {
+    "item": "cybercraft:skin_upgrades_immuno"
+  },
+  "components": [
+    {
+      "item": "cybercraft:component_titanium",
+      "count": 5,
+      "probability": 0.5
+    },
+    {
+      "item": "cybercraft:component_reactor"
+    },
+    {
+      "item": "cybercraft:component_synthnerves"
+    },
+    {
+      "item": "cybercraft:component_storage"
+    },
+    {
+      "item": "cybercraft:component_microelectric"
+    }
+  ]
+}

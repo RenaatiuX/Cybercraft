@@ -1,0 +1,14 @@
+{
+  "type": "cybercraft:component_recipe",
+  "output": {
+    "item": "cybercraft:cybereye_upgrades_underwater_vision"
+  },
+  "components": [
+    {
+      "item": "cybercraft:component_fiberoptics"
+    },
+    {
+      "item": "cybercraft:component_synthnerves"
+    }
+  ]
+}

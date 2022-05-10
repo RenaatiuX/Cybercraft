@@ -1,0 +1,19 @@
+{
+  "type": "cybercraft:component_recipe",
+  "output": {
+    "item": "cybercraft:brain_upgrades_matrix"
+  },
+  "components": [
+    {
+      "item": "cybercraft:component_ssc",
+      "count": 5,
+      "probability": 0.5
+    },
+    {
+      "item": "cybercraft:component_microelectric"
+    },
+    {
+      "item": "cybercraft:component_fiberoptics"
+    }
+  ]
+}

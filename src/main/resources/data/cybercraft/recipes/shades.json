@@ -1,0 +1,16 @@
+{
+  "type": "cybercraft:component_recipe",
+  "output": {
+    "item": "cybercraft:shades"
+  },
+  "components": [
+    {
+      "item": "minecraft:black_stained_glass",
+      "count": 5,
+      "probability": 0.5
+    },
+    {
+      "item": "cybercraft:component_plating"
+    }
+  ]
+}

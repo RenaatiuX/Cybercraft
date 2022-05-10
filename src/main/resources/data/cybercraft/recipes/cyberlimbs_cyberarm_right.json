@@ -1,0 +1,25 @@
+{
+  "type": "cybercraft:component_recipe",
+  "output": {
+    "item": "cybercraft:cyberlimbs_cyberarm_right"
+  },
+  "components": [
+    {
+      "item": "cybercraft:component_actuator",
+      "count": 5,
+      "probability": 0.5
+    },
+    {
+      "item": "cybercraft:component_titanium"
+    },
+    {
+      "item": "cybercraft:component_plating"
+    },
+    {
+      "item": "cybercraft:component_fiberoptics"
+    },
+    {
+      "item": "cybercraft:component_synthnerves"
+    }
+  ]
+}
