@@ -447,18 +447,12 @@ public final class CybercraftAPI {
             if (targetEntity instanceof PlayerEntity)
             {
                 CCNetwork.sendTo(new CybercraftSyncPacket(tagCompound, targetEntity.getId()), (ServerPlayerEntity) targetEntity);
-                // Cyberware.logger.info("Sent data for player " + ((EntityPlayer) targetEntity).getName() + " to that player's client");
+
             }
 
             for (PlayerEntity trackingPlayer : world.getPlayers(serverPlayerEntity -> true))
             {
                 CCNetwork.sendTo(new CybercraftSyncPacket(tagCompound, targetEntity.getId()), (ServerPlayerEntity) trackingPlayer);
-				/*
-				if (targetEntity instanceof EntityPlayer)
-				{
-					Cyberware.logger.info("Sent data for player " + ((EntityPlayer) targetEntity).getName() + " to player " + trackingPlayer.getName());
-				}
-				*/
             }
         }
     }
@@ -499,7 +493,7 @@ public final class CybercraftAPI {
         return new ItemStack(otherQuality, stack.getCount(), stack.getTag());
     }
 
-    public static NonNullList<ItemStack> getComponents(ItemStack blueprintItem) {
+    public static NonNullList<ItemStack> getComponents(ItemStack itemStack) {
         return NonNullList.create();
     }
 }

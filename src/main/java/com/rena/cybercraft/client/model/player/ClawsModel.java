@@ -32,4 +32,9 @@ public class ClawsModel extends BipedModel<PlayerEntity> {
 
     }
 
+
+    @Override
+    public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder builder, int packedLightIn, int packedOverlayIn, float p_225598_5_, float p_225598_6_, float p_225598_7_, float p_225598_8_) {
+        this.claw1.render(matrixStack, builder, packedLightIn, packedOverlayIn);
+    }
 }

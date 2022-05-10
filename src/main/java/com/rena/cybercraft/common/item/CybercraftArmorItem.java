@@ -2,14 +2,18 @@ package com.rena.cybercraft.common.item;
 
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.item.IDeconstructable;
+import com.rena.cybercraft.client.ClientUtils;
 import com.rena.cybercraft.common.util.CybercraftArmorMaterial;
 import com.rena.cybercraft.core.init.ItemInit;
+import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static com.rena.cybercraft.api.CybercraftAPI.withMetaData;
 
@@ -25,6 +29,24 @@ public class CybercraftArmorItem extends ArmorItem implements IDeconstructable, 
     public boolean canDestroy(ItemStack stack) {
         return true;
     }
+
+    public static NonNullList<ItemStack> getComponents(ItemStack blueprintItem) {
+        return NonNullList.create();
+    }
+
+    /*@Nullable
+    @Override
+    public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
+        if ( !itemStack.isEmpty()
+                && itemStack.getItem() == ItemInit.TRENCHCOAT.get())
+        {
+            ClientUtils.TRENCH_COAT.setDefaultModel(_default);
+            return ClientUtils.TRENCH_COAT;
+
+        }
+
+        return null;
+    }*/
 
     @Override
     public boolean hasCustomColor(@Nonnull ItemStack stack)

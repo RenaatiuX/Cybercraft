@@ -3,6 +3,7 @@ package com.rena.cybercraft.client;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.api.CybercraftAPI;
+import com.rena.cybercraft.client.model.armor.TrenchCoatModel;
 import com.rena.cybercraft.core.network.CCNetwork;
 import com.rena.cybercraft.core.network.TriggerActiveAbilityPacket;
 import net.minecraft.client.Minecraft;
@@ -24,8 +25,8 @@ import java.util.List;
 
 public class ClientUtils {
 
-    //@OnlyIn(Dist.CLIENT)
-    //public static final ModelTrenchCoat modelTrenchCoat = new ModelTrenchCoat(0.51F);
+    @OnlyIn(Dist.CLIENT)
+    public static final TrenchCoatModel TRENCH_COAT = new TrenchCoatModel(0.51F);
 
     private static final float TEXTURE_SCALE = 1.0F / 256;
     public static void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height)

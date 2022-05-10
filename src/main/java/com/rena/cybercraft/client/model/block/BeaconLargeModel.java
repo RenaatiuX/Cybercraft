@@ -93,18 +93,18 @@ public class BeaconLargeModel extends Model {
     }
 
     @Override
-    public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder vertexBuilder, int f, int f1, float f3, float f4, float f5, float scale) {
-        bar1.render(matrixStack, vertexBuilder, f, f1, f3, f4, f5, scale);
-        bar2.render(matrixStack, vertexBuilder, f, f1, f3, f4, f5, scale);
-        bar3.render(matrixStack, vertexBuilder, f, f1, f3, f4, f5, scale);
-        bar4.render(matrixStack, vertexBuilder, f, f1, f3, f4, f5, scale);
-        base.render(matrixStack, vertexBuilder, f, f1, f3, f4, f5, scale);
+    public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder vertexBuilder, int f1, int f2, float f3, float f4, float f5, float scale) {
+        bar1.render(matrixStack, vertexBuilder, f1, f2, f3, f4, f5, scale);
+        bar2.render(matrixStack, vertexBuilder, f1, f2, f3, f4, f5, scale);
+        bar3.render(matrixStack, vertexBuilder, f1, f2, f3, f4, f5, scale);
+        bar4.render(matrixStack, vertexBuilder, f1, f2, f3, f4, f5, scale);
+        base.render(matrixStack, vertexBuilder, f1, f2, f3, f4, f5, scale);
 
         for (ModelRenderer bar : crossbars)
         {
             if (bar != null)
             {
-                bar.render(matrixStack, vertexBuilder, f, f1, f3, f4, f5, scale);
+                bar.render(matrixStack, vertexBuilder, f1, f2, f3, f4, f5, scale);
             }
         }
     }
