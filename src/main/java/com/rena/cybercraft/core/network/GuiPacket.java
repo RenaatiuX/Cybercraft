@@ -1,8 +1,9 @@
 package com.rena.cybercraft.core.network;
 
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 
-public class GuiPacket {
+public class GuiPacket implements Runnable{
 
     private int guid;
     private int x;
@@ -33,4 +34,9 @@ public class GuiPacket {
         return new GuiPacket(guid, x, y, z);
     }
 
+    @Override
+    public void run() {
+        /*ServerPlayerEntity serverPlayer = context.getServerHandler().player;
+        serverPlayer.openGui(Cyberware.INSTANCE, guid, serverPlayer.world, x, y, z);*/
+    }
 }

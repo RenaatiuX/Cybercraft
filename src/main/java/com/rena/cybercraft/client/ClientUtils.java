@@ -59,10 +59,10 @@ public class ClientUtils {
     }
 
 
-    /*public static void useActiveItemClient(Entity entity, ItemStack stack)
+    public static void useActiveItemClient(Entity entity, ItemStack stack)
     {
-        CCNetwork.sendToServer(new TriggerActiveAbilityPacket(stack));
+        CCNetwork.PACKET_HANDLER.sendToServer(new TriggerActiveAbilityPacket(stack));
         CybercraftAPI.useActiveItem(entity, stack);
-    }*/
+    }
 
 }

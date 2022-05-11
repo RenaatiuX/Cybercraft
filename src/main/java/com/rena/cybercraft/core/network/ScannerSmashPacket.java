@@ -36,7 +36,7 @@ public class ScannerSmashPacket {
         return new ScannerSmashPacket(x, y, z);
     }
 
-    /*public static final void handle(ScannerSmashPacket packet, Supplier<NetworkEvent.Context> ctx) {
+    public static final void handle(ScannerSmashPacket packet, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             World world = Minecraft.getInstance().level;
 
@@ -50,6 +50,6 @@ public class ScannerSmashPacket {
                 }
             }
         });
-    }*/
+    }
 
 }

@@ -4,6 +4,8 @@ import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.client.ClientUtils;
 import com.rena.cybercraft.client.KeyBinds;
+import com.rena.cybercraft.client.screens.GuiCybercraftMenu;
+import com.rena.cybercraft.core.network.CCNetwork;
 import com.rena.cybercraft.core.network.OpenRadialMenuPacket;
 import net.java.games.input.Mouse;
 import net.minecraft.client.Minecraft;
@@ -90,7 +92,7 @@ public class CybercraftMenuHandler {
 
                 mc.setScreen(new GuiCybercraftMenu());
                 cyberwareUserData.setOpenedRadialMenu(true);
-                CyberwarePacketHandler.INSTANCE.sendToServer(new OpenRadialMenuPacket());
+                CCNetwork.PACKET_HANDLER.sendToServer(new OpenRadialMenuPacket());
 
                 wasInScreen = 5;
             }

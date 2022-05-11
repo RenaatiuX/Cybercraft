@@ -24,6 +24,7 @@ public class CCNetwork {
         PACKET_HANDLER.registerMessage(CHANNEL_INDEX++, SwitchHeldItemAndRotationPacket.class, SwitchHeldItemAndRotationPacket::write, SwitchHeldItemAndRotationPacket::read, SwitchHeldItemAndRotationPacket::handle);
         PACKET_HANDLER.registerMessage(CHANNEL_INDEX++, EngineeringDestroyPacket.class, EngineeringDestroyPacket::write, EngineeringDestroyPacket::read, EngineeringDestroyPacket::handle);
         PACKET_HANDLER.registerMessage(CHANNEL_INDEX++, ItemUpdatePacket.class, ItemUpdatePacket::write, ItemUpdatePacket::read, ItemUpdatePacket::handle);
+        PACKET_HANDLER.registerMessage(CHANNEL_INDEX++, ScannerSmashPacket.class, ScannerSmashPacket::write, ScannerSmashPacket::read, ScannerSmashPacket::handle);
     }
 
     public static void sendTo(Object message, ServerPlayerEntity player) {

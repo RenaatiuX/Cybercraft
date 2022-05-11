@@ -12,7 +12,6 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-@SuppressWarnings("unchecked")
 public class ItemInit {
 
     public static final int RARE = 10;
