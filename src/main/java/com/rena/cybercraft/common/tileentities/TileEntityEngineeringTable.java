@@ -80,7 +80,11 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
                 ComponentSalvageRecipe recipe = getBlueprintRecipe();
                 if (recipe != null && checkComponents(recipe)) {
                     setItem(9, recipe.getResultItem().copy());
+                } else{
+                    setItem(9, ItemStack.EMPTY);
                 }
+            } else{
+                setItem(9, ItemStack.EMPTY);
             }
             if (level.hasNeighborSignal(this.getBlockPos()) || level.hasNeighborSignal(this.getBlockPos().above())){
                 if (!isPlayAnimation())
@@ -99,38 +103,51 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
                 this.heightY = MAX_HEIGHT;
                 up = false;
                 blockUpdate();
-                for (int i = 0; i < recipe.getComponents().size(); i++) {
-                    if (this.level.random.nextFloat() <= recipe.getProbabilities()[i]) {
-                        ItemStack component = recipe.getComponents().get(i);
-                        if (component.getCount() > 1)
-                            component.shrink(this.level.random.nextInt(component.getCount()));
-                        if (!component.isEmpty())
-                            tryAddItemToInventory(components, component);
-                    }
-                }
-                this.removeItem(0, 1);
-                ItemStack blueprint = BlueprintItem.getBlueprintForItem(this.getItem(0));
-                if (!getItem(1).isEmpty() && this.level.random.nextDouble() * 100d < CybercraftConfig.C_MACHINES.engineeringChance.get()) {
-                    tryAddItemToInventory(components, blueprint);
-                    this.removeItem(1, 1);
-                }
-                setComponentInventory(components);
             }
+        }
+    }
+
+    private void smashItems(){
+        ComponentSalvageRecipe recipe = getSalvageRecipe();
+        if (recipe != null) {
+            Inventory components = getComponentInventory();
+            for (int i = 0; i < recipe.getComponents().size(); i++) {
+                if (this.level.random.nextFloat() <= recipe.getProbabilities()[i]) {
+                    ItemStack component = recipe.getComponents().get(i);
+                    if (component.getCount() > 1)
+                        component.shrink(this.level.random.nextInt(component.getCount()));
+                    if (!component.isEmpty())
+                        tryAddItemToInventory(components, component);
+                }
+            }
+            this.removeItem(0, 1);
+            ItemStack blueprint = BlueprintItem.getBlueprintForItem(this.getItem(0));
+            if (!getItem(1).isEmpty() && this.level.random.nextDouble() * 100d < CybercraftConfig.C_MACHINES.engineeringChance.get()) {
+                tryAddItemToInventory(components, blueprint);
+                this.removeItem(1, 1);
+            }
+            setComponentInventory(components);
+            blockUpdate();
         }
     }
 
     private void bothSidedLogic(){
         if (isPlayAnimation()) {
             if (!up) {
-                heightY -= 0.05f;
+                heightY -= 0.1f;
                 if (heightY <= MIN_HEIGHT) {
                     up = true;
                     if (level.isClientSide()){
                         smashSounds();
+                    }else{
+                        smashItems();
                     }
+                }else if(getSalvageRecipe() == null){
+                    up = true;
+                    blockUpdate();
                 }
             } else {
-                heightY += 0.01f;
+                heightY += 0.05f;
                 if (heightY >= MAX_HEIGHT) {
                     up = false;
                     setPlayAnimation(false);
