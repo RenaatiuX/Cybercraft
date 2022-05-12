@@ -38,24 +38,24 @@ public class EngineeringTableContainer extends BaseTeContainer<TileEntityEnginee
         addSlot(new ResultSLot(this.tileEntity, 9, 145, 21));
     }
 
-    public ItemStack quickMoveStack(PlayerEntity p_82846_1_, int p_82846_2_) {
+    public ItemStack quickMoveStack(PlayerEntity player, int slotIndex) {
         ItemStack lvt_3_1_ = ItemStack.EMPTY;
-        Slot lvt_4_1_ = (Slot) this.slots.get(p_82846_2_);
+        Slot lvt_4_1_ = this.slots.get(slotIndex);
         if (lvt_4_1_ != null && lvt_4_1_.hasItem()) {
             ItemStack lvt_5_1_ = lvt_4_1_.getItem();
             lvt_3_1_ = lvt_5_1_.copy();
-            if (p_82846_2_ == 0) {
+            if (slotIndex == 0) {
                 IWorldPosCallable.NULL.execute((p_217067_2_, p_217067_3_) -> {
-                    lvt_5_1_.getItem().onCraftedBy(lvt_5_1_, p_217067_2_, p_82846_1_);
+                    lvt_5_1_.getItem().onCraftedBy(lvt_5_1_, p_217067_2_, player);
                 });
                 if (!this.moveItemStackTo(lvt_5_1_, 10, 46, true)) {
                     return ItemStack.EMPTY;
                 }
 
                 lvt_4_1_.onQuickCraft(lvt_5_1_, lvt_3_1_);
-            } else if (p_82846_2_ >= 10 && p_82846_2_ < 46) {
+            } else if (slotIndex >= 10 && slotIndex < 46) {
                 if (!this.moveItemStackTo(lvt_5_1_, 1, 10, false)) {
-                    if (p_82846_2_ < 37) {
+                    if (slotIndex < 37) {
                         if (!this.moveItemStackTo(lvt_5_1_, 37, 46, false)) {
                             return ItemStack.EMPTY;
                         }
@@ -77,9 +77,9 @@ public class EngineeringTableContainer extends BaseTeContainer<TileEntityEnginee
                 return ItemStack.EMPTY;
             }
 
-            ItemStack lvt_6_1_ = lvt_4_1_.onTake(p_82846_1_, lvt_5_1_);
-            if (p_82846_2_ == 0) {
-                p_82846_1_.drop(lvt_6_1_, false);
+            ItemStack lvt_6_1_ = lvt_4_1_.onTake(player, lvt_5_1_);
+            if (slotIndex == 0) {
+                player.drop(lvt_6_1_, false);
             }
         }
 
@@ -98,18 +98,24 @@ public class EngineeringTableContainer extends BaseTeContainer<TileEntityEnginee
         @Override
         protected void onQuickCraft(ItemStack stack, int count) {
             for (int k = 0; k < count; k++) {
-                NonNullList<ItemStack> comps = NNLUtil.deepCopyList(inv.getBlueprintRecipe().getComponents());
-                for (int i = 0; i < inv.getContainerSize(); i++) {
-                    for (ItemStack comp : comps) {
-                        if (!comp.isEmpty() && inv.getItem(i).getItem() == comp.getItem()) {
-                            if (inv.getItem(i).getCount() >= comp.getCount()) {
-                                inv.getItem(i).shrink(comp.getCount());
-                            } else {
-                                comp.shrink(inv.getItem(i).getCount());
-                                inv.getItem(i).shrink(inv.getItem(i).getCount());
-                            }
-                            break;
+               reduceItems();
+            }
+        }
+
+
+
+        private void reduceItems(){
+            NonNullList<ItemStack> comps = NNLUtil.deepCopyList(inv.getBlueprintRecipe().getComponents());
+            for (int i = 0; i < inv.getContainerSize(); i++) {
+                for (ItemStack comp : comps) {
+                    if (!comp.isEmpty() && inv.getItem(i).getItem() == comp.getItem()) {
+                        if (inv.getItem(i).getCount() >= comp.getCount()) {
+                            inv.getItem(i).shrink(comp.getCount());
+                        } else {
+                            comp.shrink(inv.getItem(i).getCount());
+                            inv.getItem(i).shrink(inv.getItem(i).getCount());
                         }
+                        break;
                     }
                 }
             }
@@ -117,7 +123,7 @@ public class EngineeringTableContainer extends BaseTeContainer<TileEntityEnginee
 
         @Override
         public ItemStack onTake(PlayerEntity player, ItemStack stack) {
-            onQuickCraft(stack, 1);
+            reduceItems();
             return super.onTake(player, stack);
         }
     }
