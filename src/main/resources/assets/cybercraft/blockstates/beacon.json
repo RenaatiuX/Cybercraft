@@ -1,7 +1,20 @@
 {
     "variants": {
-        "": {
-            "model": "cybercraft:block/radio"
+        "facing=east": {
+            "model": "cybercraft:block/radio",
+            "y": 270
+        },
+        "facing=west": {
+            "model": "cybercraft:block/radio",
+            "y": 90
+        },
+        "facing=south": {
+            "model": "cybercraft:block/radio",
+            "y": 180
+        },
+        "facing=north": {
+            "model": "cybercraft:block/radio",
+            "y": 0
         }
     }
 }

@@ -72,5 +72,9 @@ public class BeaconBlock extends Block {
         p_206840_1_.add(FACING);
     }
 
+    @Override
+    public void neighborChanged(BlockState blockState, World world, BlockPos pos, Block block, BlockPos blockPos, boolean p_220069_6_) {
+        super.neighborChanged(blockState, world, pos, block, blockPos, p_220069_6_);
 
+    }
 }

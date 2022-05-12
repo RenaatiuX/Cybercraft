@@ -1,7 +1,20 @@
 {
   "variants": {
-    "": {
-      "model": "cybercraft:block/scanner"
+    "facing=east": {
+      "model": "cybercraft:block/scanner",
+      "y": 270
+    },
+    "facing=west": {
+      "model": "cybercraft:block/scanner",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "cybercraft:block/scanner",
+      "y": 180
+    },
+    "facing=north": {
+      "model": "cybercraft:block/scanner",
+      "y": 0
     }
   }
 }
