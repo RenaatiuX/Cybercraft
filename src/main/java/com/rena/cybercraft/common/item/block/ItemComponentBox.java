@@ -44,7 +44,7 @@ import java.util.List;
 public class ItemComponentBox extends CybercraftItemBlock{
 
     public ItemComponentBox(Block b) {
-        super(b, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB));
+        super(b, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB).stacksTo(1));
     }
 
     @Override
@@ -53,19 +53,12 @@ public class ItemComponentBox extends CybercraftItemBlock{
             openGui(context.getPlayer(), context.getLevel(), context.getItemInHand());
             return ActionResultType.SUCCESS;
         }
-        ActionResultType type = super.useOn(context);
-        TileEntityComponentBox te = WorldUtil.getTileEntity(TileEntityComponentBox.class, context.getLevel(), context.getClickedPos());
-        if (te != null){
-            ItemStackHandler handler = (ItemStackHandler) context.getItemInHand().getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElseThrow(IllegalStateException::new);
-            te.loadForgeItems(handler.serializeNBT());
-            System.out.println("nbt copied");
-        }
-        return type;
+        return super.useOn(context);
     }
 
     @Override
     public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
-        if (!world.isClientSide()){
+        if (!world.isClientSide() && player.isShiftKeyDown()){
             openGui(player, world, player.getItemInHand(hand));
             return ActionResult.success(player.getItemInHand(hand));
         }

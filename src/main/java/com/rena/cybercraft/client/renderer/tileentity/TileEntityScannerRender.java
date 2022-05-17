@@ -11,14 +11,13 @@ import net.minecraft.util.ResourceLocation;
 public class TileEntityScannerRender extends TileEntityRenderer<TileEntityScanner> {
 
     public static final ResourceLocation LASER_LOCATION = new ResourceLocation("textures/models/scanner.png");
-    private final ScannerModel scannerModel = new ScannerModel();
+    private final ScannerModel SCANNER_MODEL = new ScannerModel();
 
     public TileEntityScannerRender(TileEntityRendererDispatcher p_i226006_1_) {
         super(p_i226006_1_);
     }
 
     @Override
-    public void render(TileEntityScanner scanner, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int p_225616_5_, int p_225616_6_) {
-
+    public void render(TileEntityScanner scanner, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {
     }
 }

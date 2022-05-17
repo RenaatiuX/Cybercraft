@@ -1,8 +1,6 @@
 package com.rena.cybercraft.common.tileentities;
 
-import com.google.common.collect.Lists;
 import com.rena.cybercraft.Cybercraft;
-import com.rena.cybercraft.client.renderer.tileentity.TileEntityEngineeringRender;
 import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.container.EngineeringTableContainer;
 import com.rena.cybercraft.common.item.BlueprintItem;
@@ -12,7 +10,6 @@ import com.rena.cybercraft.core.Tags;
 import com.rena.cybercraft.core.init.RecipeInit;
 import com.rena.cybercraft.core.init.TileEntityTypeInit;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.*;

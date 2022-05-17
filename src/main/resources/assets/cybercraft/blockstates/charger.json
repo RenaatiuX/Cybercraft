@@ -1,7 +1,20 @@
 {
     "variants": {
-        "": {
-            "model": "cybercraft:block/charger"
+        "facing=east": {
+            "model": "cybercraft:block/charger",
+            "y": 270
+        },
+        "facing=west": {
+            "model": "cybercraft:block/charger",
+            "y": 90
+        },
+        "facing=south": {
+            "model": "cybercraft:block/charger",
+            "y": 180
+        },
+        "facing=north": {
+            "model": "cybercraft:block/charger",
+            "y": 0
         }
     }
 }

@@ -1,7 +1,20 @@
 {
     "variants": {
-        "": {
-            "model": "cybercraft:block/blueprint_archive"
+        "facing=east": {
+            "model": "cybercraft:block/blueprint_archive",
+            "y": 270
+        },
+        "facing=west": {
+            "model": "cybercraft:block/blueprint_archive",
+            "y": 90
+        },
+        "facing=south": {
+            "model": "cybercraft:block/blueprint_archive",
+            "y": 180
+        },
+        "facing=north": {
+            "model": "cybercraft:block/blueprint_archive",
+            "y": 0
         }
     }
 }

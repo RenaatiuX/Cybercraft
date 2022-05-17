@@ -9,9 +9,12 @@ import com.rena.cybercraft.common.item.BlueprintItem;
 import com.rena.cybercraft.common.item.CybercraftArmorItem;
 import com.rena.cybercraft.common.item.CybercraftBaseItem;
 import com.rena.cybercraft.common.item.CybercraftItem;
+import com.rena.cybercraft.core.init.BlockInit;
 import com.rena.cybercraft.core.init.EntityTypeInit;
 import com.rena.cybercraft.core.init.ItemInit;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.EntityType;
@@ -44,6 +47,12 @@ public class ClientEvents {
                 }
             }, ItemInit.TRENCHCOAT.get());
         }
+
+        registerBlockRenders();
+    }
+
+    private static void registerBlockRenders() {
+        RenderTypeLookup.setRenderLayer(BlockInit.RADIO.get(), RenderType.cutout());
     }
 
 }
