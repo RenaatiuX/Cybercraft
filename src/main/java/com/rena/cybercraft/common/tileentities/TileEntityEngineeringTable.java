@@ -52,7 +52,6 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
     public static final double MAX_HEIGHT = 1.5f, MIN_HEIGHT = 1.1f;
     protected boolean isGuiOpen = false;
     private int numPlayerOpenGui = 0;
-    private Item prevItem = null;
     private double cooldown = MAX_HEIGHT;
     private double heightY = MAX_HEIGHT;
     private boolean playAnimation = false, up = false;
@@ -62,7 +61,6 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
 
     public TileEntityEngineeringTable() {
         super(TileEntityTypeInit.ENGINEERING_TABLE.get());
-        this.setChanged();
     }
 
     @Override
