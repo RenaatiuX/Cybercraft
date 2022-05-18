@@ -231,5 +231,9 @@
   "cybercraft.tooltip.foot_upgrades.1": "Swim faster\\nMore powerful with two Cyberlegs",
   "cybercraft.tooltip.foot_upgrades.2": "Walk up full blocks",
   "cybercraft.tooltip.leg_upgrades.0": "Jump higher\\nShift jump to launch yourself\\nMore powerful with two Cyberlegs",
-  "cybercraft.tooltip.leg_upgrades.1": "Absorb small impacts"
+  "cybercraft.tooltip.leg_upgrades.1": "Absorb small impacts",
+
+  "_comment": "Commands",
+  "cybercraft.commands.clearCyberware.success": "Cleared the Cyberware of %1$s"
+
 }
