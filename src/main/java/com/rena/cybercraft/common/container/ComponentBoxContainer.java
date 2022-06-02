@@ -8,6 +8,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
 public class ComponentBoxContainer extends BaseTeContainer<TileEntityComponentBox>{
     public ComponentBoxContainer(int id, PlayerInventory inv, TileEntityComponentBox tileEntity) {
@@ -24,10 +26,23 @@ public class ComponentBoxContainer extends BaseTeContainer<TileEntityComponentBo
         addPlayerInventory(8, 68);
     }
 
-    private static final class ComponentsSlot extends Slot{
+    public static final class ComponentsSlot extends Slot{
 
         public ComponentsSlot(IInventory p_i1824_1_, int p_i1824_2_, int p_i1824_3_, int p_i1824_4_) {
             super(p_i1824_1_, p_i1824_2_, p_i1824_3_, p_i1824_4_);
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            return Tags.Items.COMPONENTS.contains(stack.getItem());
+        }
+    }
+
+    public static class ComponentsItemHandlerSlot extends SlotItemHandler {
+
+
+        public ComponentsItemHandlerSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, index, xPosition, yPosition);
         }
 
         @Override

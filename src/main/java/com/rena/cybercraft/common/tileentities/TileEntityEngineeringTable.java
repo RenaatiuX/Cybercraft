@@ -6,6 +6,7 @@ import com.rena.cybercraft.common.container.EngineeringTableContainer;
 import com.rena.cybercraft.common.item.BlueprintItem;
 import com.rena.cybercraft.common.recipe.ComponentSalvageRecipe;
 import com.rena.cybercraft.common.util.NNLUtil;
+import com.rena.cybercraft.common.util.WorldUtil;
 import com.rena.cybercraft.core.Tags;
 import com.rena.cybercraft.core.init.RecipeInit;
 import com.rena.cybercraft.core.init.TileEntityTypeInit;
@@ -14,7 +15,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.*;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -35,6 +35,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
@@ -47,17 +49,20 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
     private static final int[] SLOTS_DOWN = new int[]{1, 9};
     private static final int[] SLOTS_SIDE = new int[]{0, 8};
     public static final double MAX_HEIGHT = 1.5f, MIN_HEIGHT = 1.1f;
-    protected boolean isGuiOpen = false;
+    protected boolean isGuiOpen = false, hasComponentInventory;
     private int numPlayerOpenGui = 0;
     private double cooldown = MAX_HEIGHT;
     private double heightY = MAX_HEIGHT;
     private boolean playAnimation = false, up = false;
     protected LazyOptional<IItemHandlerModifiable>[] itemHandler = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
 
-    NonNullList<ItemStack> items = NonNullList.withSize(10, ItemStack.EMPTY);
+    private NonNullList<ItemStack> items = NonNullList.withSize(10, ItemStack.EMPTY);
+    private MergeInventory inv = new MergeInventory();
+    private IItemHandler componentBoxInv;
 
     public TileEntityEngineeringTable() {
         super(TileEntityTypeInit.ENGINEERING_TABLE.get());
+        inv.appendInventory(this);
     }
 
     @Override
@@ -87,6 +92,20 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
             }
         }
         bothSidedLogic();
+    }
+
+    private IItemHandler findPlacedComponentBox(){
+        for (Direction dir : Direction.Plane.HORIZONTAL){
+            TileEntityComponentBox te = WorldUtil.getTileEntity(TileEntityComponentBox.class, this.level, this.getBlockPos().relative(dir));
+            if (te != null && te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite()).isPresent()){
+                IItemHandler inv = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite()).orElse(null);
+                this.componentBoxInv = inv;
+                this.inv.appendInventory(inv);
+                return inv;
+            }
+        }
+
+        return null;
     }
 
     public void salvage() {
@@ -218,6 +237,10 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         }
     }
 
+    public MergeInventory getMergeInventory(){
+        return inv;
+    }
+
     /**
      * just makes recipe gathering faster
      */
@@ -237,6 +260,12 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         this.playAnimation = nbt.getBoolean("animation");
         this.up = nbt.getBoolean("up");
         this.heightY = nbt.getDouble("hammer_height");
+        this.hasComponentInventory = nbt.getBoolean("hasComponentInventory");
+        if (hasComponentInventory){
+            this.componentBoxInv = findPlacedComponentBox();
+        }else {
+            this.componentBoxInv = null;
+        }
         ItemStackHelper.loadAllItems(nbt, items);
     }
 
@@ -256,6 +285,15 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         nbt.putBoolean("up", this.up);
         nbt.putDouble("hammer_height", this.heightY);
         NNLUtil.saveAllItemsWithEmpty(nbt, items);
+        if (findPlacedComponentBox() == null && componentBoxInv != null){
+            this.inv.removeInventory(componentBoxInv);
+            this.componentBoxInv = null;
+        }else{
+            this.componentBoxInv = findPlacedComponentBox();
+            this.inv.appendInventory(componentBoxInv);
+        }
+        this.hasComponentInventory = componentBoxInv != null;
+        nbt.putBoolean("hasComponentInventory", this.hasComponentInventory);
         return nbt;
     }
 
@@ -365,6 +403,14 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
                 return false;
         }
         return true;
+    }
+
+    public IItemHandler getComponentBoxInv() {
+        return componentBoxInv;
+    }
+
+    public boolean hasComponentInventory(){
+        return hasComponentInventory;
     }
 
     public void setPlayAnimation(boolean playAnimation) {

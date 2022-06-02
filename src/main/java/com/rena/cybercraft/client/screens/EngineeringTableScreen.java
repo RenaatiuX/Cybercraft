@@ -38,12 +38,13 @@ public class EngineeringTableScreen extends ContainerScreen<EngineeringTableCont
         int middleX = (this.width - this.imageWidth) / 2;
         int middleY = (this.height - this.imageHeight) / 2;
         this.blit(matrixStack, middleX, middleY, 0, 0, 176, 166);
+        if (this.menu.isHasComponentInventory()){
+            this.blit(matrixStack, middleX + 176, middleY + 4, 176, 4, 65, 142);
+        }
     }
 
     private void onSalvage(Button b){
         CCNetwork.PACKET_HANDLER.sendToServer(new EngineeringDestroyPacket(menu.getTileEntity().getBlockPos()));
-        ComponentSalvageRecipe recipe = menu.getTileEntity().getSalvageRecipe();
-        Inventory inv = menu.getTileEntity().getComponentInventory();
     }
 
     @Override
