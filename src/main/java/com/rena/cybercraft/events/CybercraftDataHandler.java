@@ -64,7 +64,7 @@ public class CybercraftDataHandler {
     /*@SubscribeEvent
     public void worldLoad(WorldEvent.Load event)
     {
-        GameRules rules = event.getWorld().getGameRules();
+        GameRules rules = event.getWorld().getLevelData().getGameRules();
         if(!rules.hasRule(KEEP_WARE_GAMERULE))
         {
             rules.addGameRule(KEEP_WARE_GAMERULE, Boolean.toString(CybercraftConfig.C_GAMERULES.defaultKeep.get()), ValueType.BOOLEAN_VALUE);
@@ -73,7 +73,7 @@ public class CybercraftDataHandler {
         {
             rules.addGameRule(DROP_WARE_GAMERULE, Boolean.toString(CybercraftConfig.C_GAMERULES.defaultDrop.get()), ValueType.BOOLEAN_VALUE);
         }
-    }
+    }*/
 
     @SubscribeEvent
     public void attachCybercraftData(AttachCapabilitiesEvent<Entity> event)
@@ -84,7 +84,7 @@ public class CybercraftDataHandler {
         }
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public void playerDeathEvent(PlayerEvent.Clone event)
     {
         PlayerEntity entityPlayerLiving = event.getPlayer();
@@ -110,9 +110,9 @@ public class CybercraftDataHandler {
                 cyberwareUserDataLiving.deserializeNBT(cyberwareUserDataDead.serializeNBT());
             }
         }
-    }
+    }*/
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public void handleCyberzombieDrops(LivingDropsEvent event)
     {
         LivingEntity entityLivingBase = event.getEntityLiving();
@@ -168,7 +168,7 @@ public class CybercraftDataHandler {
                 }
             }
         }
-    }
+    }*/
 
     private boolean shouldDropWare(DamageSource source)
     {
@@ -181,7 +181,7 @@ public class CybercraftDataHandler {
         return false;
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+   /*@SubscribeEvent(priority = EventPriority.LOWEST)
     public void handleCZSpawn(LivingSpawnEvent.SpecialSpawn event)
     {
         if (!(event.getEntityLiving() instanceof LivingEntity)) {
@@ -206,15 +206,15 @@ public class CybercraftDataHandler {
                 && ( !CybercraftConfig.C_MOBS.applyDimensionToBeacon.get()
                 || isValidDimension(event.getWorld()) ) )
         {
-            int tier = TileEntityBeacon.isInRange(entityLiving.level, entityLiving.posX, entityLiving.posY, entityLiving.posZ);
+            int tier = TileEntityBeacon.isInRange(entityLiving.level, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ());
             if (tier > 0)
             {
                 float chance = tier == 2 ? LibConstants.BEACON_CHANCE
                         : tier == 1 ? LibConstants.BEACON_CHANCE_INTERNAL
                         : LibConstants.LARGE_BEACON_CHANCE;
-                if ((event.getWorld().rand.nextFloat() < (chance / 100F))) {
+                if ((event.getWorld().getRandom().nextFloat() < (chance / 100F))) {
                     CyberZombieEntity entityCyberZombie = new CyberZombieEntity(event.getWorld());
-                    if (event.getWorld().rand.nextFloat() < (LibConstants.BEACON_BRUTE_CHANCE / 100F)) {
+                    if (event.getWorld().getRandom.nextFloat() < (LibConstants.BEACON_BRUTE_CHANCE / 100F)) {
                         boolean works = entityCyberZombie.setBrute();
                     }
                     entityCyberZombie.setLocationAndAngles(entityLiving.posX, entityLiving.posY, entityLiving.posZ, entityLiving.rotationYaw, entityLiving.rotationPitch);
@@ -285,9 +285,9 @@ public class CybercraftDataHandler {
                 entityLiving.setDropChance(EquipmentSlotType.CHEST, CybercraftConfig.C_MOBS.clothDropRarity.get() / 100F);
             }
         }
-    }
+    }*/
 
-    public static void addRandomCybercraft(CyberZombieEntity cyberZombie, boolean brute) {
+    /*public static void addRandomCybercraft(CyberZombieEntity cyberZombie, boolean brute) {
         ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(cyberZombie);
         if (cyberwareUserData == null) return;
 
@@ -363,7 +363,7 @@ public class CybercraftDataHandler {
         cyberZombie.hasRandomWare = true;
 
         CybercraftAPI.updateData(cyberZombie);
-    }
+    }*/
 
     private static boolean contains(NonNullList<ItemStack> nnlHaystack, ItemStack needle)
     {
@@ -380,7 +380,7 @@ public class CybercraftDataHandler {
         return false;
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    /*@SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onPotentialSpawns(@Nonnull WorldEvent.PotentialSpawns event)
     {
         if (event.getType() != EntityClassification.MONSTER) return;
@@ -398,14 +398,14 @@ public class CybercraftDataHandler {
             }
         }
         event.getList().removeAll(spawnListEntriesToRemove);
-    }
+    }*/
 
-    public boolean isValidDimension(@Nonnull World world)
+    /*public boolean isValidDimension(@Nonnull World world)
     {
         boolean isListed = CybercraftConfig.MOBS_DIMENSION_IDS.contains(world.provider.getDimension());
         return (CybercraftConfig.C_MOBS.isDimensionBlacklist.get() && !isListed)
                 || (!CybercraftConfig.C_MOBS.isDimensionBlacklist.get() && isListed);
-    }
+    }*/
 
     @SubscribeEvent
     public void syncCyberwareData(EntityJoinWorldEvent event)
@@ -441,5 +441,4 @@ public class CybercraftDataHandler {
             }
         }
     }
-*/
 }
