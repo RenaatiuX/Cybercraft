@@ -106,7 +106,7 @@ public class CybercraftConfig {
     }
 
     public static final class C_Machines{
-        public final ForgeConfigSpec.DoubleValue engineeringChance, scannerChance, scannerChanceAddl;
+        public final ForgeConfigSpec.DoubleValue engineeringChance, scannerChance, scannerChanceAddl, maxChance;
         public final ForgeConfigSpec.IntValue scannerTime;
 
         C_Machines(ForgeConfigSpec.Builder builder){
@@ -114,6 +114,7 @@ public class CybercraftConfig {
             engineeringChance = builder.defineInRange("Chance of blueprint from Engineering Table", 15F, 0, 100F);
             scannerChance = builder.defineInRange("Chance of blueprint from Scanner", 10F, 0, 100F);
             scannerChanceAddl = builder.defineInRange("Additive chance for Scanner per extra item", 10F, 0, 100F);
+            maxChance = builder.defineInRange("Maximum Chance the scanner can drop a blueprint", 50f, 10, 100f);
             builder.comment("24000 is one Minecraft day, 1200 is one real-life minute");
             scannerTime = builder.defineInRange("Ticks taken per Scanner operation", 24000, 0, Integer.MAX_VALUE);
             builder.pop();

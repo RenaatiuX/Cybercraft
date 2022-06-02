@@ -15,7 +15,7 @@ public class ScannerModel extends Model {
     public ModelRenderer beam;
 
     public ScannerModel() {
-        super(RenderType::entitySolid);
+        super(RenderType::entityTranslucent);
         this.texWidth = 34;
         this.texHeight = 10;
 

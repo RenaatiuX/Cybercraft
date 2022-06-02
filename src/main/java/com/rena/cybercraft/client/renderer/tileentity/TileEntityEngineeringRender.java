@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.client.model.block.EngineeringModel;
 import com.rena.cybercraft.common.tileentities.TileEntityEngineeringTable;
+import com.rena.cybercraft.common.util.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.LightTexture;
@@ -49,7 +50,7 @@ public class TileEntityEngineeringRender extends TileEntityRenderer<TileEntityEn
                 default:
                     break;
             }
-            renderItem(te.getItem(0), new double[]{0.5d, 1d, 0.5d}, Vector3f.YP.rotationDegrees(rotation), matrixStack, buffer, combinedOverlay, getLightLevel(mc.player.level, te.getBlockPos()), 0.5f);
+            RenderUtils.renderItem(te.getItem(0), new double[]{0.5d, 1d, 0.5d}, Vector3f.YP.rotationDegrees(rotation), matrixStack, buffer, combinedOverlay, RenderUtils.getLightLevel(mc.player.level, te.getBlockPos()), 0.5f);
             matrixStack.pushPose();
             matrixStack.translate(0.5d, te.getHeightY(), 0.5d);
             MODEL.renderToBuffer(matrixStack, buffer.getBuffer(MODEL.renderType(TEXTURE)), combinedLight, combinedOverlay, 0, 0, 0, 0);
@@ -58,24 +59,4 @@ public class TileEntityEngineeringRender extends TileEntityRenderer<TileEntityEn
     }
 
 
-    protected int getLightLevel(World world, BlockPos pos) {
-        int bLight = world.getBrightness(LightType.BLOCK, pos);
-        int sLight = world.getBrightness(LightType.SKY, pos);
-        return LightTexture.pack(bLight, sLight);
-    }
-
-    protected void renderItem(ItemStack stack, double[] translation, Quaternion rotation, MatrixStack matrixStack,
-                              IRenderTypeBuffer buffer, int combinedOverlay, int lightLevel, float scale) {
-        Minecraft mc = Minecraft.getInstance();
-        matrixStack.pushPose();
-        matrixStack.translate(translation[0], translation[1], translation[2]);
-        matrixStack.mulPose(rotation);
-        matrixStack.mulPose(Vector3f.XN.rotationDegrees(90));
-        matrixStack.scale(scale, scale, scale);
-
-        IBakedModel model = mc.getItemRenderer().getModel(stack, null, null);
-        mc.getItemRenderer().render(stack, ItemCameraTransforms.TransformType.NONE, true, matrixStack, buffer,
-                lightLevel, combinedOverlay, model);
-        matrixStack.popPose();
-    }
 }

@@ -234,6 +234,9 @@
   "cybercraft.tooltip.leg_upgrades.1": "Absorb small impacts",
 
   "_comment": "Commands",
-  "cybercraft.commands.clearCyberware.success": "Cleared the Cyberware of %1$s"
+  "cybercraft.commands.clearCyberware.success": "Cleared the Cyberware of %1$s",
+
+  "_comment": "Screens",
+  "cybercraft.scanner.chance" : "Chance"
 
 }

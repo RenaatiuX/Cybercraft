@@ -21,7 +21,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class ScannerBlock extends Block {
+public class ScannerBlock extends RotatableBlock {
     public ScannerBlock() {
         super(AbstractBlock.Properties.of(Material.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(1).strength(7f, 3f).requiresCorrectToolForDrops().noOcclusion());
     }
@@ -48,10 +48,5 @@ public class ScannerBlock extends Block {
         }
 
         return ActionResultType.SUCCESS;
-    }
-
-    @Override
-    public BlockRenderType getRenderShape(BlockState p_149645_1_) {
-        return BlockRenderType.MODEL;
     }
 }
