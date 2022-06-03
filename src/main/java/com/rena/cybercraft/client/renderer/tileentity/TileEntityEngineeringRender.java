@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -22,7 +23,7 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 
-public class TileEntityEngineeringRender extends TileEntityRenderer<TileEntityEngineeringTable> {
+public class TileEntityEngineeringRender extends TileEntityRenderer<TileEntity> {
 
     private static final EngineeringModel MODEL = new EngineeringModel();
     private static final ResourceLocation TEXTURE = Cybercraft.modLoc("textures/models/engineering.png");
@@ -32,8 +33,9 @@ public class TileEntityEngineeringRender extends TileEntityRenderer<TileEntityEn
     }
 
     @Override
-    public void render(TileEntityEngineeringTable te, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
-        if (te != null) {
+    public void render(TileEntity te, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
+        if (te != null && te instanceof TileEntityEngineeringTable) {
+            TileEntityEngineeringTable engineering = (TileEntityEngineeringTable) te;
             Minecraft mc = Minecraft.getInstance();
             float rotation = 0;
             Direction facing = te.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
@@ -50,9 +52,9 @@ public class TileEntityEngineeringRender extends TileEntityRenderer<TileEntityEn
                 default:
                     break;
             }
-            RenderUtils.renderItem(te.getItem(0), new double[]{0.5d, 1d, 0.5d}, Vector3f.YP.rotationDegrees(rotation), matrixStack, buffer, combinedOverlay, RenderUtils.getLightLevel(mc.player.level, te.getBlockPos()), 0.5f);
+            RenderUtils.renderItem(engineering.getItem(0), new double[]{0.5d, 1d, 0.5d}, Vector3f.YP.rotationDegrees(rotation), matrixStack, buffer, combinedOverlay, RenderUtils.getLightLevel(mc.player.level, te.getBlockPos()), 0.5f);
             matrixStack.pushPose();
-            matrixStack.translate(0.5d, te.getHeightY(), 0.5d);
+            matrixStack.translate(0.5d, engineering.getHeightY(), 0.5d);
             MODEL.renderToBuffer(matrixStack, buffer.getBuffer(MODEL.renderType(TEXTURE)), combinedLight, combinedOverlay, 0, 0, 0, 0);
             matrixStack.popPose();
         }

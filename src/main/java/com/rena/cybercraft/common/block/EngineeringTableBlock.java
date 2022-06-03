@@ -1,8 +1,10 @@
 package com.rena.cybercraft.common.block;
 
+import com.rena.cybercraft.common.tileentities.DummyTileEntity;
 import com.rena.cybercraft.common.tileentities.TileEntityEngineeringTable;
 import com.rena.cybercraft.common.util.WorldUtil;
 import com.rena.cybercraft.core.init.BlockInit;
+import com.rena.cybercraft.core.init.TileEntityTypeInit;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
@@ -58,7 +60,7 @@ public class EngineeringTableBlock extends RotatableBlock {
 
     @Override
     public boolean hasTileEntity(BlockState state) {
-        return state.getValue(TOP) == Half.BOTTOM;
+        return true;
     }
 
     @Override
@@ -108,7 +110,9 @@ public class EngineeringTableBlock extends RotatableBlock {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileEntityEngineeringTable();
+        if(state.getValue(TOP) == Half.BOTTOM)
+            return new TileEntityEngineeringTable();
+        return new DummyTileEntity(TileEntityTypeInit.ENGINEERING_TABLE.get(), BlockPos::below);
     }
 
     @Override

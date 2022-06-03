@@ -43,11 +43,11 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 
-public class TileEntityEngineeringTable extends LockableLootTileEntity implements ISidedInventory, ITickableTileEntity{
+public class TileEntityEngineeringTable extends LockableLootTileEntity implements ISidedInventory, ITickableTileEntity {
 
-    private static final int[] SLOTS_UP = new int[]{2, 3, 4, 5, 6, 7};
-    private static final int[] SLOTS_DOWN = new int[]{1, 9};
-    private static final int[] SLOTS_SIDE = new int[]{0, 8};
+    private static final int[] SLOTS_UP = new int[]{0, 1};
+    private static final int[] SLOTS_DOWN = new int[]{8, 9};
+    private static final int[] SLOTS_SIDE = new int[]{2, 3, 4, 5, 6, 7};
     public static final double MAX_HEIGHT = 1.5f, MIN_HEIGHT = 1.1f;
     protected boolean isGuiOpen = false, hasComponentInventory;
     private int numPlayerOpenGui = 0;
@@ -80,13 +80,13 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
                 ComponentSalvageRecipe recipe = getBlueprintRecipe();
                 if (recipe != null && checkComponents(recipe)) {
                     setItem(9, recipe.getResultItem().copy());
-                } else{
+                } else {
                     setItem(9, ItemStack.EMPTY);
                 }
-            } else{
+            } else {
                 setItem(9, ItemStack.EMPTY);
             }
-            if (level.hasNeighborSignal(this.getBlockPos()) || level.hasNeighborSignal(this.getBlockPos().above())){
+            if (level.hasNeighborSignal(this.getBlockPos()) || level.hasNeighborSignal(this.getBlockPos().above())) {
                 if (!isPlayAnimation())
                     salvage();
             }
@@ -94,10 +94,10 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         bothSidedLogic();
     }
 
-    private IItemHandler findPlacedComponentBox(){
-        for (Direction dir : Direction.Plane.HORIZONTAL){
+    private IItemHandler findPlacedComponentBox() {
+        for (Direction dir : Direction.Plane.HORIZONTAL) {
             TileEntityComponentBox te = WorldUtil.getTileEntity(TileEntityComponentBox.class, this.level, this.getBlockPos().relative(dir));
-            if (te != null && te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite()).isPresent()){
+            if (te != null && te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite()).isPresent()) {
                 IItemHandler inv = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite()).orElse(null);
                 this.componentBoxInv = inv;
                 this.inv.appendInventory(inv);
@@ -121,7 +121,7 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         }
     }
 
-    private void smashItems(){
+    private void smashItems() {
         ComponentSalvageRecipe recipe = getSalvageRecipe();
         if (recipe != null) {
             Inventory components = getComponentInventory();
@@ -145,18 +145,18 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         }
     }
 
-    private void bothSidedLogic(){
+    private void bothSidedLogic() {
         if (isPlayAnimation()) {
             if (!up) {
                 heightY -= 0.1f;
                 if (heightY <= MIN_HEIGHT) {
                     up = true;
-                    if (level.isClientSide()){
+                    if (level.isClientSide()) {
                         smashSounds();
-                    }else{
+                    } else {
                         smashItems();
                     }
-                }else if(getSalvageRecipe() == null){
+                } else if (getSalvageRecipe() == null) {
                     up = true;
                     blockUpdate();
                 }
@@ -167,7 +167,7 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
                     setPlayAnimation(false);
                 }
             }
-        }else{
+        } else {
             heightY = MAX_HEIGHT;
         }
     }
@@ -179,7 +179,7 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
             blockUpdate();
     }
 
-    private void blockUpdate(){
+    private void blockUpdate() {
         this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
     }
 
@@ -195,7 +195,7 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
                 }
             }
         }
-        for (ItemStack stack : components){
+        for (ItemStack stack : components) {
             if (!stack.isEmpty())
                 return false;
         }
@@ -237,7 +237,7 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         }
     }
 
-    public MergeInventory getMergeInventory(){
+    public MergeInventory getMergeInventory() {
         return inv;
     }
 
@@ -261,9 +261,9 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         this.up = nbt.getBoolean("up");
         this.heightY = nbt.getDouble("hammer_height");
         this.hasComponentInventory = nbt.getBoolean("hasComponentInventory");
-        if (hasComponentInventory){
+        if (hasComponentInventory) {
             this.componentBoxInv = findPlacedComponentBox();
-        }else {
+        } else {
             this.componentBoxInv = null;
         }
         ItemStackHelper.loadAllItems(nbt, items);
@@ -279,16 +279,16 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         return nbt;
     }
 
-    private CompoundNBT saveClientData(CompoundNBT nbt){
+    private CompoundNBT saveClientData(CompoundNBT nbt) {
         nbt = super.save(nbt);
         nbt.putBoolean("animation", this.playAnimation);
         nbt.putBoolean("up", this.up);
         nbt.putDouble("hammer_height", this.heightY);
         NNLUtil.saveAllItemsWithEmpty(nbt, items);
-        if (findPlacedComponentBox() == null && componentBoxInv != null){
+        if (findPlacedComponentBox() == null && componentBoxInv != null) {
             this.inv.removeInventory(componentBoxInv);
             this.componentBoxInv = null;
-        }else{
+        } else {
             this.componentBoxInv = findPlacedComponentBox();
             this.inv.appendInventory(componentBoxInv);
         }
@@ -409,7 +409,7 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         return componentBoxInv;
     }
 
-    public boolean hasComponentInventory(){
+    public boolean hasComponentInventory() {
         return hasComponentInventory;
     }
 
@@ -426,15 +426,13 @@ public class TileEntityEngineeringTable extends LockableLootTileEntity implement
         return heightY;
     }
 
-    public void smashSounds()
-    {
+    public void smashSounds() {
         int x = getBlockPos().getX();
         int y = getBlockPos().getY();
         int z = getBlockPos().getZ();
         level.playLocalSound(x, y, z, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 1F, 1F, false);
         level.playLocalSound(x, y, z, SoundEvents.ITEM_BREAK, SoundCategory.BLOCKS, 1F, .5F, false);
-        for (int index = 0; index < 10; index++)
-        {
+        for (int index = 0; index < 10; index++) {
             level.addParticle(new ItemParticleData(ParticleTypes.ITEM, getItem(0)),
                     x + .5F, y + 1, z + .5F,
                     .25F * (level.random.nextFloat() - .5F), .1F, .25F * (level.random.nextFloat() - .5F));

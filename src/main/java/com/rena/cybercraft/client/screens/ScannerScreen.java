@@ -119,7 +119,7 @@ public class ScannerScreen extends ContainerScreen<ScannerContainer> {
                 tickCounter ++;
             }else{
                 if (dotCounter >= 3){
-                    if (new Random().nextDouble() <= 0.1){
+                    if (new Random().nextDouble() <= 0.02){
                         chooseRandomText();
                     }else
                         chosenText = RANDOM_MESSAGES.get(chosenIndex);
