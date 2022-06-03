@@ -114,7 +114,7 @@ public class ScannerScreen extends ContainerScreen<ScannerContainer> {
             ITextComponent chance = new StringTextComponent(TileEntityScanner.getBlueprintChance(this.menu.getTileEntity())*100 + "% ").append(new TranslationTextComponent(Cybercraft.MOD_ID +".scanner.chance")).withStyle(TextFormatting.AQUA);
             this.font.draw(stack, chance,
                      middleX + 176 - this.font.width(chance) - 5, middleY + 6, 4210752);
-            this.font.draw(stack, chosenText.copy().withStyle(TextFormatting.AQUA), middleX + 8, middleY + 20, 4210752);
+            this.font.draw(stack, chosenText.copy().withStyle(TextFormatting.DARK_AQUA), middleX + 8, middleY + 20, 4210752);
             if (tickCounter <= TICKS_PER_DOT){
                 tickCounter ++;
             }else{
