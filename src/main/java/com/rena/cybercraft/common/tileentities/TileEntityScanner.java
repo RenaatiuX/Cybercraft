@@ -5,13 +5,16 @@ import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.container.ScannerContainer;
 import com.rena.cybercraft.common.item.BlueprintItem;
 import com.rena.cybercraft.common.recipe.BlueprintCraftingRecipe;
+import com.rena.cybercraft.core.Tags;
 import com.rena.cybercraft.core.init.RecipeInit;
 import com.rena.cybercraft.core.init.TileEntityTypeInit;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -19,21 +22,29 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableLootTileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class TileEntityScanner extends LockableLootTileEntity implements ITickableTileEntity {
+public class TileEntityScanner extends LockableLootTileEntity implements ITickableTileEntity, ISidedInventory {
 
     private NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
     private int maxCounter = 1, counter = 0, counterPercentage;
+    private LazyOptional<IItemHandlerModifiable>[] handler = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
 
     public TileEntityScanner() {
         super(TileEntityTypeInit.SCANNER_TE.get());
@@ -183,5 +194,51 @@ public class TileEntityScanner extends LockableLootTileEntity implements ITickab
 
     private void blockUpdate() {
         this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+    }
+
+    @Override
+    public int[] getSlotsForFace(Direction side) {
+        if (side == Direction.UP){
+            return new int[]{1};
+        }else if (side == Direction.DOWN)
+            return new int[]{2};
+        return new int[]{0};
+    }
+
+    @Override
+    public boolean canPlaceItem(int slot, ItemStack stack) {
+        if (slot == 2)
+            return false;
+        else if (slot == 1)
+            Tags.Items.COMPONENTS.contains(stack.getItem());
+        else if (slot == 0)
+            return stack.getItem() == Items.PAPER;
+        return super.canPlaceItem(slot, stack);
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction side) {
+        return canPlaceItem(slot, stack);
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
+        return slot == 2;
+    }
+
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
+        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            if (side == null)
+                return LazyOptional.of(() -> new InvWrapper(this)).cast();
+            else if (side == Direction.UP)
+                return handler[0].cast();
+            else if (side == Direction.DOWN)
+                return handler[1].cast();
+            else
+                return handler[2].cast();
+        }
+
+        return super.getCapability(cap, side);
     }
 }
