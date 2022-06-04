@@ -45,48 +45,50 @@ public class TileEntityScannerRender extends TileEntityRenderer<TileEntityScanne
             matrixStack.mulPose(Vector3f.YP.rotationDegrees(rotation));
             matrixStack.translate(0.3 + scannerX, 0, 0.4 + scannerZ);
             SCANNER_MODEL.renderScanner(matrixStack, buffer.getBuffer(SCANNER_MODEL.renderType(LASER_LOCATION)), combinedLight, combinedOverlay, 1f, 1f, 1f, 1f);
-            if (true && scanner.getCounterPercentage() > 0) {
-                if (amountOfBeams > 0) {
-                    if (beamTicks <= TICKS_PER_BEAM) {
-                        GlStateManager._enableBlend();
-                        SCANNER_MODEL.renderBeam(matrixStack, buffer.getBuffer(SCANNER_MODEL.renderType(LASER_LOCATION)), combinedLight, combinedOverlay, 1f, 1f, 1f, 0.7f);
-                        GlStateManager._disableBlend();
-                        beamTicks++;
+            if (!mc.isPaused()) {
+                if (scanner.getCounterPercentage() > 0) {
+                    if (amountOfBeams > 0) {
+                        if (beamTicks <= TICKS_PER_BEAM) {
+                            GlStateManager._enableBlend();
+                            SCANNER_MODEL.renderBeam(matrixStack, buffer.getBuffer(SCANNER_MODEL.renderType(LASER_LOCATION)), combinedLight, combinedOverlay, 1f, 1f, 1f, 0.7f);
+                            GlStateManager._disableBlend();
+                            beamTicks++;
+                        } else {
+                            amountOfBeams--;
+                            beamTicks = 0;
+                        }
                     } else {
-                        amountOfBeams--;
-                        beamTicks = 0;
+                        if (motion == Vector3d.ZERO) {
+                            Random rand = new Random();
+                            double newX = 10, newZ = 10;
+                            while (Math.abs(newX + scannerX) > MAX_MOVE || Math.abs(newZ + scannerZ) > MAX_MOVE) {
+                                newX = rand.nextDouble() * 2 * MAX_MOVE - MAX_MOVE - scannerX;
+                                newZ = rand.nextDouble() * 2 * MAX_MOVE - MAX_MOVE - scannerZ;
+                            }
+                            motion = motion.add(newX, 0, newZ).scale(0.02);
+                            amountOfMoves = 50;
+                        } else if (amountOfMoves > 0) {
+                            scannerX += motion.x;
+                            scannerZ += motion.z;
+                            amountOfMoves--;
+                        } else {
+                            motion = Vector3d.ZERO;
+                            amountOfBeams = new Random().nextInt(4) + 1;
+                        }
                     }
                 } else {
-                    if (motion == Vector3d.ZERO) {
-                        Random rand = new Random();
-                        double newX = 10, newZ = 10;
-                        while (Math.abs(newX + scannerX) > MAX_MOVE || Math.abs(newZ + scannerZ) > MAX_MOVE) {
-                            newX = rand.nextDouble() * 2 * MAX_MOVE - MAX_MOVE - scannerX;
-                            newZ = rand.nextDouble() * 2 * MAX_MOVE - MAX_MOVE - scannerZ;
-                        }
-                        motion = motion.add(newX, 0, newZ).scale(0.02);
-                        amountOfMoves = 50;
-                    } else if (amountOfMoves > 0) {
+                    if (Math.abs(scannerX) - 0.01 != 0 && Math.abs(scannerZ) + 0.01 != 0) {
+                        motion = new Vector3d(-scannerX, 0, -scannerZ).scale(0.02);
                         scannerX += motion.x;
                         scannerZ += motion.z;
-                        amountOfMoves--;
                     } else {
-                        motion = Vector3d.ZERO;
+                        scannerX = 0;
+                        scannerZ = 0;
+                        beamTicks = 0;
                         amountOfBeams = new Random().nextInt(4) + 1;
+                        motion = Vector3d.ZERO;
+                        amountOfMoves = 0;
                     }
-                }
-            } else {
-                if (Math.abs(scannerX) - 0.01 != 0 && Math.abs(scannerZ) + 0.01 != 0){
-                    motion = new Vector3d(-scannerX, 0, -scannerZ).scale(0.02);
-                    scannerX += motion.x;
-                    scannerZ += motion.z;
-                }else {
-                    scannerX = 0;
-                    scannerZ = 0;
-                    beamTicks = 0;
-                    amountOfBeams = new Random().nextInt(4) + 1;
-                    motion = Vector3d.ZERO;
-                    amountOfMoves = 0;
                 }
             }
             matrixStack.translate(-0.3 - scannerX, 0, 0);
