@@ -20,7 +20,7 @@ import java.util.Random;
 public class ScannerScreen extends ContainerScreen<ScannerContainer> {
 
     public static final ResourceLocation TEXTURE = Cybercraft.modLoc("textures/gui/scanner.png");
-    private static final int TICKS_PER_DOT = 20;
+    private static final int TICKS_PER_DOT = 60;
     private static final ImmutableList<ITextComponent> RANDOM_MESSAGES = ImmutableList.<ITextComponent>builder().add(
             new TranslationTextComponent(Cybercraft.MOD_ID + ".scanner.random_message1"),
             new TranslationTextComponent(Cybercraft.MOD_ID + ".scanner.random_message2"),
