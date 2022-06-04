@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.realmsclient.util.JsonUtils;
 import com.rena.cybercraft.api.CybercraftAPI;
+import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.item.BlueprintItem;
 import com.rena.cybercraft.core.init.RecipeInit;
 import net.minecraft.inventory.IInventory;
@@ -87,8 +88,8 @@ public class BlueprintCraftingRecipe implements IRecipe<IInventory> {
         @Override
         public BlueprintCraftingRecipe fromJson(ResourceLocation id, JsonObject json) {
             final Ingredient input = Ingredient.fromJson(getJsonElement(json, "input"));
-            final int workTime = JSONUtils.getAsInt(json, "worktime", 200);
-            return new BlueprintCraftingRecipe(input, id, workTime);
+            //final int workTime = JSONUtils.getAsInt(json, "worktime", CybercraftConfig.C_MACHINES.scannerTime.get());
+            return new BlueprintCraftingRecipe(input, id, CybercraftConfig.C_MACHINES.scannerTime.get());
         }
 
         @Nullable
