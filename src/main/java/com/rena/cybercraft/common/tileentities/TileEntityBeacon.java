@@ -26,6 +26,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -37,37 +39,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class TileEntityBeacon extends TileEntity implements ITickableTileEntity {
 
-    private static List<Integer> tiers = new CopyOnWriteArrayList<>();
-    private static Map<Integer, Map<Integer, Map<BlockPos, Integer>>> mapBeaconPositionByTierDimension = new HashMap<>();
-    private boolean wasWorking = false;
-    private int count = 0;
-
-    private static int TIER = 2;
-
-    private static Map<Integer, Map<BlockPos, Integer>> getBeaconPositionsForTier(int tier)
-    {
-        Map<Integer, Map<BlockPos, Integer>> mapBeaconPositionByDimension = mapBeaconPositionByTierDimension.get(tier);
-        if (mapBeaconPositionByDimension == null)
-        {
-            mapBeaconPositionByDimension = new HashMap<>();
-            mapBeaconPositionByTierDimension.put(tier, mapBeaconPositionByDimension);
-            if (!tiers.contains(tier))
-            {
-                tiers.add(tier);
-                Collections.sort(tiers);
-                Collections.reverse(tiers);
-            }
-        }
-
-        return mapBeaconPositionByDimension;
-    }
-
-    /*public static Map<BlockPos, Integer> getBeaconPositionsForTierAndDimension(int tier, @Nonnull World world)
-    {
-        Map<Integer, Map<BlockPos, Integer>> mapBeaconPositionByDimension = getBeaconPositionsForTier(tier);
-        int idDimension = world.provider.getDimension();
-        return mapBeaconPositionByDimension.computeIfAbsent(idDimension, k -> new HashMap<>());
-    }*/
+    private boolean working = false;
+    protected int count = 0, tier = -1;
 
     public TileEntityBeacon() {
         super(TileEntityTypeInit.BEACON_TE.get());
@@ -75,7 +48,58 @@ public class TileEntityBeacon extends TileEntity implements ITickableTileEntity 
 
     @Override
     public void tick() {
+        this.working = !level.hasNeighborSignal(this.getBlockPos());
+        if(!level.isClientSide()){
+            if (working && this.tier > -1){
+                work();
+            }
+        }else if (working && this.tier > -1){
+            spawnParticles();
+        }
 
+    }
+
+    protected void work(){
+
+    }
+    @OnlyIn(Dist.CLIENT)
+    protected void spawnParticles(){
+        BlockState state = this.getBlockState();
+        boolean ns = state.getValue(BeaconLargeBlock.FACING) == Direction.NORTH
+                || state.getValue(BeaconLargeBlock.FACING) == Direction.SOUTH;
+        boolean backwards = state.getValue(BeaconLargeBlock.FACING) == Direction.SOUTH
+                || state.getValue(BeaconLargeBlock.FACING) == Direction.EAST;
+        float dist = .2F;
+        float speedMod = .08F;
+        int degrees = 45;
+        for (int index = 0; index < 5; index++) {
+            float sin = (float) Math.sin(Math.toRadians(degrees));
+            float cos = (float) Math.cos(Math.toRadians(degrees));
+            float xOffset = dist * sin;
+            float yOffset = .2F + dist * cos;
+            float xSpeed = speedMod * sin;
+            float ySpeed = speedMod * cos;
+            float backOffsetX = (backwards ^ ns ? .3F : -.3F);
+            float backOffsetZ = (backwards ? -.4F : .4F);
+
+            level.addParticle(ParticleTypes.SMOKE,
+                    worldPosition.getX() + .5F + (ns ? xOffset + backOffsetX : backOffsetZ),
+                    worldPosition.getY() + .5F + yOffset,
+                    worldPosition.getZ() + .5F + (ns ? backOffsetZ : xOffset + backOffsetX),
+                    ns ? xSpeed : 0,
+                    ySpeed,
+                    ns ? 0 : xSpeed);
+
+            level.addParticle(ParticleTypes.SMOKE,
+                    worldPosition.getX() + .5F + (ns ? -xOffset + backOffsetX : backOffsetZ),
+                    worldPosition.getY() + .5F + yOffset,
+                    worldPosition.getZ() + .5F + (ns ? backOffsetZ : -xOffset + backOffsetX),
+                    ns ? -xSpeed : 0,
+                    ySpeed,
+                    ns ? 0 : -xSpeed);
+
+            degrees += 18;
+        }
     }
 
 
@@ -206,4 +230,11 @@ public class TileEntityBeacon extends TileEntity implements ITickableTileEntity 
         return -1;
     }*/
 
+    public void setTier(int tier) {
+        this.tier = tier;
+    }
+
+    public boolean isWorking() {
+        return working;
+    }
 }
