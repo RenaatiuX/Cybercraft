@@ -19,7 +19,7 @@ public class CybercraftConfig {
     public static C_Gamerules C_GAMERULES;
 
 
-    public static ForgeConfigSpec init(ForgeConfigSpec.Builder builder){
+    public static ForgeConfigSpec init(ForgeConfigSpec.Builder builder) {
 
         C_ESSENCE = new C_Essence(builder);
         C_MOBS = new C_Mobs(builder);
@@ -31,13 +31,13 @@ public class CybercraftConfig {
 
     }
 
-    public static final class C_Mobs{
+    public static final class C_Mobs {
         public final ForgeConfigSpec.BooleanValue enableCyberZombies, isDimensionBlacklist, applyDimensionToSpawning, applyDimensionToBeacon, addClothes;
         public final ForgeConfigSpec.IntValue cyberZombieWeight, cyberZombieMinPack, cyberZombieMaxPack;
         public final ForgeConfigSpec.DoubleValue cyberZombieDropRarity, clothDropRarity;
         public final Map<ICybercraft.EnumSlot, ForgeConfigSpec.ConfigValue<List<? extends String>>> startItems = new HashMap<>();
 
-        C_Mobs(ForgeConfigSpec.Builder builder){
+        C_Mobs(ForgeConfigSpec.Builder builder) {
             builder.push("Mobs").comment("Config for the Cyberzombies");
             enableCyberZombies = builder.define("CyberZombies are enabled", true);
             builder.comment("Vanilla Zombie = 100, Enderman = 10, Witch = 5");
@@ -54,17 +54,17 @@ public class CybercraftConfig {
             clothDropRarity = builder.defineInRange("Percent chance a Cybercrafr clothing is dropped", 50F, 0F, 100F);
             builder.push("StartingItems");
             builder.comment("Eyes");
-            startItems.put(ICybercraft.EnumSlot.EYES, builder.defineList("items", Arrays.asList(ItemInit.EYES.getId().toString(), ItemInit.CYBER_EYES.getId().toString()),location -> location instanceof String));
+            startItems.put(ICybercraft.EnumSlot.EYES, builder.defineList("items", Arrays.asList(ItemInit.EYES.getId().toString(), ItemInit.CYBER_EYES.getId().toString()), location -> location instanceof String));
             builder.pop();
             builder.pop();
         }
     }
 
-    public static final class C_Other{
+    public static final class C_Other {
         public final ForgeConfigSpec.BooleanValue surgeryCrafting, enableKatana, enableClothes, render;
         public final ForgeConfigSpec.IntValue testlaPerPower, fistMiningLevel;
 
-        C_Other(ForgeConfigSpec.Builder builder){
+        C_Other(ForgeConfigSpec.Builder builder) {
             builder.push("Other").comment("Config for Other things");
             builder.comment("Normally only found in Nether fortresses");
             surgeryCrafting = builder.define("Enable crafting recipe for Robosurgeon", false);
@@ -77,23 +77,23 @@ public class CybercraftConfig {
         }
     }
 
-    public static final class C_Essence{
+    public static final class C_Essence {
         public final ForgeConfigSpec.IntValue essence, criticalEssence;
 
-        C_Essence(ForgeConfigSpec.Builder builder){
+        C_Essence(ForgeConfigSpec.Builder builder) {
             builder.push("Essence").comment("Config for the Essence");
             essence = builder.defineInRange("Maximum Essence", 100, 0, Integer.MAX_VALUE);
-            criticalEssence = builder.defineInRange("Critical Essence value, where rejection begins", 25, 0, Integer.MAX_VALUE );
+            criticalEssence = builder.defineInRange("Critical Essence value, where rejection begins", 25, 0, Integer.MAX_VALUE);
             builder.pop();
         }
 
     }
 
-    public static final class C_Gamerules{
+    public static final class C_Gamerules {
         public final ForgeConfigSpec.BooleanValue defaultDrop, defaultKeep;
         public final ForgeConfigSpec.DoubleValue dropChance;
 
-        C_Gamerules(ForgeConfigSpec.Builder builder){
+        C_Gamerules(ForgeConfigSpec.Builder builder) {
             builder.push("Gamerules").comment("Config for the Gamerules");
             builder.comment("Determines if players drop their Cybercraft on death. Does not change settings on existing worlds, use /gamerule for that. Overridden if cybercraft_keepCybercraft is true");
             defaultDrop = builder.define("Default for gamerule cybercraft_dropCybercraft", false);
@@ -105,11 +105,13 @@ public class CybercraftConfig {
         }
     }
 
-    public static final class C_Machines{
+    public static final class C_Machines {
         public final ForgeConfigSpec.DoubleValue engineeringChance, scannerChance, scannerChanceAddl, maxChance;
         public final ForgeConfigSpec.IntValue scannerTime;
+        public final ForgeConfigSpec.DoubleValue radioBaseRange, radioRangePerTier;
+        public final ForgeConfigSpec.DoubleValue zombieSpawnChance, zombieSpawnChancePerLevel, brutesChance;
 
-        C_Machines(ForgeConfigSpec.Builder builder){
+        C_Machines(ForgeConfigSpec.Builder builder) {
             builder.push("Machines").comment("Config for the Machines");
             engineeringChance = builder.defineInRange("Chance of blueprint from Engineering Table", 15F, 0, 100F);
             scannerChance = builder.defineInRange("Chance of blueprint from Scanner", 10F, 0, 100F);
@@ -117,16 +119,27 @@ public class CybercraftConfig {
             maxChance = builder.defineInRange("Maximum Chance the scanner can drop a blueprint", 50f, 10, 100f);
             builder.comment("24000 is one Minecraft day, 1200 is one real-life minute");
             scannerTime = builder.defineInRange("Ticks taken per Scanner operation", 24000, 0, Integer.MAX_VALUE);
+            builder.comment("Base range is teh range the radio has with Tier 0, so when u simply place it on dirt");
+            radioBaseRange = builder.defineInRange("Base Range", 64, 10, Double.MAX_VALUE);
+            builder.comment("Range per Tier defines how much additional Range the radio gets when placed on a Tiered block");
+            radioRangePerTier = builder.defineInRange("Range Per Level", 64, 10, Double.MAX_VALUE);
+            builder.comment("Defines the chance of a zombie in range of radio that spawns to be a cyber-zombie when the radio has Tier 0");
+            builder.comment("0 means that now zombies will be converted at Tier 0");
+            zombieSpawnChance = builder.defineInRange("spawn_chance", 0.1, 0, 1);
+            builder.comment("Defines the chance of a zombie in range of radio that spawns to be a cyber-zombie per Tier");
+            zombieSpawnChancePerLevel = builder.defineInRange("spawn_chance_per_tier", 0.1, 0, 1);
+            builder.comment("defines the chance that when a zombie is converted to be a Brute");
+            brutesChance = builder.defineInRange("brute_chance", 0.5, 0, 1);
             builder.pop();
 
         }
     }
 
-    public static final class C_Hud{
+    public static final class C_Hud {
         public final ForgeConfigSpec.BooleanValue enableFloat;
         public final ForgeConfigSpec.DoubleValue hudjackFloat, hudlensFloat;
 
-        C_Hud(ForgeConfigSpec.Builder builder){
+        C_Hud(ForgeConfigSpec.Builder builder) {
             builder.push("Hud").comment("Config for the Hud");
             builder.comment("Experimental, defaults to false");
             enableFloat = builder.define("Enable hudlens and hudjack float", false);

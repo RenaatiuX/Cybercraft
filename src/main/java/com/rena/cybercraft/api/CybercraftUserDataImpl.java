@@ -95,9 +95,12 @@ public class CybercraftUserDataImpl implements ICybercraftUserData{
         {
             NonNullList<ItemStack> nnlCyberwaresInSlot = NonNullList.create();
             NonNullList<ItemStack> startItems = NonNullList.create();
-            for (String s : CybercraftConfig.C_MOBS.startItems.get(slot).get()){
-                startItems.add(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(s))));
-                System.out.println(s);
+            if (CybercraftConfig.C_MOBS.startItems.containsKey(slot)) {
+                for (String s : CybercraftConfig.C_MOBS.startItems.get(slot).get()) {
+                    if (s != null) {
+                        startItems.add(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(s))));
+                    }
+                }
             }
             for (ItemStack startItem : startItems) {
                 nnlCyberwaresInSlot.add(startItem.copy());

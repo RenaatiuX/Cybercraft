@@ -79,7 +79,7 @@ public class CyberZombieEntity extends ZombieEntity {
 
     @Override
     public EntitySize getDimensions(Pose pose) {
-        return isBrute() && getEyeHeight() != (1.95F * 1.2F) ? getDimensions(pose).scale(1.2f) : super.getDimensions(pose);
+        return isBrute() && getEyeHeight() != (1.95F * 1.2F) ? super.getDimensions(pose).scale(1.2f) : super.getDimensions(pose);
     }
 
     @Override
