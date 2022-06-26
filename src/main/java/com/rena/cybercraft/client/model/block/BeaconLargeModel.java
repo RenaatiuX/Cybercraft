@@ -98,7 +98,6 @@ public class BeaconLargeModel extends Model {
         bar2.render(matrixStack, vertexBuilder, f1, f2, f3, f4, f5, scale);
         bar3.render(matrixStack, vertexBuilder, f1, f2, f3, f4, f5, scale);
         bar4.render(matrixStack, vertexBuilder, f1, f2, f3, f4, f5, scale);
-        base.render(matrixStack, vertexBuilder, f1, f2, f3, f4, f5, scale);
 
         for (ModelRenderer bar : crossbars)
         {

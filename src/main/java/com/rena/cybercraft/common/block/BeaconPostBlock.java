@@ -1,20 +1,25 @@
 package com.rena.cybercraft.common.block;
 
 import com.rena.cybercraft.common.tileentities.TileEntityBeaconPost;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
+import com.rena.cybercraft.common.util.WorldUtil;
+import net.minecraft.block.*;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IntegerProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
+import java.util.Comparator;
 
 public class BeaconPostBlock extends ContainerBlock {
 
@@ -36,55 +41,46 @@ public class BeaconPostBlock extends ContainerBlock {
     public static final AxisAlignedBB NORTH_AABB = new AxisAlignedBB(0.375D, 0.0D, 0.0D, 0.625D, 1D, 0.375D);
     public static final AxisAlignedBB EAST_AABB = new AxisAlignedBB(0.625D, 0.0D, 0.375D, 1.0D, 1D, 0.625D);
 
-    protected BeaconPostBlock(Properties properties) {
-        super(properties);
+    public BeaconPostBlock() {
+        super(AbstractBlock.Properties.of(Material.METAL).strength(5f, 10f).sound(SoundType.METAL).harvestLevel(1).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops());
     }
 
     @Override
     public void setPlacedBy(World world, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, ItemStack itemStack) {
-
-        BlockPos complete = complete(world, blockPos);
-
-        if (complete != null)
-        {
-
-        }
-    }
-
-    private BlockPos complete(World world, BlockPos pos)
-    {
-        for (int y = -9; y <= 0; y++)
-        {
-            for (int x = -1; x <= 1; x++)
-            {
-                for (int z = -1; z <= 1; z++)
-                {
-                    BlockPos start = pos.offset(x, y, z);
-
-                    BlockPos result = complete(world, pos, start);
-                    if (result != null)
-                    {
-                        return result;
-                    }
-                }
+        if (!world.isClientSide()) {
+            findAdjacentTowers(blockPos, world);
+            BlockPos master = WorldUtil.getTileEntity(TileEntityBeaconPost.class,world, blockPos).getMaster();
+            System.out.println(canComplete(world, master));
+            if(canComplete(world, master)){
+                setCompleted(world, master);
             }
         }
-
-        return null;
     }
 
-    private BlockPos complete(World world, BlockPos pos, BlockPos start)
+    private void findAdjacentTowers(BlockPos pos, World world){
+        TileEntityBeaconPost current = WorldUtil.getTileEntity(TileEntityBeaconPost.class, world, pos);
+        for (Direction dir : Direction.values()){
+            TileEntityBeaconPost te = WorldUtil.getTileEntity(TileEntityBeaconPost.class, world, pos.relative(dir));
+            if (te != null){
+                if (te.getMaster().getY() < pos.getY()){
+                    te.updateMaster(pos);
+                }else{
+                    te.addSlave(pos);
+                    current.setMasterLoc(te.getMaster());
+                }
+                return;
+            }
+        }
+        current.setMasterLoc(pos);
+    }
+
+    private boolean canComplete(World world, BlockPos start)
     {
-        for (int y = 0; y <= 9; y++)
-        {
-            for (int x = -1; x <= 1; x++)
-            {
-                for (int z = -1; z <= 1; z++)
-                {
-                    if (y > 3 && (x != 0 || z != 0))
-                    {
+        for (int y = 0; y >= -9; y--) {
+            for (int x = -1; x <= 1; x++) {
+                for (int z = -1; z <= 1; z++) {
+                    if (y > -7 && (x != 0 || z != 0))
                         continue;
-                    }
 
                     BlockPos newPos = start.offset(x, y, z);
 
@@ -92,49 +88,72 @@ public class BeaconPostBlock extends ContainerBlock {
                     Block block = state.getBlock();
                     if (block != this || state.getValue(TRANSFORMED) != 0)
                     {
-                        return null;
+                        return false;
                     }
                 }
             }
         }
-        for (int y = 0; y <= 9; y++)
+        return true;
+    }
+
+    private void setCompleted(World world, BlockPos masterPos){
+        for (int y = 0; y <= -9; y--)
         {
             for (int x = -1; x <= 1; x++)
             {
                 for (int z = -1; z <= 1; z++)
                 {
-                    if (y > 3 && (x != 0 || z != 0))
+                    if (y > -7 && (x != 0 || z != 0))
                     {
                         continue;
                     }
-
-                    BlockPos newPos = start.offset(x, y, z);
-
-
-                    if (newPos.equals(start))
-                    {
+                    BlockPos newPos = masterPos.offset(x, y, z);
+                    if (newPos.equals(masterPos)) {
                         world.setBlock(newPos, world.getBlockState(newPos).setValue(TRANSFORMED, 2), 2);
-
-                        TileEntityBeaconPost post = (TileEntityBeaconPost) world.getBlockEntity(newPos);
                     }
-                    else
-                    {
+                    else {
                         world.setBlock(newPos, world.getBlockState(newPos).setValue(TRANSFORMED, 1), 2);
-
-                        TileEntityBeaconPost post = (TileEntityBeaconPost) world.getBlockEntity(newPos);
-                        post.setMasterLoc(start);
                     }
                 }
             }
         }
-        return start;
     }
 
+    @Override
+    public void onRemove(BlockState state, World world, BlockPos pos, BlockState newSTate, boolean bool) {
+        if (!world.isClientSide() && !state.is(newSTate.getBlock())) {
+            TileEntityBeaconPost te = WorldUtil.getTileEntity(TileEntityBeaconPost.class, world, pos);
+            if (te.isMaster()) {
+                te.removeSlave(pos);
+                BlockPos max = te.getSlaves().stream().max(Comparator.comparing(p -> p.getY())).orElse(null);
+                if (max != null)
+                    te.updateMaster(max);
+            }else {
+                te.removeSlave(pos);
+            }
+        }
+        super.onRemove(state, world, pos, newSTate, bool);
+    }
 
+    @Override
+    public BlockRenderType getRenderShape(BlockState state) {
+        return state.getValue(TRANSFORMED) == 0 ? BlockRenderType.MODEL : BlockRenderType.INVISIBLE;
+    }
+
+    @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
 
     @Nullable
     @Override
     public TileEntity newBlockEntity(IBlockReader p_196283_1_) {
-        return null;
+        return new TileEntityBeaconPost();
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
+        builder.add(TRANSFORMED, EAST, WEST, SOUTH, NORTH);
     }
 }

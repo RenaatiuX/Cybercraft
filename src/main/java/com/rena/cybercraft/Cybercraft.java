@@ -1,5 +1,6 @@
 package com.rena.cybercraft;
 
+import com.rena.cybercraft.client.renderer.tileentity.PostBeaconTileEntityRenderer;
 import com.rena.cybercraft.client.renderer.tileentity.TileEntityEngineeringRender;
 import com.rena.cybercraft.client.screens.BlueprintArchiveScreen;
 import com.rena.cybercraft.client.screens.ComponentBoxScreen;
@@ -97,6 +98,7 @@ public class Cybercraft {
             RenderTypeLookup.setRenderLayer(BlockInit.SCANNER_BLOCK.get(), RenderType.translucent());
 
             ClientRegistry.bindTileEntityRenderer(TileEntityTypeInit.ENGINEERING_TABLE.get(), TileEntityEngineeringRender::new);
+            ClientRegistry.bindTileEntityRenderer(TileEntityTypeInit.RADIO_TOWER.get(), PostBeaconTileEntityRenderer::new);
 
         });
     }
