@@ -137,7 +137,7 @@ public class HudHandler {
                 if (((IHudjack) CybercraftAPI.getCybercraft(stack)).isActive(stack)) {
                     isHUDjackAvailable = true;
                     if (CybercraftConfig.C_HUD.enableFloat.get()) {
-                        if (CybercraftAPI.getCybercraft(stack) == ItemInit.EYE_UPGRADES.get()) {
+                        if (CybercraftAPI.getCybercraft(stack) == ItemInit.CYBER_EYES.get()) {
                             cache_floatingFactor = CybercraftConfig.C_HUD.hudlensFloat.get();
                         } else {
                             cache_floatingFactor = CybercraftConfig.C_HUD.hudjackFloat.get();
@@ -160,10 +160,10 @@ public class HudHandler {
 
         double accelLastY = lastVelY - lastLastVelY;
         double accelY = entityPlayerSP.motionY - lastVelY;
-        double accelPitch = accelLastY + (accelY - accelLastY) * (event.renderTickTime + entityPlayerSP.ticksExisted - lastTickExisted) / 2F;
+        double accelPitch = accelLastY + (accelY - accelLastY) * (event.renderTickTime + entityPlayerSP.tickCount - lastTickExisted) / 2F;
 
-        double pitchCameraMove = cache_floatingFactor * ((entityPlayerSP.prevRenderArmPitch + (entityPlayerSP.renderArmPitch - entityPlayerSP.prevRenderArmPitch) * event.renderTickTime) - entityPlayerSP.rotationPitch);
-        double yawCameraMove   = cache_floatingFactor * ((entityPlayerSP.prevRenderArmYaw   + (entityPlayerSP.renderArmYaw   - entityPlayerSP.prevRenderArmYaw  ) * event.renderTickTime) - entityPlayerSP.rotationYaw  );
+        double pitchCameraMove = cache_floatingFactor * ((entityPlayerSP.prevRenderArmPitch + (entityPlayerSP.renderArmPitch - entityPlayerSP.prevRenderArmPitch) * event.renderTickTime) - entityPlayerSP.xRot);
+        double yawCameraMove   = cache_floatingFactor * ((entityPlayerSP.prevRenderArmYaw   + (entityPlayerSP.renderArmYaw   - entityPlayerSP.prevRenderArmYaw  ) * event.renderTickTime) - entityPlayerSP.yRot  );
 
         matrixStack.translate(yawCameraMove, pitchCameraMove + accelPitch * 50F * cache_floatingFactor, 0);
 

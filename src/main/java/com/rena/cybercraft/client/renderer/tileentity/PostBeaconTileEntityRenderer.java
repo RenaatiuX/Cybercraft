@@ -21,9 +21,9 @@ public class PostBeaconTileEntityRenderer extends TileEntityRenderer<TileEntityB
 
     @Override
     public void render(TileEntityBeaconPost te, float partialTicks, MatrixStack stack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
-        if (te != null && te.isMaster()) {
+        if (te != null && te.isMaster() && te.isTransformed()) {
             stack.pushPose();
-            stack.translate(0.5, 0.5, 0.5);
+            stack.translate(0.5, 1.5, 0.5);
             BEACON_MODEL.renderToBuffer(stack, buffer.getBuffer(BEACON_MODEL.renderType(TOWER_TEXTURE)), combinedLight, combinedOverlay, 1, 1, 1, 1);
             BEACON_MODEL.renderBase(stack, buffer.getBuffer(BEACON_MODEL.renderType(BASE_TEXTURE)), combinedLight, combinedOverlay, 1, 1, 1, 1);
             stack.popPose();

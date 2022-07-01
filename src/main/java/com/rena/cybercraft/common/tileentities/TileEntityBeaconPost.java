@@ -45,6 +45,16 @@ public class TileEntityBeaconPost extends TileEntity implements IRadioTower {
         return 16384.0D;
     }
 
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+        if (this.isMaster){
+            AxisAlignedBB aabb = new AxisAlignedBB(this.getBlockPos().below(10));
+            aabb = aabb.inflate(2, 10, 2);
+            return aabb;
+        }
+        return super.getRenderBoundingBox();
+    }
+
     public void setMasterLoc(BlockPos start) {
         this.master = start;
         this.isMaster = start.compareTo(this.getBlockPos()) == 0;
@@ -64,9 +74,10 @@ public class TileEntityBeaconPost extends TileEntity implements IRadioTower {
         if (this.isMaster) {
             this.slaves.add(start);
         }
-        level.sendBlockUpdated(worldPosition, level.getBlockState(getBlockPos()), level.getBlockState(getBlockPos()), 2);
         this.setChanged();
     }
+
+
 
     public void updateMaster(BlockPos newMaster) {
         if (this.isMaster) {
