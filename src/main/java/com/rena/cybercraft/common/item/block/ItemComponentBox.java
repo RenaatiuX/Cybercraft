@@ -115,6 +115,7 @@ public class ItemComponentBox extends CybercraftItemBlock{
         public void deserializeNBT(CompoundNBT nbt) {
             handler.deserializeNBT(nbt);
         }
+
     }
 
     @Override
