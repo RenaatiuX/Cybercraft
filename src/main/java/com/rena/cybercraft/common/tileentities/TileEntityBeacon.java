@@ -71,6 +71,7 @@ public class TileEntityBeacon extends TileEntity implements ITickableTileEntity 
     @Override
     public void tick() {
         this.working = !level.hasNeighborSignal(this.getBlockPos());
+        System.out.println(this.tier);
         if(!level.isClientSide()){
             if (working && this.tier > -1){
                 work();

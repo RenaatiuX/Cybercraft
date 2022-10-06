@@ -30,10 +30,6 @@ public class CybercraftArmorItem extends ArmorItem implements IDeconstructable, 
         return true;
     }
 
-    public static NonNullList<ItemStack> getComponents(ItemStack blueprintItem) {
-        return NonNullList.create();
-    }
-
     /*@Nullable
     @Override
     public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {

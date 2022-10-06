@@ -50,7 +50,7 @@ public class BeaconPostBlock extends ContainerBlock {
     public static final AxisAlignedBB EAST_AABB = new AxisAlignedBB(0.625D, 0.0D, 0.375D, 1.0D, 1D, 0.625D);
 
     public BeaconPostBlock() {
-        super(AbstractBlock.Properties.of(Material.METAL).strength(5f, 10f).sound(SoundType.METAL).harvestLevel(1).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops());
+        super(AbstractBlock.Properties.of(Material.METAL).strength(5f, 10f).sound(SoundType.METAL).harvestLevel(1).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops().noCollission());
     }
 
     @Override
@@ -90,6 +90,7 @@ public class BeaconPostBlock extends ContainerBlock {
 
     private boolean canComplete(World world, BlockPos start) {
         TileEntityBeaconPost master = WorldUtil.getTileEntity(TileEntityBeaconPost.class, world, start);
+        BlockState masterState = master.getBlockState();
         for (int y = 0; y >= -9; y--) {
             for (int x = -1; x <= 1; x++) {
                 for (int z = -1; z <= 1; z++) {
@@ -100,8 +101,14 @@ public class BeaconPostBlock extends ContainerBlock {
 
                     BlockState state = world.getBlockState(newPos);
                     Block block = state.getBlock();
-                    if (block != this || state.getValue(TRANSFORMED) != 0 || !master.getSlaves().contains(newPos)) {
-                        return false;
+                    if (masterState.getValue(TRANSFORMED) > 0){
+                        if (block != this || !master.getSlaves().contains(newPos)) {
+                            return false;
+                        }
+                    }else {
+                        if (block != this || state.getValue(TRANSFORMED) != 0 || !master.getSlaves().contains(newPos)) {
+                            return false;
+                        }
                     }
                 }
             }
@@ -141,13 +148,14 @@ public class BeaconPostBlock extends ContainerBlock {
             TileEntityBeaconPost te = WorldUtil.getTileEntity(TileEntityBeaconPost.class, world, pos);
             if (te.isMaster()) {
                 te.removeSlave(pos);
-                BlockPos max = te.getSlaves().stream().max(Comparator.comparing(BlockPos::getY)).orElse(null);
-                if (max != null)
+                BlockPos max = te.getSlaves().stream().filter(pos1 -> !pos1.equals(te.getBlockPos())).max(Comparator.comparing(BlockPos::getY)).orElse(null);
+                if (max != null) {
                     te.updateMaster(max);
-                tryComplete(world, max);
+                    tryComplete(world, max);
+                }
             } else {
                 te.removeSlave(pos);
-                tryComplete(world, te.getMaster());
+                System.out.println(tryComplete(world, te.getMaster()));
             }
         }
         super.onRemove(state, world, pos, newSTate, bool);

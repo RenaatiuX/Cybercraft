@@ -82,10 +82,12 @@ public class TileEntityBeaconPost extends TileEntity implements IRadioTower {
     public void updateMaster(BlockPos newMaster) {
         if (this.isMaster) {
             TileEntityBeaconPost master = WorldUtil.getTileEntity(TileEntityBeaconPost.class, this.level, newMaster);
-            master.setMasterLoc(newMaster);
-            for (BlockPos pos : this.slaves) {
-                TileEntityBeaconPost te = WorldUtil.getTileEntity(TileEntityBeaconPost.class, this.level, pos);
-                te.setMasterLoc(newMaster);
+            if (master != null) {
+                master.setMasterLoc(newMaster);
+                for (BlockPos pos : this.slaves) {
+                    TileEntityBeaconPost te = WorldUtil.getTileEntity(TileEntityBeaconPost.class, this.level, pos);
+                    te.setMasterLoc(newMaster);
+                }
             }
         } else {
             TileEntityBeaconPost te = WorldUtil.getTileEntity(TileEntityBeaconPost.class, this.level, this.master);
