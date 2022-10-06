@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.EnumProperty;
@@ -30,6 +31,7 @@ public class SurgeryChamberBlock extends Block {
 
     public SurgeryChamberBlock(Properties properties) {
         super(properties);
+        registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(OPEN, false).setValue(HALF, DoubleBlockHalf.LOWER));
     }
 
     private static final VoxelShape top    = Block.box(       0F, 15F / 16F,        0F,       1F,       1F,       1F);
@@ -41,8 +43,16 @@ public class SurgeryChamberBlock extends Block {
 
 
     @Override
-    public ActionResultType use(BlockState p_225533_1_, World p_225533_2_, BlockPos p_225533_3_, PlayerEntity p_225533_4_, Hand p_225533_5_, BlockRayTraceResult p_225533_6_) {
-        return super.use(p_225533_1_, p_225533_2_, p_225533_3_, p_225533_4_, p_225533_5_, p_225533_6_);
+    public ActionResultType use(BlockState blockState, World world, BlockPos pos, PlayerEntity p_225533_4_, Hand p_225533_5_, BlockRayTraceResult p_225533_6_) {
+        boolean top = blockState.getValue(HALF) == DoubleBlockHalf.UPPER;
+        if (canOpen(top ? pos : pos.above(), world))
+        {
+            toggleDoor(top, blockState, pos, world);
+
+            notifySurgeon(top ? pos : pos.above(), world);
+        }
+
+        return ActionResultType.sidedSuccess(world.isClientSide);
     }
 
     public void toggleDoor(boolean top, BlockState blockState, BlockPos pos, World worldIn)
@@ -64,7 +74,7 @@ public class SurgeryChamberBlock extends Block {
         }
     }
 
-    /*private boolean canOpen(BlockPos pos, World worldIn)
+    private boolean canOpen(BlockPos pos, World worldIn)
     {
         TileEntity above = worldIn.getBlockEntity(pos.above());
 
@@ -84,7 +94,7 @@ public class SurgeryChamberBlock extends Block {
         {
             ((TileEntitySurgery) above).notifyChange();
         }
-    }*/
+    }
 
     @Override
     public void neighborChanged(BlockState p_220069_1_, World p_220069_2_, BlockPos p_220069_3_, Block p_220069_4_, BlockPos p_220069_5_, boolean p_220069_6_) {

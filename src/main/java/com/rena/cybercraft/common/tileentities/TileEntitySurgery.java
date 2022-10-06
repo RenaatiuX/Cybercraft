@@ -54,12 +54,11 @@ public class TileEntitySurgery extends TileEntity implements ITickableTileEntity
         super(p_i48285_1_);
     }
 
-    @Override
+    /*@Override
     public void tick() {
 
-    }
-
-    /*public boolean isUsableByPlayer(PlayerEntity entityPlayer)
+    }*/
+    public boolean isUsableByPlayer(PlayerEntity entityPlayer)
     {
         return this.level.getBlockEntity(worldPosition) == this
                 && entityPlayer.distanceToSqr(getBlockPos().getX() + 0.5D, getBlockPos().getY() + 0.5D, getBlockPos().getZ() + 0.5D) <= 64.0D;
@@ -680,5 +679,5 @@ public class TileEntitySurgery extends TileEntity implements ITickableTileEntity
 
         this.missingPower = hasConsume && !hasProduce;
     }
-*/
+
 }

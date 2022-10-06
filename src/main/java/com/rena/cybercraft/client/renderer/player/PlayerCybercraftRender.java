@@ -75,7 +75,7 @@ public class PlayerCybercraftRender extends PlayerRenderer {
             CLAWS.claw1.zRot = 0.07F;
             CLAWS.claw1.xRot = 0.00F;
             CLAWS.claw1.setPos(-5.0F, -5.0F + (7F * percent), 0.0F);
-            //CLAWS.claw1.render(0.0625F);
+            CLAWS.claw1.render(matrixStack, buffer.getBuffer(RenderType.entityCutout(getTextureLocation(player))), combinedLight, OverlayTexture.NO_OVERLAY);
             matrixStack.popPose();
         }
     }
