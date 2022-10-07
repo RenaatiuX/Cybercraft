@@ -21,13 +21,17 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class CyberZombieEntity extends ZombieEntity {
 
@@ -36,7 +40,7 @@ public class CyberZombieEntity extends ZombieEntity {
     public boolean hasRandomWare;
     private CybercraftUserDataImpl cybercraft;
 
-    public CyberZombieEntity(EntityType<? extends ZombieEntity> cyberZombie, World world) {
+    public CyberZombieEntity(EntityType<ZombieEntity> cyberZombie, World world) {
         super(cyberZombie, world);
         cybercraft = new CybercraftUserDataImpl();
         hasRandomWare = false;
@@ -112,6 +116,13 @@ public class CyberZombieEntity extends ZombieEntity {
             cybercraft.deserializeNBT(tagCompound.getCompound("ware"));
         }
     }
+
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+        return super.getCapability(capability, facing);
+    }
+
+
 
     @Override
     protected void populateDefaultEquipmentSlots(@Nonnull DifficultyInstance difficulty)

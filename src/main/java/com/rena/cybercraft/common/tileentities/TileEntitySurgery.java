@@ -10,6 +10,7 @@ import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.item.CybercraftItem;
 import com.rena.cybercraft.common.util.LibConstants;
 import com.rena.cybercraft.core.init.ItemInit;
+import com.rena.cybercraft.events.CommonEvents;
 import com.rena.cybercraft.events.EssentialsMissingHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
@@ -178,7 +179,7 @@ public class TileEntitySurgery extends TileEntity implements ITickableTileEntity
     public void setWrongSlot(int index)
     {
         this.wrongSlot = index;
-        Cybercraft.proxy.wrong(this);
+        CommonEvents.wrong(this);
     }
 
     public void disableDependants(ItemStack stack, ICybercraft.EnumSlot slot, int indexSlotToCheck)
@@ -351,7 +352,7 @@ public class TileEntitySurgery extends TileEntity implements ITickableTileEntity
 
         ListNBT list = new ListNBT();
         for (boolean discardSlot : this.discardSlots) {
-            list.add(new NBTTagByte((byte) (discardSlot ? 1 : 0)));
+            list.add(new ByteNBT((byte) (discardSlot ? 1 : 0)));
         }
         compoundNBT.put("discard", list);
 
@@ -443,7 +444,7 @@ public class TileEntitySurgery extends TileEntity implements ITickableTileEntity
 
                 progressTicks++;
 
-                if (Cybercraft.proxy.workingOnPlayer(targetEntity))
+                if (CommonEvents.workingOnPlayer(targetEntity))
                 {
                     workingOnPlayer = true;
                     playerProgressTicks = progressTicks;
@@ -453,7 +454,7 @@ public class TileEntitySurgery extends TileEntity implements ITickableTileEntity
             {
                 inProgress = false;
                 progressTicks = 0;
-                if (Cybercraft.proxy.workingOnPlayer(targetEntity))
+                if (CommonEvents.workingOnPlayer(targetEntity))
                 {
                     workingOnPlayer = false;
                 }
@@ -468,7 +469,7 @@ public class TileEntitySurgery extends TileEntity implements ITickableTileEntity
         }
         else if (inProgress)
         {
-            if (Cybercraft.proxy.workingOnPlayer(targetEntity))
+            if (CommonEvents.workingOnPlayer(targetEntity))
             {
                 workingOnPlayer = false;
             }
