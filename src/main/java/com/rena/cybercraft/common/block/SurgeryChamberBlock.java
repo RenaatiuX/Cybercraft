@@ -44,13 +44,13 @@ public class SurgeryChamberBlock extends Block {
 
     @Override
     public ActionResultType use(BlockState blockState, World world, BlockPos pos, PlayerEntity p_225533_4_, Hand p_225533_5_, BlockRayTraceResult p_225533_6_) {
-        boolean top = blockState.getValue(HALF) == DoubleBlockHalf.UPPER;
+        /*boolean top = blockState.getValue(HALF) == DoubleBlockHalf.UPPER;
         if (canOpen(top ? pos : pos.above(), world))
         {
             toggleDoor(top, blockState, pos, world);
 
             notifySurgeon(top ? pos : pos.above(), world);
-        }
+        }*/
 
         return ActionResultType.sidedSuccess(world.isClientSide);
     }
@@ -74,7 +74,7 @@ public class SurgeryChamberBlock extends Block {
         }
     }
 
-    private boolean canOpen(BlockPos pos, World worldIn)
+    /*private boolean canOpen(BlockPos pos, World worldIn)
     {
         TileEntity above = worldIn.getBlockEntity(pos.above());
 
@@ -86,7 +86,7 @@ public class SurgeryChamberBlock extends Block {
     }
 
 
-    private void notifySurgeon(BlockPos pos, World worldIn)
+    /*private void notifySurgeon(BlockPos pos, World worldIn)
     {
         TileEntity above = worldIn.getBlockEntity(pos.above());
 
@@ -94,7 +94,7 @@ public class SurgeryChamberBlock extends Block {
         {
             ((TileEntitySurgery) above).notifyChange();
         }
-    }
+    }*/
 
     @Override
     public void neighborChanged(BlockState p_220069_1_, World p_220069_2_, BlockPos p_220069_3_, Block p_220069_4_, BlockPos p_220069_5_, boolean p_220069_6_) {

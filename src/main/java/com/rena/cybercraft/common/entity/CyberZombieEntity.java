@@ -40,7 +40,7 @@ public class CyberZombieEntity extends ZombieEntity {
     public boolean hasRandomWare;
     private CybercraftUserDataImpl cybercraft;
 
-    public CyberZombieEntity(EntityType<ZombieEntity> cyberZombie, World world) {
+    public CyberZombieEntity(EntityType<CyberZombieEntity> cyberZombie, World world) {
         super(cyberZombie, world);
         cybercraft = new CybercraftUserDataImpl();
         hasRandomWare = false;
