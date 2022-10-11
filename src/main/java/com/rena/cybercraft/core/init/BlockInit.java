@@ -32,13 +32,12 @@ public class BlockInit {
     public static final DoubleRegistryObject<ComponentBoxBlock, ItemComponentBox> COMPONENT_BOX = CUSTOM.register("component_box", ComponentBoxBlock::new, block -> new ItemComponentBox(block));
     public static final RegistryObject<BeaconBlock> RADIO = BLOCKS.register("beacon", BeaconBlock::new);
     public static final RegistryObject<BeaconPostBlock> RADIO_POST = BLOCKS.register("radio_post", BeaconPostBlock::new);
+    public static final RegistryObject<SurgeryChamberBlock> SURGERY_CHAMBER_BLOCK = BLOCKS.register("surgery_chamber", SurgeryChamberBlock::new);
 
     @SubscribeEvent
     public static final void registerBlockItems(RegistryEvent.Register<Item> event){
         final IForgeRegistry<Item> registry = event.getRegistry();
-        BLOCKS.getEntries().stream().map(RegistryObject::get).forEach(block -> {
-            registry.register(new BlockItem(block, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)).setRegistryName(block.getRegistryName()));
-        });
+        BLOCKS.getEntries().stream().map(RegistryObject::get).forEach(block -> registry.register(new BlockItem(block, new Item.Properties().tab(Cybercraft.CYBERCRAFTAB)).setRegistryName(block.getRegistryName())));
         for (String s : CybercraftConfig.C_MOBS.startItems.get(ICybercraft.EnumSlot.EYES).get()){
             System.out.println(s);
         }

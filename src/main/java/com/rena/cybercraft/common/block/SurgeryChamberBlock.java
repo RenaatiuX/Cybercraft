@@ -1,9 +1,11 @@
 package com.rena.cybercraft.common.block;
 
 import com.rena.cybercraft.common.tileentities.TileEntitySurgery;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -29,8 +31,8 @@ public class SurgeryChamberBlock extends Block {
     public static final BooleanProperty OPEN = BooleanProperty.create("open");
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
 
-    public SurgeryChamberBlock(Properties properties) {
-        super(properties);
+    public SurgeryChamberBlock() {
+        super(AbstractBlock.Properties.of(Material.METAL).strength(5f, 10f));
         registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(OPEN, false).setValue(HALF, DoubleBlockHalf.LOWER));
     }
 
@@ -44,13 +46,13 @@ public class SurgeryChamberBlock extends Block {
 
     @Override
     public ActionResultType use(BlockState blockState, World world, BlockPos pos, PlayerEntity p_225533_4_, Hand p_225533_5_, BlockRayTraceResult p_225533_6_) {
-        /*boolean top = blockState.getValue(HALF) == DoubleBlockHalf.UPPER;
+        boolean top = blockState.getValue(HALF) == DoubleBlockHalf.UPPER;
         if (canOpen(top ? pos : pos.above(), world))
         {
             toggleDoor(top, blockState, pos, world);
 
             notifySurgeon(top ? pos : pos.above(), world);
-        }*/
+        }
 
         return ActionResultType.sidedSuccess(world.isClientSide);
     }
@@ -61,20 +63,18 @@ public class SurgeryChamberBlock extends Block {
         worldIn.setBlock(pos, blockStateNew, 2);
 
         BlockPos otherPos = pos.above();
-        if (top)
-        {
+        if (top) {
             otherPos = pos.below();
         }
         BlockState otherState = worldIn.getBlockState(otherPos);
 
-        if (otherState.getBlock() == this)
-        {
+        if (otherState.getBlock() == this) {
             otherState = otherState.cycle(OPEN);
             worldIn.setBlock(otherPos, otherState, 2);
         }
     }
 
-    /*private boolean canOpen(BlockPos pos, World worldIn)
+    private boolean canOpen(BlockPos pos, World worldIn)
     {
         TileEntity above = worldIn.getBlockEntity(pos.above());
 
@@ -86,7 +86,7 @@ public class SurgeryChamberBlock extends Block {
     }
 
 
-    /*private void notifySurgeon(BlockPos pos, World worldIn)
+    private void notifySurgeon(BlockPos pos, World worldIn)
     {
         TileEntity above = worldIn.getBlockEntity(pos.above());
 
@@ -94,7 +94,7 @@ public class SurgeryChamberBlock extends Block {
         {
             ((TileEntitySurgery) above).notifyChange();
         }
-    }*/
+    }
 
     @Override
     public void neighborChanged(BlockState p_220069_1_, World p_220069_2_, BlockPos p_220069_3_, Block p_220069_4_, BlockPos p_220069_5_, boolean p_220069_6_) {
