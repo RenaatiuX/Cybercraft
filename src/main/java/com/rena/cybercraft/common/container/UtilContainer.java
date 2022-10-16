@@ -1,5 +1,6 @@
 package com.rena.cybercraft.common.container;
 
+import com.rena.cybercraft.common.tileentities.TileEntitySurgery;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -8,6 +9,7 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
@@ -145,6 +147,23 @@ public abstract class UtilContainer extends Container {
         Objects.requireNonNull(inventory, "the inventory must not be null");
         Objects.requireNonNull(buffer, "the buffer must not be null");
         final Entity entity = inventory.player.level.getEntity(buffer.readVarInt());
+        return (X) entity;
+    }
+
+    /**
+     * remeber to write the block Pos of the TileEntity in {@code NetworkHooks#OpenGui}
+     * @param inventory
+     * @param buffer
+     * @param <X>
+     * @return
+     */
+    @OnlyIn(Dist.CLIENT)
+    @SuppressWarnings("unchecked")
+    protected static <X extends TileEntity> X getClientTileEntity(final PlayerInventory inventory,
+                                                                         final PacketBuffer buffer) {
+        Objects.requireNonNull(inventory, "the inventory must not be null");
+        Objects.requireNonNull(buffer, "the buffer must not be null");
+        final TileEntity entity = inventory.player.level.getBlockEntity(buffer.readBlockPos());
         return (X) entity;
     }
 

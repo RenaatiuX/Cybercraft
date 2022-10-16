@@ -39,8 +39,8 @@ import java.util.List;
 
 public class TileEntitySurgery extends TileEntity implements ITickableTileEntity {
 
-    public ItemStackHandler slotsPlayer = new ItemStackHandler(120);
-    public ItemStackHandler slots = new ItemStackHandler(120);
+    public ItemStackHandler slotsPlayer = new ItemStackHandler(ICybercraft.EnumSlot.values().length * LibConstants.WARE_PER_SLOT);
+    public ItemStackHandler slots = new ItemStackHandler(ICybercraft.EnumSlot.values().length * LibConstants.WARE_PER_SLOT);
     public boolean[] discardSlots = new boolean[120];
     public boolean[] isEssentialMissing = new boolean[ICybercraft.EnumSlot.values().length * 2];
     public int essence = 0;
@@ -227,20 +227,19 @@ public class TileEntitySurgery extends TileEntity implements ITickableTileEntity
             ICybercraft ware = CybercraftAPI.getCybercraft(stack);
             for (Item needed : ware.requiredInstalledItems()) {
                 boolean found = false;
+                int row = slot.ordinal();
                 outerLoop:
-                for (int row = 0; row < ICybercraft.EnumSlot.values().length; row++) {
-                    for (int indexSlot = 0; indexSlot < LibConstants.WARE_PER_SLOT; indexSlot++) {
-                        if (indexSlot != indexSlotToCheck) {
-                            int index = row * LibConstants.WARE_PER_SLOT + indexSlot;
-                            ItemStack slotStack = slots.getStackInSlot(index);
-                            ItemStack playerStack = slotsPlayer.getStackInSlot(index);
+                for (int indexSlot = 0; indexSlot < LibConstants.WARE_PER_SLOT; indexSlot++) {
+                    if (indexSlot != indexSlotToCheck) {
+                        int index = row * LibConstants.WARE_PER_SLOT + indexSlot;
+                        ItemStack slotStack = slots.getStackInSlot(index);
+                        ItemStack playerStack = slotsPlayer.getStackInSlot(index);
 
-                            ItemStack otherStack = !slotStack.isEmpty() ? slotStack : (discardSlots[index] ? ItemStack.EMPTY : playerStack);
+                        ItemStack otherStack = !slotStack.isEmpty() ? slotStack : (discardSlots[index] ? ItemStack.EMPTY : playerStack);
 
-                            if (!otherStack.isEmpty() && otherStack.getItem() == needed.getItem()) {
-                                found = true;
-                                break outerLoop;
-                            }
+                        if (!otherStack.isEmpty() && otherStack.getItem() == needed.getItem()) {
+                            found = true;
+                            break outerLoop;
                         }
                     }
                 }

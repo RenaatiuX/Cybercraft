@@ -17,4 +17,5 @@ public class ContainerInit {
     public static final RegistryObject<ContainerType<BlueprintArchiveContainer>> BLUEPRINT_ARCHIVE_CONTAINER = CONTAINERS.register("blueprint_archive", () -> IForgeContainerType.create(BlueprintArchiveContainer::new));
     public static final RegistryObject<ContainerType<ItemComponentBoxContainer>> ITEM_COMPONENT_BOX_CONTAINER = CONTAINERS.register("item_component_box", () -> IForgeContainerType.create(ItemComponentBoxContainer::new));
     public static final RegistryObject<ContainerType<EngineeringTableContainer>> ENGINEERING_TABLE_CONTAINER = CONTAINERS.register("engineering_table", () -> IForgeContainerType.create(EngineeringTableContainer::new));
+    public static final RegistryObject<ContainerType<SurgeryContainer>> SURGERY_CONTAINER = CONTAINERS.register("surgery_container", () -> IForgeContainerType.create(SurgeryContainer::new));
 }

@@ -5,42 +5,33 @@ import com.rena.cybercraft.common.tileentities.TileEntitySurgery;
 import com.rena.cybercraft.common.util.LibConstants;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class SurgeryRemovePacket implements Runnable{
+public class SurgeryRemovePacket implements Runnable {
 
     private BlockPos pos;
-    private int dimensionId;
     private int slotNumber;
     private boolean isNull;
 
-    public SurgeryRemovePacket(BlockPos pos, int dimensionId, int slotNumber, boolean isNull)
-    {
+    public SurgeryRemovePacket(BlockPos pos, int slotNumber, boolean isNull) {
         this.pos = pos;
-        this.dimensionId = dimensionId;
         this.slotNumber = slotNumber;
         this.isNull = isNull;
     }
 
     public static void write(SurgeryRemovePacket packet, PacketBuffer buf) {
-        buf.writeInt(packet.pos.getX());
-        buf.writeInt(packet.pos.getY());
-        buf.writeInt(packet.pos.getZ());
-        buf.writeInt(packet.dimensionId);
+        buf.writeBlockPos(packet.pos);
         buf.writeInt(packet.slotNumber);
         buf.writeBoolean(packet.isNull);
     }
 
     public static SurgeryRemovePacket read(SurgeryRemovePacket packet, PacketBuffer buf) {
-        int x = buf.readInt();
-        int y = buf.readInt();
-        int z = buf.readInt();
-        packet.pos = new BlockPos(x, y, z);
-        packet.dimensionId = buf.readInt();
+        packet.pos = buf.readBlockPos();
         packet.slotNumber = buf.readInt();
         packet.isNull = buf.readBoolean();
-        return new SurgeryRemovePacket(packet.pos, packet.dimensionId , packet.slotNumber, packet.isNull);
+        return new SurgeryRemovePacket(packet.pos, packet.slotNumber, packet.isNull);
     }
 
     @Override

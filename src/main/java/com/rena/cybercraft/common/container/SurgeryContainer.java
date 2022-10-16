@@ -1,26 +1,74 @@
 package com.rena.cybercraft.common.container;
 
+import com.rena.cybercraft.Cybercraft;
+import com.rena.cybercraft.api.CybercraftAPI;
+import com.rena.cybercraft.api.item.ICybercraft;
 import com.rena.cybercraft.common.container.slot.SurgerySlot;
 import com.rena.cybercraft.common.tileentities.TileEntitySurgery;
+import com.rena.cybercraft.common.util.LibConstants;
+import com.rena.cybercraft.core.init.ContainerInit;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class SurgeryContainer extends Container {
+public class SurgeryContainer extends UtilContainer {
 
     private final TileEntitySurgery surgery;
-    protected SurgeryContainer(@Nullable ContainerType<?> p_i50105_1_, int p_i50105_2_, TileEntitySurgery surgery) {
-        super(p_i50105_1_, p_i50105_2_);
+    public SurgeryContainer(int id, PlayerInventory playerinv, TileEntitySurgery surgery) {
+        super(ContainerInit.SURGERY_CONTAINER.get(), id, playerinv);
         this.surgery = surgery;
+        init();
+    }
+
+    /**
+     * just client side
+     * @param id
+     * @param playerInventory
+     * @param buffer dont forget to write the block pos of the tileentity on the buffer in NetworkHooks
+     */
+    public SurgeryContainer(int id, PlayerInventory playerInventory, PacketBuffer buffer) {
+        this(id, playerInventory, getClientTileEntity(playerInventory, buffer));
+    }
+
+    public void init(){
+        addPlayerInventory(8, 139);
+
+
+        int indexContainerSlot = 0;
+        for (ICybercraft.EnumSlot slot : ICybercraft.EnumSlot.values())
+        {
+            for (int indexCyberwareSlot = 0; indexCyberwareSlot < 8; indexCyberwareSlot++)
+            {
+                addSlot(new SlotSurgery(surgery.slots, surgery.slotsPlayer, indexContainerSlot, 9 + 20 * indexCyberwareSlot, 109, slot));
+                indexContainerSlot++;
+            }
+            for (int indexCyberwareSlot = 0; indexCyberwareSlot < LibConstants.WARE_PER_SLOT - 8; indexCyberwareSlot++)
+            {
+                addSlot(new SlotSurgery(surgery.slots, surgery.slotsPlayer, indexContainerSlot, Integer.MIN_VALUE, Integer.MIN_VALUE, slot));
+                indexContainerSlot++;
+            }
+        }
+    }
+
+    public TileEntitySurgery getSurgery() {
+        return surgery;
     }
 
     @Override
     public boolean stillValid(PlayerEntity playerEntity) {
-        return false;//surgery.isUsableByPlayer(playerEntity);
+        return surgery.isUsableByPlayer(playerEntity);
     }
 
     @Override
@@ -70,5 +118,134 @@ public class SurgeryContainer extends Container {
         }
 
         return itemstack;
+    }
+
+    public class SlotSurgery extends SlotItemHandler {
+        public final int savedXPosition;
+        public final int savedYPosition;
+        public final ICybercraft.EnumSlot slot;
+        private final int index;
+        private IItemHandler playerItems;
+        private boolean visible = false;
+
+        public SlotSurgery(IItemHandler itemHandler, IItemHandler playerItems, int index, int xPosition, int yPosition, ICybercraft.EnumSlot slot)
+        {
+            super(itemHandler, index, xPosition, yPosition);
+
+            savedXPosition = xPosition;
+            savedYPosition = yPosition;
+            this.slot = slot;
+            this.index = index;
+            this.playerItems = playerItems;
+        }
+
+        public ItemStack getPlayerStack()
+        {
+            return playerItems.getStackInSlot(this.index);
+        }
+
+        public boolean slotDiscarded()
+        {
+            return surgery.discardSlots[this.index];
+        }
+
+        public void setDiscarded(boolean dis)
+        {
+            surgery.discardSlots[this.index] = dis;
+            surgery.updateEssential(slot);
+            surgery.updateEssence();
+        }
+
+        @Override
+        public boolean mayPickup(PlayerEntity playerIn) {
+            return surgery.canDisableItem(this.getItem(), slot, index % LibConstants.WARE_PER_SLOT);
+        }
+
+
+        @Override
+        public void setChanged() {
+            super.setChanged();
+            surgery.updateEssence();
+            surgery.setChanged();
+        }
+
+        @Override
+        public void set(@Nonnull ItemStack stack) {
+            if (mayPlace(stack)) {
+                surgery.disableDependants(getPlayerStack(), slot, index % LibConstants.WARE_PER_SLOT);
+                super.set(stack);
+            }
+            surgery.setChanged();
+            surgery.updateEssential(slot);
+            surgery.updateEssence();
+        }
+
+        public void setVisible(boolean visible){
+            this.visible = visible;
+        }
+
+        @Override
+        @OnlyIn(Dist.CLIENT)
+        public boolean isActive() {
+            return this.visible;
+        }
+
+        /*
+		@Override
+		public void onPickupFromSlot(EntityPlayer entityPlayer, ItemStack stack)
+	    {
+			super.onPickupFromSlot(entityPlayer, stack);
+			surgery.markDirty();
+			surgery.updateEssential(slot);
+			surgery.updateEssence();
+	    }
+	    */
+
+        @Override
+        public boolean mayPlace(@Nonnull ItemStack stack) {
+            ItemStack playerStack = getPlayerStack();
+            if ( !getPlayerStack().isEmpty()
+                    && !surgery.canDisableItem(playerStack, slot, index % LibConstants.WARE_PER_SLOT) )
+            {
+                return false;
+            }
+            if ( !( !stack.isEmpty() && CybercraftAPI.isCybercraft(stack) && CybercraftAPI.getCybercraft(stack).getSlot(stack) == slot )) {
+                return false;
+            }
+
+            if (CybercraftAPI.areCybercraftStacksEqual(stack, playerStack))
+            {
+                int stackSize = CybercraftAPI.getCybercraft(stack).installedStackSize(stack);
+                if (playerStack.getCount() == stackSize) return false;
+            }
+
+
+            return !doesItemConflict(stack)
+                    && areRequirementsFulfilled(stack);
+        }
+
+        public boolean doesItemConflict(@Nonnull ItemStack stack)
+        {
+            return surgery.doesItemConflict(stack, slot, index % LibConstants.WARE_PER_SLOT);
+        }
+
+        public boolean areRequirementsFulfilled(@Nonnull ItemStack stack)
+        {
+            return surgery.areRequirementsFulfilled(stack, slot, index % LibConstants.WARE_PER_SLOT);
+        }
+
+
+        @Override
+        public int getMaxStackSize(@Nonnull ItemStack stack) {
+            if ( stack.isEmpty() || !CybercraftAPI.isCybercraft(stack) ) {
+                return 1;
+            }
+            ItemStack playerStack = getPlayerStack();
+            int stackSize = CybercraftAPI.getCybercraft(stack).installedStackSize(stack);
+            if (CybercraftAPI.areCybercraftStacksEqual(playerStack, stack)) {
+                return stackSize - playerStack.getCount();
+            }
+            return stackSize;
+        }
     }
 }
