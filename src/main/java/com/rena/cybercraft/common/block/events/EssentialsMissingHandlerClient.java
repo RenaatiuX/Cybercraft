@@ -1,32 +1,7 @@
-package com.rena.cybercraft.events;
+package com.rena.cybercraft.common.block.events;
 
-import com.rena.cybercraft.api.CybercraftAPI;
-import com.rena.cybercraft.api.ICybercraftUserData;
-import com.rena.cybercraft.api.item.ICybercraft;
-import com.rena.cybercraft.client.renderer.player.PlayerCybercraftRender;
-import com.rena.cybercraft.common.config.CybercraftConfig;
-import com.rena.cybercraft.common.item.CyberLimbItem;
-import net.minecraft.client.GameSettings;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.PlayerRenderer;
-import net.minecraft.client.renderer.entity.model.PlayerModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.HandSide;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderHandEvent;
-import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 

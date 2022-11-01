@@ -1,23 +1,4 @@
-package com.rena.cybercraft.events;
-
-import com.rena.cybercraft.api.CybercraftAPI;
-import com.rena.cybercraft.api.item.ICybercraft;
-import com.rena.cybercraft.api.item.IDeconstructable;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import java.util.List;
+package com.rena.cybercraft.common.block.events;
 
 public class MiscHandler {
 

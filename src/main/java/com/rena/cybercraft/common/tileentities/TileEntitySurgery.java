@@ -10,27 +10,21 @@ import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.item.CybercraftItem;
 import com.rena.cybercraft.common.util.LibConstants;
 import com.rena.cybercraft.core.init.ItemInit;
-import com.rena.cybercraft.events.CommonEvents;
-import com.rena.cybercraft.events.EssentialsMissingHandler;
+import com.rena.cybercraft.common.block.events.CommonEvents;
+import com.rena.cybercraft.common.block.events.EssentialsMissingHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.ByteNBT;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -51,8 +45,8 @@ public class TileEntitySurgery extends TileEntity implements ITickableTileEntity
     public int cooldownTicks = 0;
     public boolean missingPower = false;
 
-    public TileEntitySurgery(TileEntityType<?> p_i48285_1_) {
-        super(p_i48285_1_);
+    public TileEntitySurgery(TileEntityType<?> tileEntity) {
+        super(tileEntity);
     }
 
     public boolean isUsableByPlayer(PlayerEntity entityPlayer) {

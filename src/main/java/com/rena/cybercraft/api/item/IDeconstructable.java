@@ -5,6 +5,6 @@ import net.minecraft.util.NonNullList;
 
 public interface IDeconstructable {
 
-    public boolean canDestroy(ItemStack stack);
+    boolean canDestroy(ItemStack stack);
 
 }

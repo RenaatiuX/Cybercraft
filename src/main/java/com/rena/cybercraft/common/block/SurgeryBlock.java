@@ -6,10 +6,7 @@ import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.tileentities.TileEntityScanner;
 import com.rena.cybercraft.common.tileentities.TileEntitySurgery;
 import com.rena.cybercraft.common.util.WorldUtil;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -31,7 +28,7 @@ import javax.annotation.Nullable;
 public class SurgeryBlock extends Block {
 
     public SurgeryBlock() {
-        super(AbstractBlock.Properties.of(Material.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(1).strength(7f, 3f).requiresCorrectToolForDrops());
+        super(AbstractBlock.Properties.of(Material.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(1).strength(5f, 10f).sound(SoundType.METAL).requiresCorrectToolForDrops());
     }
 
     @Override
@@ -42,7 +39,7 @@ public class SurgeryBlock extends Block {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileEntityScanner();
+        return null; //new TileEntitySurgery();
     }
 
     @Override
@@ -60,7 +57,7 @@ public class SurgeryBlock extends Block {
                 player.getAttribute(CybercraftAPI.TOLERANCE_ATTR).setBaseValue(CybercraftConfig.C_ESSENCE.essence.get());
 
                 ICybercraftUserData cybercraftUserData = CybercraftAPI.getCapabilityOrNull(player);
-                //te.updatePlayerSlots(player, cybercraftUserData);
+                te.updatePlayerSlots(player, cybercraftUserData);
                 //NetworkHooks.openGui((ServerPlayerEntity) player, te, pos);
                 return ActionResultType.CONSUME;
             }

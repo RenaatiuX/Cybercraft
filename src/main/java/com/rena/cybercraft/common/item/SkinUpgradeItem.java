@@ -5,7 +5,7 @@ import com.rena.cybercraft.api.CybercraftUpdateEvent;
 import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.common.ArmorClass;
 import com.rena.cybercraft.core.init.ItemInit;
-import com.rena.cybercraft.events.EssentialsMissingHandler;
+import com.rena.cybercraft.common.block.events.EssentialsMissingHandler;
 import com.rena.cybercraft.common.util.LibConstants;
 import com.rena.cybercraft.core.init.EffectInit;
 import net.minecraft.enchantment.ThornsEnchantment;
@@ -30,11 +30,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.*;
 
 public class SkinUpgradeItem extends CybercraftItem{
-
-    public static final int META_SOLARSKIN = 0;
-    public static final int META_SUBDERMAL_SPIKES = 1;
-    public static final int META_SYNTHETIC_SKIN = 2;
-    public static final int META_IMMUNOSUPPRESSANT = 3;
 
     public SkinUpgradeItem(Properties properties, EnumSlot slots, Quality q) {
         super(properties, slots, q);

@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack;
 
 public interface ICybercraftTabItem {
 
-    public static enum EnumCategory
+    enum EnumCategory
     {
         BLOCKS,
         BODYPARTS,
@@ -22,6 +22,6 @@ public interface ICybercraftTabItem {
         FOOT;
     }
 
-    public EnumCategory getCategory(ItemStack stack);
+    EnumCategory getCategory(ItemStack stack);
 
 }

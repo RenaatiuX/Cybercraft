@@ -4,7 +4,7 @@ import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.item.ICybercraft;
 import com.rena.cybercraft.api.item.ICybercraftTabItem;
 import com.rena.cybercraft.core.init.ItemInit;
-import com.rena.cybercraft.events.CreativeMenuHandler;
+import com.rena.cybercraft.common.block.events.CreativeMenuHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;

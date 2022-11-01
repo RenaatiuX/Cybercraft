@@ -1,18 +1,6 @@
-package com.rena.cybercraft.events;
+package com.rena.cybercraft.common.block.events;
 
-import com.rena.cybercraft.api.CybercraftAPI;
-import com.rena.cybercraft.api.ICybercraftUserData;
-import com.rena.cybercraft.client.ClientUtils;
-import com.rena.cybercraft.client.KeyBinds;
-import com.rena.cybercraft.client.screens.GuiCybercraftMenu;
-import com.rena.cybercraft.core.network.CCNetwork;
-import com.rena.cybercraft.core.network.OpenRadialMenuPacket;
-import net.java.games.input.Mouse;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.settings.KeyConflictContext;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;

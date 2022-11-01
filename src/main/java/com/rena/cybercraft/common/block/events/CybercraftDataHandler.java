@@ -1,49 +1,23 @@
-package com.rena.cybercraft.events;
+package com.rena.cybercraft.common.block.events;
 
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.CybercraftUserDataImpl;
 import com.rena.cybercraft.api.ICybercraftUserData;
-import com.rena.cybercraft.api.item.ICybercraft;
-import com.rena.cybercraft.common.config.CybercraftConfig;
-import com.rena.cybercraft.common.entity.CyberZombieEntity;
-import com.rena.cybercraft.common.tileentities.TileEntityBeacon;
-import com.rena.cybercraft.common.util.LibConstants;
-import com.rena.cybercraft.core.init.ItemInit;
 import com.rena.cybercraft.core.network.CCNetwork;
 import com.rena.cybercraft.core.network.CybercraftSyncPacket;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.monster.piglin.AbstractPiglinEntity;
-import net.minecraft.entity.monster.piglin.PiglinBruteEntity;
-import net.minecraft.entity.monster.piglin.PiglinEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.WeightedRandom;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class CybercraftDataHandler {
 

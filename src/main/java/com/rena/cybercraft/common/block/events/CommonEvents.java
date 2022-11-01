@@ -1,4 +1,4 @@
-package com.rena.cybercraft.events;
+package com.rena.cybercraft.common.block.events;
 
 import com.rena.cybercraft.common.tileentities.TileEntitySurgery;
 import net.minecraft.entity.LivingEntity;

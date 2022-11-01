@@ -6,7 +6,7 @@ import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.hud.INotification;
 import com.rena.cybercraft.api.hud.NotificationInstance;
 import com.rena.cybercraft.client.ClientUtils;
-import com.rena.cybercraft.events.HudHandler;
+import com.rena.cybercraft.common.block.events.HudHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketBuffer;

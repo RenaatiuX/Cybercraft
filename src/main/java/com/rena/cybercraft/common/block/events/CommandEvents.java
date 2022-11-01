@@ -1,4 +1,4 @@
-package com.rena.cybercraft.events;
+package com.rena.cybercraft.common.block.events;
 
 import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.common.command.CommandClearCybercraft;

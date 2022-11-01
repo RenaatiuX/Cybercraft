@@ -3,7 +3,7 @@ package com.rena.cybercraft.common.item;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.CybercraftUpdateEvent;
 import com.rena.cybercraft.api.ICybercraftUserData;
-import com.rena.cybercraft.events.EssentialsMissingHandler;
+import com.rena.cybercraft.common.block.events.EssentialsMissingHandler;
 import com.rena.cybercraft.common.util.LibConstants;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;

@@ -1,14 +1,7 @@
 package com.rena.cybercraft.client.screens.hud;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.rena.cybercraft.api.CybercraftAPI;
-import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.api.hud.HudElementBase;
-import com.rena.cybercraft.client.ClientUtils;
-import com.rena.cybercraft.events.HudHandler;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 
 public class PowerDisplay extends HudElementBase {

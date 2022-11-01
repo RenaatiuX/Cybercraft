@@ -13,21 +13,21 @@ import java.util.Map;
 
 public interface ICybercraft {
 
-    public EnumSlot getSlot(ItemStack stack);
-    public int installedStackSize(ItemStack stack);
-    public boolean isIncompatible(ItemStack stack, ItemStack comparison);
+    EnumSlot getSlot(ItemStack stack);
+    int installedStackSize(ItemStack stack);
+    boolean isIncompatible(ItemStack stack, ItemStack comparison);
     boolean isEssential(ItemStack stack);
-    public List<ITextComponent> getInfo(ItemStack stack);
-    public int getCapacity(ItemStack wareStack);
+    List<ITextComponent> getInfo(ItemStack stack);
+    int getCapacity(ItemStack wareStack);
     NonNullList<Item> requiredInstalledItems();
 
 
-    public Quality getQuality();
+    Quality getQuality();
 
-    public Item withQuality(Quality quality);
-    public boolean canHoldQuality(Quality quality);
+    Item withQuality(Quality quality);
+    boolean canHoldQuality(Quality quality);
 
-    public class Quality
+    class Quality
     {
         private static Map<String, Quality> mapping = new HashMap<>();
         public static List<Quality> qualities = new ArrayList<>();
@@ -75,7 +75,7 @@ public interface ICybercraft {
     }
 
     // @TODO rename to BodyRegion since it's more a type/category than an actual inventory slot
-    public enum EnumSlot
+    enum EnumSlot
     {
         EYES(12, "eyes"),
         CRANIUM(11, "cranium"),
@@ -103,7 +103,7 @@ public interface ICybercraft {
             this.hasEssential = hasEssential;
         }
 
-        private EnumSlot(int slot, String name)
+        EnumSlot(int slot, String name)
         {
             this(slot, name, false, true);
         }
@@ -141,20 +141,20 @@ public interface ICybercraft {
         }
     }
 
-    public void onAdded(LivingEntity livingEntity, ItemStack stack);
-    public void onRemoved(LivingEntity livingEntity, ItemStack stack);
+    void onAdded(LivingEntity livingEntity, ItemStack stack);
+    void onRemoved(LivingEntity livingEntity, ItemStack stack);
 
-    public interface ISidedLimb
+    interface ISidedLimb
     {
-        public EnumSide getSide(ItemStack stack);
+        EnumSide getSide(ItemStack stack);
 
-        public enum EnumSide
+        enum EnumSide
         {
             LEFT,
             RIGHT;
         }
     }
 
-    public int getEssenceCost(ItemStack stack);
+    int getEssenceCost(ItemStack stack);
 
 }
