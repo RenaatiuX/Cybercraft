@@ -30,5 +30,8 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         }
         tag(Tags.Items.COMPONENTS).add(COMPONENT_ACTUATOR.get(), COMPONENT_FULLERENE.get(), COMPONENT_SSC.get(), COMPONENT_PLATING.get(), COMPONENT_FIBER_OPTICS.get(),
                 COMPONENT_MICRO_ELECTRIC.get(), COMPONENT_REACTOR.get(), COMPONENT_STORAGE.get(), COMPONENT_SYNTHNERVES.get(), COMPONENT_TITANIUM.get());
+
+        tag(Tags.Items.BODY_PARTS).add(EYES.get(), BRAIN.get(), HEART.get(), LUNGS.get(), STOMACH.get(), SKIN.get(), MUSCLES.get(), BONES.get(), ARM_LEFT.get(), ARM_RIGHT.get(),
+                LEG_LEFT.get(), LEG_RIGHT.get());
     }
 }

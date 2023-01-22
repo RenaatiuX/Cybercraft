@@ -1,10 +1,15 @@
 package com.rena.cybercraft.common.entity;
 
+import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.api.AddRandomCyberwareEvent;
+import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.CybercraftUserDataImpl;
+import com.rena.cybercraft.api.item.ICybercraft;
 import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.util.LibConstants;
+import com.rena.cybercraft.core.Tags;
 import com.rena.cybercraft.core.init.ItemInit;
+import com.rena.cybercraft.datagen.ModItemTagsProvider;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
@@ -21,7 +26,9 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
@@ -32,6 +39,9 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class CyberZombieEntity extends ZombieEntity {
 
@@ -47,8 +57,7 @@ public class CyberZombieEntity extends ZombieEntity {
     }
 
     @Override
-    protected void defineSynchedData()
-    {
+    protected void defineSynchedData() {
         super.defineSynchedData();
         entityData.define(CYBER_VARIANT, 0);
     }
@@ -62,10 +71,11 @@ public class CyberZombieEntity extends ZombieEntity {
                 .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE);
     }
 
-   @Override
-    public void tick() {
-        if ( !hasRandomWare && !level.isClientSide ) {
-            if ( !isBrute() && level.random.nextFloat() < (LibConstants.NATURAL_BRUTE_CHANCE / 100F) ) {
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (!hasRandomWare && !level.isClientSide) {
+            if (!isBrute() && level.random.nextFloat() < (LibConstants.NATURAL_BRUTE_CHANCE / 100F)) {
                 setBrute();
             }
             if (!hasRandomWare)
@@ -77,8 +87,6 @@ public class CyberZombieEntity extends ZombieEntity {
             setHealth(getMaxHealth());
             hasRandomWare = true;
         }
-
-        super.tick();
     }
 
     @Override
@@ -93,7 +101,7 @@ public class CyberZombieEntity extends ZombieEntity {
         tagCompound.putBoolean("hasRandomWare", hasRandomWare);
         tagCompound.putBoolean("brute", isBrute());
 
-        if(hasRandomWare){
+        if (hasRandomWare) {
 
             CompoundNBT tagCompoundCybercraft = cybercraft.serializeNBT();
             tagCompound.put("ware", tagCompoundCybercraft);
@@ -106,45 +114,100 @@ public class CyberZombieEntity extends ZombieEntity {
         super.readAdditionalSaveData(tagCompound);
 
         boolean brute = tagCompound.getBoolean("brute");
-        if(brute)
-        {
+        if (brute) {
             setBrute();
         }
         hasRandomWare = tagCompound.getBoolean("hasRandomWare");
-        if(tagCompound.contains("ware"))
-        {
+        if (tagCompound.contains("ware")) {
             cybercraft.deserializeNBT(tagCompound.getCompound("ware"));
         }
     }
-
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+        if (capability == CybercraftAPI.CYBERCRAFT_CAPABILITY)
+        {
+            return LazyOptional.of(() -> cybercraft).cast();
+        }
         return super.getCapability(capability, facing);
     }
 
+    @Override
+    protected void dropCustomDeathLoot(DamageSource damageSource, int lootingModifier, boolean wasRecentlyHit) {
+        super.dropCustomDeathLoot(damageSource, lootingModifier, wasRecentlyHit);
 
+        /*if (CybercraftConfig.C_OTHER.enableKatana.get() && CybercraftConfig.C_MOBS.addClothes.get()
+                && !getItemBySlot(EquipmentSlotType.MAINHAND).isEmpty() && getItemBySlot(EquipmentSlotType.MAINHAND).getItem() == ItemInit.KATANA.get()) {
+            ItemStack itemstack = getItemBySlot(EquipmentSlotType.MAINHAND).copy();
+            if (itemstack.isDamageableItem()) {
+                int i = Math.max(itemstack.getMaxDamage() - 25, 1);
+                int j = itemstack.getMaxDamage() - random.nextInt(random.nextInt(i) + 1);
+                if (j > i) {
+                    j = i;
+                }
+                if (j < 1) {
+                    j = 1;
+                }
+                itemstack.setDamageValue(j);
+            }
+            spawnAtLocation(itemstack, 0.0F);
+        }
+
+        if (hasRandomWare) {
+            float rarity = (float) Math.min(100.0F, CybercraftConfig.C_MOBS.cyberZombieDropRarity.get() + lootingModifier * 5.0F);
+            if (level.random.nextFloat() < (rarity / 100.0F)) {
+                List<ItemStack> allWares = new ArrayList<>();
+                for (ICybercraft.EnumSlot slot : ICybercraft.EnumSlot.values()) {
+                    NonNullList<ItemStack> nnlInstalled = cybercraft.getInstalledCybercraft(slot);
+                    for (ItemStack stack : nnlInstalled) {
+                        if (!stack.isEmpty()) {
+                            allWares.add(stack);
+                        }
+                    }
+                }
+                allWares.removeAll(Collections.singleton(ItemStack.EMPTY));
+                // Sanity check for corrupted NBT
+                if (allWares.size() == 0) {
+                    Cybercraft.LOGGER.error(String.format("Invalid cyberzombie with hasRandomWare %s with actually no implants: %s",
+                            hasRandomWare, this));
+                    return;
+                }
+                ItemStack drop = ItemStack.EMPTY;
+                int count = 0;
+                while (count < 50
+                        && (drop.isEmpty()
+                        || drop.getItem() == ItemInit.CREATIVE_BATTERY.get()
+                        || Tags.Items.BODY_PARTS.contains(drop.getItem()))) {
+                    int random = level.random.nextInt(allWares.size());
+                    drop = allWares.get(random).copy();
+                    drop = CybercraftAPI.sanitize(drop);
+                    drop = CybercraftAPI.getCybercraft(drop).setQuality(drop, CybercraftAPI.QUALITY_SCAVENGED);
+                    drop.setCount(1);
+                    count++;
+                }
+                if (count < 50) {
+                    spawnAtLocation(drop, 0.0F);
+                }
+            }
+        }*/
+    }
 
     @Override
-    protected void populateDefaultEquipmentSlots(@Nonnull DifficultyInstance difficulty)
-    {
+    protected void populateDefaultEquipmentSlots(@Nonnull DifficultyInstance difficulty) {
         super.populateDefaultEquipmentSlots(difficulty);
 
-        if ( CybercraftConfig.C_OTHER.enableKatana.get() && CybercraftConfig.C_MOBS.addClothes.get()
+        if (CybercraftConfig.C_OTHER.enableKatana.get() && CybercraftConfig.C_MOBS.addClothes.get()
                 && !getItemBySlot(EquipmentSlotType.MAINHAND).isEmpty()
-                && getItemBySlot(EquipmentSlotType.MAINHAND).getItem() == Items.IRON_SWORD )
-        {
+                && getItemBySlot(EquipmentSlotType.MAINHAND).getItem() == Items.IRON_SWORD) {
             setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ItemInit.KATANA.get()));
             setDropChance(EquipmentSlotType.MAINHAND, 0F);
         }
     }
 
-    public boolean isBrute()
-    {
+    public boolean isBrute() {
         return entityData.get(CYBER_VARIANT) == 1;
     }
 
-    public boolean setBrute()
-    {
+    public boolean setBrute() {
         setBaby(false);
         entityData.set(CYBER_VARIANT, 1);
 

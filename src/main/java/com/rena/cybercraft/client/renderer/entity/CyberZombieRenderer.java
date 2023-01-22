@@ -23,11 +23,10 @@ public class CyberZombieRenderer extends MobRenderer<CyberZombieEntity, ZombieMo
 
     @Override
     public ResourceLocation getTextureLocation(CyberZombieEntity entity) {
-        CyberZombieEntity cz = entity;
-        if (cz.isBrute())
-        {
+        if (entity.isBrute()) {
             return ZOMBIE_BRUTE;
         }
-        return ZOMBIE;    }
+        return ZOMBIE;
+    }
 
 }

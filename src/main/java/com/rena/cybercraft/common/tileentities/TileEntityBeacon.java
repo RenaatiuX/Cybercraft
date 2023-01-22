@@ -1,48 +1,25 @@
 package com.rena.cybercraft.common.tileentities;
 
-import com.rena.cybercraft.api.CybercraftAPI;
-import com.rena.cybercraft.api.ICybercraftUserData;
-import com.rena.cybercraft.api.item.EnableDisableHelper;
 import com.rena.cybercraft.common.block.BeaconLargeBlock;
 import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.entity.CyberZombieEntity;
-import com.rena.cybercraft.common.item.BrainUpgradeItem;
-import com.rena.cybercraft.common.util.LibConstants;
-import com.rena.cybercraft.core.init.BlockInit;
 import com.rena.cybercraft.core.init.EntityTypeInit;
-import com.rena.cybercraft.core.init.ItemInit;
 import com.rena.cybercraft.core.init.TileEntityTypeInit;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import javax.annotation.Nonnull;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 
 public class TileEntityBeacon extends TileEntity implements ITickableTileEntity {
 

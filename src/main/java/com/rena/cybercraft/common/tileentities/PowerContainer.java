@@ -4,15 +4,14 @@ import com.rena.cybercraft.api.IEnergy;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.util.INBTSerializable;
 
-public class PowerContainer implements IEnergy, INBTSerializable<CompoundNBT>{
+public class PowerContainer implements IEnergy, INBTSerializable<CompoundNBT> {
 
     private long stored;
     private long capacity;
     private long inputRate;
     private long outputRate;
 
-    public PowerContainer()
-    {
+    public PowerContainer() {
         this.stored = 0;
         this.capacity = 5000;
         this.inputRate = 50;
@@ -37,31 +36,26 @@ public class PowerContainer implements IEnergy, INBTSerializable<CompoundNBT>{
         this.inputRate = nbt.getLong("input");
         this.outputRate = nbt.getLong("output");
 
-        if (this.stored > this.getCapacity())
-        {
+        if (this.stored > this.getCapacity()) {
             this.stored = this.getCapacity();
         }
     }
 
     @Override
-    public long getCapacity()
-    {
+    public long getCapacity() {
         return capacity;
     }
 
     @Override
-    public long getStoredPower()
-    {
+    public long getStoredPower() {
         return stored;
     }
 
     @Override
-    public long givePower(long power, boolean simulated)
-    {
+    public long givePower(long power, boolean simulated) {
         final long acceptedEnergy = Math.min(this.getCapacity() - this.stored, Math.min(inputRate, power));
 
-        if (!simulated)
-        {
+        if (!simulated) {
             this.stored += acceptedEnergy;
         }
 
@@ -69,12 +63,10 @@ public class PowerContainer implements IEnergy, INBTSerializable<CompoundNBT>{
     }
 
     @Override
-    public long takePower(long power, boolean simulated)
-    {
+    public long takePower(long power, boolean simulated) {
         final long removedPower = Math.min(this.stored, Math.min(outputRate, power));
 
-        if (!simulated)
-        {
+        if (!simulated) {
             this.stored -= removedPower;
         }
 
