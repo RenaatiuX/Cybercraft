@@ -12,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.tileentity.TileEntity;
@@ -28,7 +29,7 @@ import net.minecraft.world.World;
 public class SurgeryChamberBlock extends Block {
 
     public static final DirectionProperty FACING = HorizontalBlock.FACING;
-    public static final BooleanProperty OPEN = BooleanProperty.create("open");
+    public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
 
     public SurgeryChamberBlock() {
@@ -113,5 +114,10 @@ public class SurgeryChamberBlock extends Block {
     @Override
     public PushReaction getPistonPushReaction(BlockState p_149656_1_) {
         return PushReaction.DESTROY;
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> p_206840_1_) {
+        p_206840_1_.add(FACING, OPEN, HALF);
     }
 }

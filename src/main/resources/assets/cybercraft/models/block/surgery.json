@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "particle": "cybercraft:block/surgery_chamber_top",
+    "end": "cybercraft:block/surgery_chamber_top",
+    "side": "cybercraft:block/robosurgeon_screen"
+  }
+}

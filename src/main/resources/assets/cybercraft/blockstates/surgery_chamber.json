@@ -1,27 +1,67 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "cybercraft:surgery_bottom",
-        "textures": {
-            "particle": "cybercraft:blocks/surgery_chamber_top"
-        }
+  "variants": {
+    "facing=east,half=lower,open=false": {
+      "model": "cybercraft:block/surgery_bottom",
+      "y": 90
     },
-    "variants": {
-        "facing": {
-            "east": {"y" : 90},
-            "west": {"y" : 270},
-            "north": {},
-            "south": {"y" : 180}
-        },
-        "half": {
-            "lower": {},
-            "upper": {
-                "model" : "cybercraft:surgery_top"
-            }
-        },
-        "open": {
-            "true": {},
-            "false": {}
-        }
+    "facing=east,half=lower,open=open": {
+      "model": "cybercraft:block/surgery_bottom",
+      "y": 90
+    },
+    "facing=east,half=upper,open=false": {
+      "model": "cybercraft:block/surgery_top",
+      "y": 90
+    },
+    "facing=east,half=upper,open=open": {
+      "model": "cybercraft:block/surgery_top",
+      "y": 90
+    },
+
+    "facing=north,half=lower,open=false": {
+      "model": "cybercraft:block/surgery_bottom"
+    },
+    "facing=north,half=lower,open=true": {
+      "model": "cybercraft:block/surgery_bottom"
+    },
+    "facing=north,half=upper,open=false": {
+      "model": "cybercraft:block/surgery_top"
+    },
+    "facing=north,half=upper,open=true": {
+      "model": "cybercraft:block/surgery_top"
+    },
+
+    "facing=south,half=lower,open=false": {
+      "model": "cybercraft:block/surgery_bottom",
+      "y": 180
+    },
+    "facing=south,half=lower,open=true": {
+      "model": "cybercraft:block/surgery_bottom",
+      "y": 180
+    },
+    "facing=south,half=upper,open=false": {
+      "model": "cybercraft:block/surgery_top",
+      "y": 180
+    },
+    "facing=south,half=upper,open=true": {
+      "model": "cybercraft:block/surgery_top",
+      "y": 180
+    },
+
+    "facing=west,half=lower,open=false": {
+      "model": "cybercraft:block/surgery_bottom",
+      "y": 270
+    },
+    "facing=west,half=lower,open=true": {
+      "model": "cybercraft:block/surgery_bottom",
+      "y": 270
+    },
+    "facing=west,half=upper,open=false": {
+      "model": "cybercraft:block/surgery_top",
+      "y": 270
+    },
+    "facing=west,half=upper,open=true": {
+      "model": "cybercraft:block/surgery_top",
+      "y": 270
     }
+  }
 }

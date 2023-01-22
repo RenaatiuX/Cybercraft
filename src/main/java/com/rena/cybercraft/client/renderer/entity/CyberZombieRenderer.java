@@ -18,7 +18,7 @@ public class CyberZombieRenderer extends MobRenderer<CyberZombieEntity, ZombieMo
 
     public CyberZombieRenderer(EntityRendererManager rendererManager) {
         super(rendererManager, new ZombieModel<>(0.0F, false), 0.5F);
-        this.addLayer(new ZombieHighlightLayer<>(this));
+        //this.addLayer(new ZombieHighlightLayer<>(this));
     }
 
     @Override

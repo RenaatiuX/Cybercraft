@@ -32,6 +32,7 @@ public class BlockInit {
     public static final DoubleRegistryObject<ComponentBoxBlock, ItemComponentBox> COMPONENT_BOX = CUSTOM.register("component_box", ComponentBoxBlock::new, block -> new ItemComponentBox(block));
     public static final RegistryObject<BeaconBlock> RADIO = BLOCKS.register("beacon", BeaconBlock::new);
     public static final RegistryObject<BeaconPostBlock> RADIO_POST = BLOCKS.register("radio_post", BeaconPostBlock::new);
+    public static final RegistryObject<SurgeryBlock> SURGERY = BLOCKS.register("surgery", SurgeryBlock::new);
     public static final RegistryObject<SurgeryChamberBlock> SURGERY_CHAMBER_BLOCK = BLOCKS.register("surgery_chamber", SurgeryChamberBlock::new);
 
     @SubscribeEvent
