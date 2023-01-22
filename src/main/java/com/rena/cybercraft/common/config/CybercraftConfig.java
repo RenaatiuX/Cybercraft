@@ -4,6 +4,7 @@ import com.rena.cybercraft.api.item.ICybercraft;
 import com.rena.cybercraft.core.init.ItemInit;
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +18,7 @@ public class CybercraftConfig {
     public static C_Hud C_HUD;
     public static C_Machines C_MACHINES;
     public static C_Gamerules C_GAMERULES;
-
+    public static File configDirectory;
 
     public static ForgeConfigSpec init(ForgeConfigSpec.Builder builder) {
 

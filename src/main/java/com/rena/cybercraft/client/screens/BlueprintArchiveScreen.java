@@ -35,5 +35,6 @@ public class BlueprintArchiveScreen extends ContainerScreen<BlueprintArchiveCont
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
+        this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 }

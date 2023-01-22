@@ -2,23 +2,24 @@ package com.rena.cybercraft.client.screens.hud;
 
 import com.rena.cybercraft.api.hud.IHudSaveData;
 import com.rena.cybercraft.common.config.CybercraftConfig;
+import net.minecraftforge.common.ForgeConfig;
 
 import java.io.File;
 
 public class HudConfigData implements IHudSaveData {
 
-    //private Configuration config;
+    private ForgeConfig config;
 
-    /*public HudConfigData(String name)
+    public HudConfigData(String name)
     {
-        config = new Configuration(new File(CybercraftConfig.configDirectory, "cybercraft_hud/" + name + ".cfg"));
-    }*/
+        //config = new ForgeConfig(new File(CybercraftConfig.configDirectory, "cybercraft_hud/" + name + ".cfg"));
+    }
 
 
     @Override
     public void setString(String key, String s)
     {
-        //config.getString(key, category, defaultValue, comment)
+        //config.getString(key, category, defaultValue, comment);
     }
 
     @Override

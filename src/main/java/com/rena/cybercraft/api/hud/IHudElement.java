@@ -5,13 +5,13 @@ import net.minecraft.entity.player.PlayerEntity;
 
 public interface IHudElement {
 
-    public static enum EnumAnchorHorizontal
+    enum EnumAnchorHorizontal
     {
         LEFT,
         RIGHT;
     }
 
-    public static enum EnumAnchorVertical
+    enum EnumAnchorVertical
     {
         TOP,
         BOTTOM;
