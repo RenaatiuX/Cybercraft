@@ -12,7 +12,7 @@ import com.rena.cybercraft.common.item.CybercraftSpawnEgg;
 import com.rena.cybercraft.common.util.CybercraftTab;
 import com.rena.cybercraft.core.init.*;
 import com.rena.cybercraft.core.network.CCNetwork;
-import com.rena.cybercraft.common.block.events.loot.NeuropozyneAdditionModifier;
+import com.rena.cybercraft.common.events.loot.NeuropozyneAdditionModifier;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;

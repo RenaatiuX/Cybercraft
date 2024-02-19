@@ -1,4 +1,4 @@
-package com.rena.cybercraft.common.block.events;
+package com.rena.cybercraft.common.events;
 
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.CybercraftUserDataImpl;

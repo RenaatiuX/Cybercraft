@@ -45,10 +45,8 @@ public class CybercraftArmorItem extends ArmorItem implements IDeconstructable, 
     }*/
 
     @Override
-    public boolean hasCustomColor(@Nonnull ItemStack stack)
-    {
-        if (getMaterial() != CybercraftArmorMaterial.TRENCHCOAT)
-        {
+    public boolean hasCustomColor(@Nonnull ItemStack stack) {
+        if (getMaterial() != CybercraftArmorMaterial.TRENCHCOAT) {
             return false;
         }
 
@@ -59,22 +57,16 @@ public class CybercraftArmorItem extends ArmorItem implements IDeconstructable, 
     }
 
     @Override
-    public int getColor(@Nonnull ItemStack stack)
-    {
-        if (getMaterial() != CybercraftArmorMaterial.TRENCHCOAT)
-        {
+    public int getColor(@Nonnull ItemStack stack) {
+        if (getMaterial() != CybercraftArmorMaterial.TRENCHCOAT) {
             return 16777215;
-        }
-        else
-        {
+        } else {
             CompoundNBT tagCompound = stack.getTag();
 
-            if (tagCompound != null)
-            {
+            if (tagCompound != null) {
                 CompoundNBT tagCompoundDisplay = tagCompound.getCompound("display");
 
-                if (tagCompoundDisplay.contains("color", 3))
-                {
+                if (tagCompoundDisplay.contains("color", 3)) {
                     return tagCompoundDisplay.getInt("color");
                 }
             }
@@ -84,18 +76,12 @@ public class CybercraftArmorItem extends ArmorItem implements IDeconstructable, 
     }
 
     @Override
-    public void clearColor(@Nonnull ItemStack stack)
-    {
-        if (getMaterial() != CybercraftArmorMaterial.TRENCHCOAT)
-        {
+    public void clearColor(@Nonnull ItemStack stack) {
+        if (getMaterial() != CybercraftArmorMaterial.TRENCHCOAT) {
             CompoundNBT tagCompound = stack.getTag();
-
-            if (tagCompound != null)
-            {
+            if (tagCompound != null) {
                 CompoundNBT tagCompoundDisplay = tagCompound.getCompound("display");
-
-                if (tagCompoundDisplay.contains("color"))
-                {
+                if (tagCompoundDisplay.contains("color")) {
                     tagCompoundDisplay.remove("color");
                 }
             }
@@ -103,38 +89,27 @@ public class CybercraftArmorItem extends ArmorItem implements IDeconstructable, 
     }
 
     @Override
-    public void setColor(ItemStack stack, int color)
-    {
-        if (getMaterial() != CybercraftArmorMaterial.TRENCHCOAT)
-        {
+    public void setColor(ItemStack stack, int color) {
+        if (getMaterial() != CybercraftArmorMaterial.TRENCHCOAT) {
             throw new UnsupportedOperationException("Can't dye non-leather!");
-        }
-        else
-        {
+        } else {
             CompoundNBT tagCompound = stack.getTag();
-
-            if (tagCompound == null)
-            {
+            if (tagCompound == null) {
                 tagCompound = new CompoundNBT();
                 stack.setTag(tagCompound);
             }
-
             CompoundNBT tagCompoundDisplay = tagCompound.getCompound("display");
-
-            if (!tagCompound.contains("display", 10))
-            {
+            if (!tagCompound.contains("display", 10)) {
                 tagCompound.put("display", tagCompoundDisplay);
             }
-
             tagCompoundDisplay.putInt("color", color);
         }
     }
 
     @Override
     public void fillItemCategory(ItemGroup itemGroup, NonNullList<ItemStack> itemStack) {
-        if(allowdedIn(itemGroup)){
-            if(getMaterial() == CybercraftArmorMaterial.TRENCHCOAT)
-            {
+        if (allowdedIn(itemGroup)) {
+            if (getMaterial() == CybercraftArmorMaterial.TRENCHCOAT) {
                 super.fillItemCategory(itemGroup, itemStack);
                 ItemStack brown = new ItemStack(this);
                 setColor(brown, 0x664028);
@@ -142,8 +117,7 @@ public class CybercraftArmorItem extends ArmorItem implements IDeconstructable, 
                 ItemStack white = new ItemStack(this);
                 setColor(white, 0xEAEAEA);
                 itemStack.add(white);
-            }
-            else {
+            } else {
                 super.fillItemCategory(itemGroup, itemStack);
             }
         }

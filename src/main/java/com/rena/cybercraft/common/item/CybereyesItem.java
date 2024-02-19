@@ -8,7 +8,7 @@ import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.client.ClientUtils;
 import com.rena.cybercraft.common.util.LibConstants;
 import com.rena.cybercraft.core.init.ItemInit;
-import com.rena.cybercraft.common.block.events.EssentialsMissingHandler;
+import com.rena.cybercraft.common.events.EssentialsMissingHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;

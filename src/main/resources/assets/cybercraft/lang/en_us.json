@@ -159,8 +159,8 @@
   "cybercraft.tooltip.power_production": "Produces%1$s pow/s when in use",
   "cybercraft.tooltip.capacity": "%1$d power units capacity",
   "tooltip.cybercraft.max_install": "Can install up to %1$d",
-  "cybercraft.tooltip.essence": "Tolerance cost:%1$s",
-  "cybercraft.tooltip.essence_add": "Tolerance boost:%1$s ",
+  "cybercraft.tooltip.essence": "Tolerance cost: %1$s",
+  "cybercraft.tooltip.essence_add": "Tolerance boost: %1$s ",
 
   "cybercraft.tooltip.can_deconstruct": "Can deconstruct or scan",
 

@@ -42,7 +42,8 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(EntityTypeInit.CYBER_ZOMBIE.get(), CyberZombieRenderer::new);
 
         if(CybercraftConfig.C_OTHER.enableClothes.get()){
-            Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> tintIndex > 0 ? -1 : ((CybercraftArmorItem)stack.getItem()).getColor(stack), ItemInit.TRENCHCOAT.get());
+            Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> tintIndex > 0 ? -1 :
+                    ((CybercraftArmorItem)stack.getItem()).getColor(stack), ItemInit.TRENCHCOAT.get());
         }
 
         registerBlockRenders();

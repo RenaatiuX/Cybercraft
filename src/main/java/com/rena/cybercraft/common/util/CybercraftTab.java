@@ -4,7 +4,7 @@ import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.item.ICybercraft;
 import com.rena.cybercraft.api.item.ICybercraftTabItem;
 import com.rena.cybercraft.core.init.ItemInit;
-import com.rena.cybercraft.common.block.events.CreativeMenuHandler;
+import com.rena.cybercraft.common.events.CreativeMenuHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -34,9 +34,7 @@ public class CybercraftTab extends ItemGroup {
             subLists.put(category, new ArrayList<>());
         }
         NonNullList<ItemStack> unsorted = NonNullList.create();
-
         ICybercraft.Quality q = CreativeMenuHandler.pageSelected == 0 ? CybercraftAPI.QUALITY_SCAVENGED : CybercraftAPI.QUALITY_MANUFACTURED;
-
         for (Item item : ForgeRegistries.ITEMS) {
             if (item == null) {
                 continue;
@@ -60,12 +58,10 @@ public class CybercraftTab extends ItemGroup {
                 }
             }
         }
-
         for (ICybercraftTabItem.EnumCategory category : ICybercraftTabItem.EnumCategory.values()) {
             List<ItemStack> toAdd = subLists.get(category);
             list.addAll(toAdd);
         }
-
         list.addAll(unsorted);
     }
 }

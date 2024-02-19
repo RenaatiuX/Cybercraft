@@ -1,7 +1,7 @@
-package com.rena.cybercraft.common.block.events.loot;
+package com.rena.cybercraft.common.events.loot;
 
 import com.google.gson.JsonObject;
-import net.minecraft.item.Item;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.conditions.ILootCondition;
@@ -14,9 +14,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class NeuropozyneAdditionModifier extends LootModifier {
+public class SurgeryApparatusAdditionModifier extends LootModifier {
 
-    private final Item addition;
+    private final Block addition;
 
     /**
      * Constructs a LootModifier.
@@ -24,7 +24,7 @@ public class NeuropozyneAdditionModifier extends LootModifier {
      * @param conditionsIn the ILootConditions that need to be matched before the loot is modified.
      * @param addition
      */
-    protected NeuropozyneAdditionModifier(ILootCondition[] conditionsIn, Item addition) {
+    protected SurgeryApparatusAdditionModifier(ILootCondition[] conditionsIn, Block addition) {
         super(conditionsIn);
         this.addition = addition;
     }
@@ -33,24 +33,24 @@ public class NeuropozyneAdditionModifier extends LootModifier {
     @Override
     protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
         if(context.getRandom().nextFloat() > 0.15) {
-            generatedLoot.add(new ItemStack(addition, 3));
+            generatedLoot.add(new ItemStack(addition, 1));
         }
         return generatedLoot;
     }
 
-    public static class Serializer extends GlobalLootModifierSerializer<NeuropozyneAdditionModifier> {
+    public static class Serializer extends GlobalLootModifierSerializer<SurgeryApparatusAdditionModifier> {
 
         @Override
-        public NeuropozyneAdditionModifier read(ResourceLocation name, JsonObject object, ILootCondition[] conditionsIn) {
-            Item addition = ForgeRegistries.ITEMS.getValue(
+        public SurgeryApparatusAdditionModifier read(ResourceLocation name, JsonObject object, ILootCondition[] conditionsIn) {
+            Block addition = ForgeRegistries.BLOCKS.getValue(
                     new ResourceLocation(JSONUtils.getAsString(object, "addition")));
-            return new NeuropozyneAdditionModifier(conditionsIn, addition);
+            return new SurgeryApparatusAdditionModifier(conditionsIn, addition);
         }
 
         @Override
-        public JsonObject write(NeuropozyneAdditionModifier instance) {
+        public JsonObject write(SurgeryApparatusAdditionModifier instance) {
             JsonObject json = makeConditions(instance.conditions);
-            json.addProperty("addition", ForgeRegistries.ITEMS.getKey(instance.addition).toString());
+            json.addProperty("addition", ForgeRegistries.BLOCKS.getKey(instance.addition).toString());
             return json;
         }
     }

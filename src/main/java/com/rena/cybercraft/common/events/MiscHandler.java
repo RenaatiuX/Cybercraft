@@ -1,4 +1,4 @@
-package com.rena.cybercraft.common.block.events;
+package com.rena.cybercraft.common.events;
 
 public class MiscHandler {
 

@@ -8,6 +8,7 @@ import com.rena.cybercraft.common.tileentities.TileEntitySurgery;
 import com.rena.cybercraft.common.util.WorldUtil;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
@@ -17,6 +18,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -24,11 +26,13 @@ import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class SurgeryBlock extends Block {
 
     public SurgeryBlock() {
-        super(AbstractBlock.Properties.of(Material.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(1).strength(5f, 10f).sound(SoundType.METAL).requiresCorrectToolForDrops());
+        super(AbstractBlock.Properties.of(Material.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(1)
+                .strength(5f, 10f).sound(SoundType.METAL).requiresCorrectToolForDrops());
     }
 
     @Override
@@ -85,5 +89,6 @@ public class SurgeryBlock extends Block {
             super.onRemove(blockState, world, pos, newState, isMoving);
         }
     }
+
 
 }

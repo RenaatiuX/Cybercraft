@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.api.hud.HudElementBase;
-import com.rena.cybercraft.common.block.events.HudHandler;
+import com.rena.cybercraft.common.events.HudHandler;
 import com.rena.cybercraft.core.init.ItemInit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

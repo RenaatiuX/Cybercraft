@@ -1,4 +1,4 @@
-package com.rena.cybercraft.common.block.events;
+package com.rena.cybercraft.common.events;
 
 import com.google.common.collect.HashMultimap;
 import com.mojang.blaze3d.matrix.MatrixStack;

@@ -8,7 +8,11 @@ import net.minecraft.block.HorizontalBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.loot.LootContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.EnumProperty;
@@ -23,8 +27,12 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class SurgeryChamberBlock extends Block {
 
@@ -34,32 +42,29 @@ public class SurgeryChamberBlock extends Block {
 
     public SurgeryChamberBlock() {
         super(AbstractBlock.Properties.of(Material.METAL).strength(5f, 10f));
-        registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(OPEN, false).setValue(HALF, DoubleBlockHalf.LOWER));
+        registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH)
+                .setValue(OPEN, false).setValue(HALF, DoubleBlockHalf.LOWER));
     }
 
-    private static final VoxelShape top    = Block.box(       0F, 15F / 16F,        0F,       1F,       1F,       1F);
-    private static final VoxelShape south  = Block.box(       0F,        0F,        0F,       1F,       1F, 1F / 16F);
-    private static final VoxelShape north  = Block.box(       0F,        0F, 15F / 16F,       1F,       1F,       1F);
-    private static final VoxelShape east   = Block.box(       0F,        0F,        0F, 1F / 16F,       1F,       1F);
-    private static final VoxelShape west   = Block.box(15F / 16F,        0F,        0F,       1F,       1F,       1F);
-    private static final VoxelShape bottom = Block.box(       0F,        0F,        0F,       1F, 1F / 16F,       1F);
-
+    private static final VoxelShape top = Block.box(0F, 15F / 16F, 0F, 1F, 1F, 1F);
+    private static final VoxelShape south = Block.box(0F, 0F, 0F, 1F, 1F, 1F / 16F);
+    private static final VoxelShape north = Block.box(0F, 0F, 15F / 16F, 1F, 1F, 1F);
+    private static final VoxelShape east = Block.box(0F, 0F, 0F, 1F / 16F, 1F, 1F);
+    private static final VoxelShape west = Block.box(15F / 16F, 0F, 0F, 1F, 1F, 1F);
+    private static final VoxelShape bottom = Block.box(0F, 0F, 0F, 1F, 1F / 16F, 1F);
 
     @Override
     public ActionResultType use(BlockState blockState, World world, BlockPos pos, PlayerEntity p_225533_4_, Hand p_225533_5_, BlockRayTraceResult p_225533_6_) {
         boolean top = blockState.getValue(HALF) == DoubleBlockHalf.UPPER;
-        if (canOpen(top ? pos : pos.above(), world))
-        {
+        if (canOpen(top ? pos : pos.above(), world)) {
             toggleDoor(top, blockState, pos, world);
-
             notifySurgeon(top ? pos : pos.above(), world);
         }
 
         return ActionResultType.sidedSuccess(world.isClientSide);
     }
 
-    public void toggleDoor(boolean top, BlockState blockState, BlockPos pos, World worldIn)
-    {
+    public void toggleDoor(boolean top, BlockState blockState, BlockPos pos, World worldIn) {
         BlockState blockStateNew = blockState.cycle(OPEN);
         worldIn.setBlock(pos, blockStateNew, 2);
 
@@ -75,32 +80,44 @@ public class SurgeryChamberBlock extends Block {
         }
     }
 
-    private boolean canOpen(BlockPos pos, World worldIn)
-    {
+    private boolean canOpen(BlockPos pos, World worldIn) {
         TileEntity above = worldIn.getBlockEntity(pos.above());
 
-        if (above instanceof TileEntitySurgery)
-        {
+        if (above instanceof TileEntitySurgery) {
             return ((TileEntitySurgery) above).canOpen();
         }
         return true;
     }
 
 
-    private void notifySurgeon(BlockPos pos, World worldIn)
-    {
+    private void notifySurgeon(BlockPos pos, World worldIn) {
         TileEntity above = worldIn.getBlockEntity(pos.above());
 
-        if (above instanceof TileEntitySurgery)
-        {
+        if (above instanceof TileEntitySurgery) {
             ((TileEntitySurgery) above).notifyChange();
         }
     }
 
     @Override
     public void neighborChanged(BlockState p_220069_1_, World p_220069_2_, BlockPos p_220069_3_, Block p_220069_4_, BlockPos p_220069_5_, boolean p_220069_6_) {
-
-        super.neighborChanged(p_220069_1_, p_220069_2_, p_220069_3_, p_220069_4_, p_220069_5_, p_220069_6_);
+        if (p_220069_1_.getValue(HALF) == DoubleBlockHalf.UPPER) {
+            BlockPos pos = p_220069_3_.below();
+            BlockState blockState = p_220069_2_.getBlockState(pos);
+            if (blockState.getBlock() != this) {
+                p_220069_2_.isEmptyBlock(pos);
+            } else if (p_220069_4_ != this) {
+                blockState.neighborChanged(p_220069_2_, p_220069_3_, p_220069_4_, p_220069_5_, p_220069_6_);
+            }
+        } else {
+            BlockPos blockPos = p_220069_3_.above();
+            BlockState state = p_220069_2_.getBlockState(blockPos);
+            if (state.getBlock() != this) {
+                p_220069_2_.isEmptyBlock(blockPos);
+                if (!p_220069_2_.isClientSide) {
+                    dropResources(state, p_220069_2_, blockPos);
+                }
+            }
+        }
     }
 
     @Override
@@ -119,5 +136,16 @@ public class SurgeryChamberBlock extends Block {
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> p_206840_1_) {
         p_206840_1_.add(FACING, OPEN, HALF);
+    }
+
+    @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+        return super.createTileEntity(state, world);
     }
 }

@@ -27,21 +27,16 @@ public class NeuropozyneItem extends Item {
     @Override
     public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         ItemStack stack = player.getItemInHand(hand);
-
-        if (!player.abilities.instabuild)
-        {
+        if (!player.abilities.instabuild) {
             stack.shrink(1);
         }
-
         player.addEffect(new EffectInstance(EffectInit.NEUROPOZYNE.get(), 24000, 0, false, false));
-
         return new ActionResult<>(ActionResultType.SUCCESS, stack);
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         String neuropozyne = I18n.get("tooltip.cybercraft.neuropozyne");
-
         tooltip.add(new TranslationTextComponent(neuropozyne).withStyle(TextFormatting.BLUE));
     }
 }
