@@ -39,14 +39,13 @@ public class ScannerBlock extends RotatableBlock {
 
     @Override
     public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-        if (!world.isClientSide()){
+        if (!world.isClientSide()) {
             TileEntityScanner te = WorldUtil.getTileEntity(TileEntityScanner.class, world, pos);
-            if (te != null && player instanceof ServerPlayerEntity){
+            if (te != null && player instanceof ServerPlayerEntity) {
                 NetworkHooks.openGui((ServerPlayerEntity) player, te, pos);
                 return ActionResultType.CONSUME;
             }
         }
-
         return ActionResultType.SUCCESS;
     }
 }

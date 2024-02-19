@@ -151,6 +151,10 @@
   "cybercraft.tooltip.charger.0": "Charges Entities with Cyberware",
   "cybercraft.tooltip.charger.1": "Accepts Forge Energy",
   "cybercraft.tooltip.scanner": "Analyzes Cyberware to create Blueprints",
+  "cybercraft.tooltip.surgery.0": "Used to set what Cyberware to install or remove",
+  "cybercraft.tooltip.surgery.1": "Place on top of a Surgery Chamber to function",
+  "cybercraft.tooltip.surgery_chamber.0": "Performs Operations for the Robosurgeon",
+  "cybercraft.tooltip.surgery_chamber.1": "Right-Click when inside to activate",
 
   "tooltip.cybercraft.blueprint": "Creates %1$s",
   "tooltip.cybercraft.craft_blueprint": "Craft with a piece of Cyberware",

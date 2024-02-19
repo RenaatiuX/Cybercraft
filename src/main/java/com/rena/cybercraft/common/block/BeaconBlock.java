@@ -28,8 +28,7 @@ import javax.annotation.Nullable;
 
 public class BeaconBlock extends HorizontalBlock {
 
-    private static final VoxelShape BOUND = Block.box(1F , 0F, 1F / 16F, 15F , 4F , 15F );
-
+    private static final VoxelShape BOUND = Block.box(1F, 0F, 1F / 16F, 15F, 4F, 15F);
 
     public BeaconBlock() {
         super(AbstractBlock.Properties.of(Material.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(5).strength(10F, 10F).requiresCorrectToolForDrops().noOcclusion());
@@ -73,21 +72,21 @@ public class BeaconBlock extends HorizontalBlock {
         builder.add(FACING);
     }
 
-    protected static int getTier(IWorld world, BlockPos pos){
-            TileEntity radio = world.getBlockEntity(pos.below());
-            int tier;
-            if (radio == null)
-                tier = 0;
-            else {
-                tier = radio instanceof IRadioTower ? ((IRadioTower) radio).getTier(pos.below()) : 0;
-            }
-            return tier;
+    protected static int getTier(IWorld world, BlockPos pos) {
+        TileEntity radio = world.getBlockEntity(pos.below());
+        int tier;
+        if (radio == null)
+            tier = 0;
+        else {
+            tier = radio instanceof IRadioTower ? ((IRadioTower) radio).getTier(pos.below()) : 0;
+        }
+        return tier;
     }
 
     @Override
     public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity living, ItemStack stack) {
         TileEntityBeacon te = WorldUtil.getTileEntity(TileEntityBeacon.class, world, pos);
-        if (te != null){
+        if (te != null) {
             te.setTier(getTier(world, pos));
         }
     }
@@ -97,7 +96,7 @@ public class BeaconBlock extends HorizontalBlock {
         if (!canSurvive(state, world, pos))
             return Blocks.AIR.defaultBlockState();
         TileEntityBeacon te = WorldUtil.getTileEntity(TileEntityBeacon.class, world, pos);
-        if (te != null){
+        if (te != null) {
             te.setTier(getTier(world, pos));
         }
         return state;

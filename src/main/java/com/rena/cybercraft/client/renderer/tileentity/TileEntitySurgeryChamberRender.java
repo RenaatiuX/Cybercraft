@@ -1,7 +1,6 @@
 package com.rena.cybercraft.client.renderer.tileentity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.client.model.block.SurgeryChamberModel;
 import com.rena.cybercraft.common.block.SurgeryChamberBlock;
@@ -14,51 +13,43 @@ import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
 
 public class TileEntitySurgeryChamberRender extends TileEntityRenderer<TileEntitySurgeryChamber> {
     private static final SurgeryChamberModel MODEL = new SurgeryChamberModel();
     public static final ResourceLocation TEXTURE = Cybercraft.modLoc("textures/models/surgery_chamber_door.png");
+
     public TileEntitySurgeryChamberRender(TileEntityRendererDispatcher p_i226006_1_) {
         super(p_i226006_1_);
     }
 
     @Override
     public void render(TileEntitySurgeryChamber te, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer p_225616_4_, int p_225616_5_, int p_225616_6_) {
-        if (te != null)
-        {
+        if (te != null) {
             float ticks = Minecraft.getInstance().player.tickCount + partialTicks;
-
-            /*matrixStack.pushPose();
-            //RenderSystem.color(1.0F, 1.0F, 1.0F, 1.0F);
-            matrixStack.translate(x+.5, y+.5, z+.5);
-
-            BlockState state = te.getLevel().getBlockState(te.getBlockPos());
-            if (state.getBlock() == BlockInit.SURGERY_CHAMBER_BLOCK.get())
-            {
-
+            matrixStack.pushPose();
+            matrixStack.translate(0.5D, 0.5D, 0.5D);
+            BlockState state = te.getBlockState();
+            if (state.getBlock() == BlockInit.SURGERY_CHAMBER_BLOCK.get()) {
                 Direction facing = state.getValue(SurgeryChamberBlock.FACING);
-
-                switch (facing)
-                {
+                switch (facing) {
                     case EAST:
-                        GlStateManager.rotate(90F, 0F, 1F, 0F);
+                        matrixStack.mulPose(Vector3f.YP.rotationDegrees(90F));
                         break;
                     case NORTH:
-                        GlStateManager.rotate(180F, 0F, 1F, 0F);
+                        matrixStack.mulPose(Vector3f.YP.rotationDegrees(180F));
                         break;
                     case SOUTH:
                         break;
                     case WEST:
-                        GlStateManager.rotate(270F, 0F, 1F, 0F);
+                        matrixStack.mulPose(Vector3f.YP.rotationDegrees(270F));
                         break;
                     default:
                         break;
                 }
-                ClientUtils.bindTexture(TEXTURE);
 
                 boolean isOpen = state.getValue(SurgeryChamberBlock.OPEN);
-                if (isOpen != te.lastOpen)
-                {
+                if (isOpen != te.lastOpen) {
                     te.lastOpen = isOpen;
                     te.openTicks = ticks;
                 }
@@ -67,25 +58,24 @@ public class TileEntitySurgeryChamberRender extends TileEntityRenderer<TileEntit
                 double v = Math.sin(ticksPassed * ((Math.PI / 2) / 10F)) * 90F;
                 float rotate = (float) v;
 
-                if (!isOpen)
-                {
+                if (!isOpen) {
                     rotate = 90F - (float) v;
                 }
 
                 matrixStack.pushPose();
                 matrixStack.translate(-6F / 16F, 0F, -6F / 16F);
-                GlStateManager.rotate(-rotate, 0F, 1F, 0F);
-                MODEL.renderToBuffer(null, 0, 0, 0, 0, 0, .0625f);
+                matrixStack.mulPose(Vector3f.YP.rotationDegrees(-rotate));
+                MODEL.renderToBuffer(matrixStack, p_225616_4_.getBuffer(MODEL.renderType(TEXTURE)), p_225616_5_, p_225616_6_, 1f, 1f, 1f, .0625f);
                 matrixStack.popPose();
 
                 matrixStack.pushPose();
                 matrixStack.translate(6F / 16F, 0F, -6F / 16F);
-                GlStateManager.rotate(rotate, 0F, 1F, 0F);
-                MODEL.renderRight(null, 0, 0, 0, 0, 0, .0625f);
+                matrixStack.mulPose(Vector3f.YP.rotationDegrees(rotate));
+                MODEL.renderRight(matrixStack, p_225616_4_.getBuffer(MODEL.renderType(TEXTURE)), p_225616_5_, p_225616_6_, 1f, 1f, 1f, .0625f);
                 matrixStack.popPose();
 
                 matrixStack.popPose();
-            }*/
+            }
         }
     }
 }

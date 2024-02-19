@@ -33,6 +33,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -163,53 +164,52 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
 
     @Override
     protected void renderBg(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
-        RenderSystem.color4f(0f, 0f, 0f,0f);
+        RenderSystem.color4f(0f, 0f, 0f, 0f);
         Minecraft.getInstance().textureManager.bind(SURGERY_GUI_TEXTURES);
-        this.blit(stack, leftPos, topPos, 0,0,176, 222);
+        this.blit(stack, leftPos, topPos, 0, 0, 176, 222);
     }
 
     @Override
     protected void renderLabels(MatrixStack p_230451_1_, int p_230451_2_, int p_230451_3_) {
     }
 
-   protected void renderHoverTooltip(MatrixStack matrixStack,ItemStack stack, double mouseX, double mouseY, int extras){
-       List<ITextComponent> listTooltips = stack.getTooltipLines(Minecraft.getInstance().player, Minecraft.getInstance().options.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
-       for (int indexTooltip = 0; indexTooltip < listTooltips.size(); indexTooltip++) {
-           if (indexTooltip == 0) {
-               listTooltips.set(indexTooltip, listTooltips.get(indexTooltip).copy().withStyle( stack.getItem().getRarity(stack).color));
-           } else {
-               listTooltips.set(indexTooltip, listTooltips.get(indexTooltip).copy().withStyle(TextFormatting.GRAY));
-           }
-       }
+    protected void renderHoverTooltip(MatrixStack matrixStack, ItemStack stack, double mouseX, double mouseY, int extras) {
+        List<ITextComponent> listTooltips = stack.getTooltipLines(Minecraft.getInstance().player, Minecraft.getInstance().options.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
+        for (int indexTooltip = 0; indexTooltip < listTooltips.size(); indexTooltip++) {
+            if (indexTooltip == 0) {
+                listTooltips.set(indexTooltip, listTooltips.get(indexTooltip).copy().withStyle(stack.getItem().getRarity(stack).color));
+            } else {
+                listTooltips.set(indexTooltip, listTooltips.get(indexTooltip).copy().withStyle(TextFormatting.GRAY));
+            }
+        }
 
-       if (extras == 1) {
-           listTooltips.add(1, new TranslationTextComponent("cyberware.gui.remove"));
-       } else if (extras >= 2) {
-           listTooltips.add(1, new TranslationTextComponent("cyberware.gui.click"));
+        if (extras == 1) {
+            listTooltips.add(1, new TranslationTextComponent("cyberware.gui.remove"));
+        } else if (extras >= 2) {
+            listTooltips.add(1, new TranslationTextComponent("cyberware.gui.click"));
 
-           if (extras == 3) {
-               listTooltips.set(0, listTooltips.get(0).copy().append(new StringTextComponent(" ")).append(new TranslationTextComponent("cyberware.gui.added")));
-           } else if (extras == 4) {
-               listTooltips.set(0, listTooltips.get(0).copy().append(new StringTextComponent(" ")).append(new TranslationTextComponent("cyberware.gui.removed")));
-           }
-       }
-       renderComponentTooltip(matrixStack, listTooltips, (int)mouseX, (int)mouseY);
-   }
+            if (extras == 3) {
+                listTooltips.set(0, listTooltips.get(0).copy().append(new StringTextComponent(" ")).append(new TranslationTextComponent("cyberware.gui.added")));
+            } else if (extras == 4) {
+                listTooltips.set(0, listTooltips.get(0).copy().append(new StringTextComponent(" ")).append(new TranslationTextComponent("cyberware.gui.removed")));
+            }
+        }
+        renderComponentTooltip(matrixStack, listTooltips, (int) mouseX, (int) mouseY);
+    }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseKey) {
-        if ( mouseKey == 0 && mouseX >= leftPos && mouseX < leftPos + imageWidth && mouseY >= topPos && mouseY < topPos + imageHeight) {
+        if (mouseKey == 0 && mouseX >= leftPos && mouseX < leftPos + imageWidth && mouseY >= topPos && mouseY < topPos + imageHeight) {
             oldRotate = ease.rotation;
             mouseDown = true;
             mouseDownX = mouseX;
-            for (int n = 0; n < 5; n++)
-            {
+            for (int n = 0; n < 5; n++) {
                 lastDownX[n] = mouseDownX;
             }
         }
 
         // Right click to go back
-        if (mouseKey == 1 && ( page != 0 || ease.rotation != 0 ) && findSlot(mouseX, mouseY) == null && mouseY < topPos + imageHeight ) {
+        if (mouseKey == 1 && (page != 0 || ease.rotation != 0) && findSlot(mouseX, mouseY) == null && mouseY < topPos + imageHeight) {
             int pageToGoTo = page <= 10 ? 0 : parent;
             prepTransition(20, pageToGoTo);
             return true;
@@ -220,8 +220,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int mouseKey) {
         // Make it spin! :D
-        if (mouseKey == 0)
-        {
+        if (mouseKey == 0) {
             if (mouseDown) {
                 mouseDown = false;
                 rotateVelocity = (mouseX - lastDownX[4]);
@@ -235,13 +234,13 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
 
     @Override
     protected void slotClicked(Slot slot, int id, int mouseButton, ClickType type) {
-        if (slot instanceof SurgeryContainer.SlotSurgery && !isSlotAccessible((SurgeryContainer.SlotSurgery) slot) ) {
+        if (slot instanceof SurgeryContainer.SlotSurgery && !isSlotAccessible((SurgeryContainer.SlotSurgery) slot)) {
             return;
         }
 
         if (slot instanceof SurgeryContainer.SlotSurgery) {
             SurgeryContainer.SlotSurgery surgerySlot = (SurgeryContainer.SlotSurgery) slot;
-            if ( surgerySlot.getItem().isEmpty() && !surgerySlot.getPlayerStack().isEmpty()) {
+            if (surgerySlot.getItem().isEmpty() && !surgerySlot.getPlayerStack().isEmpty()) {
                 int number = surgerySlot.getSlotIndex();
 
                 ItemStack playerSlotItem = surgerySlot.getPlayerStack();
@@ -266,7 +265,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
 
     @Nullable
     private Slot findSlot(double p_195360_1_, double p_195360_3_) {
-        for(int i = 0; i < this.menu.slots.size(); ++i) {
+        for (int i = 0; i < this.menu.slots.size(); ++i) {
             Slot slot = this.menu.slots.get(i);
             if (this.isHovering(slot, p_195360_1_, p_195360_3_) && slot.isActive()) {
                 return slot;
@@ -280,8 +279,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
         return this.isHovering(p_195362_1_.x, p_195362_1_.y, 16, 16, p_195362_2_, p_195362_4_);
     }
 
-    private void prepTransition(int time, int targetPage)
-    {
+    private void prepTransition(int time, int targetPage) {
         if (page == index.buttonId) {
             if (targetPage == 0) {
                 back.visible = false;
@@ -292,7 +290,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
 
                 return;
             } else {
-                if ( targetPage >= 18 && targetPage <= 20 ) {
+                if (targetPage >= 18 && targetPage <= 20) {
                     ease = current = configs[targetPage].copy();
                     page = targetPage;
                     showHideRelevantButtons(true);
@@ -307,7 +305,6 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
                     ease = current = configs[0].copy();
                 }
             }
-
 
 
         }
@@ -340,7 +337,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
                         if (CybercraftAPI.areCybercraftStacksEqual(playerStack, surgeryStack)) {
                             draw.grow(playerStack.getCount());
                         } else {
-                            indexStacks.set(indexCount,playerStack.copy());
+                            indexStacks.set(indexCount, playerStack.copy());
                             ICybercraft.EnumSlot slot = ICybercraft.EnumSlot.values()[indexSurgeySlot / LibConstants.WARE_PER_SLOT];
                             indexPages[indexCount] = slot.getSlotNumber();
                             indexNews[indexCount] = 2;
@@ -352,9 +349,9 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
                         }
                     }
                     nu = 1;
-                } else if ( !playerStack.isEmpty() && !surgery.discardSlots[indexSurgeySlot] ) {
+                } else if (!playerStack.isEmpty() && !surgery.discardSlots[indexSurgeySlot]) {
                     draw = playerStack.copy();
-                } else if ( !playerStack.isEmpty() && surgery.discardSlots[indexSurgeySlot] ) {
+                } else if (!playerStack.isEmpty() && surgery.discardSlots[indexSurgeySlot]) {
                     draw = playerStack.copy();
                     nu = 2;
                 }
@@ -379,28 +376,24 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
         showHideRelevantButtons(false);
         page = targetPage;
         target = configs[page].copy();
-        if (page == 0)
-        {
+        if (page == 0) {
             back.visible = false;
             //index.visible = true;
-        }
-        else
-        {
+        } else {
             back.visible = true;
             index.visible = false;
         }
     }
 
-    protected void actionPerformed(Button button)
-    {
-        if (button.active){
+    protected void actionPerformed(Button button) {
+        if (button.active) {
             int id = -1;
             if (button instanceof IIdButton)
-                id = ((IIdButton)button).getId();
+                id = ((IIdButton) button).getId();
 
             // BACK
             if (id == back.buttonId) {
-                if ( page != 0 || ease.rotation != 0 ) {
+                if (page != 0 || ease.rotation != 0) {
                     int pageToGoTo = page <= 10 ? 0 : parent;
                     prepTransition(20, pageToGoTo);
                 }
@@ -408,40 +401,28 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
             }
 
             openTime = 1;
-            if (id > 10)
-            {
+            if (id > 10) {
                 parent = page;
             }
 
-            if (id == 4)
-            {
+            if (id == 4) {
                 prepTransition(20, 3);
-            }
-            else if (id == 6)
-            {
+            } else if (id == 6) {
                 prepTransition(20, 5);
-            }
-            else if (id == 13)
-            {
+            } else if (id == 13) {
                 prepTransition(20, 12);
-            }
-            else if (id == 16)
-            {
+            } else if (id == 16) {
                 prepTransition(20, 15);
-            }
-            else
-            {
+            } else {
                 prepTransition(20, id);
             }
         }
     }
 
-    private void showHideRelevantButtons(boolean show)
-    {
+    private void showHideRelevantButtons(boolean show) {
         Button[] list = new Button[0];
 
-        switch(page)
-        {
+        switch (page) {
             case 0:
                 list = bodyIcons;
                 break;
@@ -469,11 +450,9 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
         updateSurgerySlotsVisibility(show);
     }
 
-    private void updateLocationButtons(float rot, float scale, float yOffset)
-    {
+    private void updateLocationButtons(float rot, float scale, float yOffset) {
         //SPECIAL CASE FOR GOING BACK TO MENU
-        if (page == 0)
-        {
+        if (page == 0) {
             index.visible = true;
         }
         int xLeft = (width - imageWidth) / 2;
@@ -481,8 +460,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
 
         GuiButtonSurgeryLocation[] list = new GuiButtonSurgeryLocation[0];
 
-        switch(page)
-        {
+        switch (page) {
             case 1:
                 list = headIcons;
                 break;
@@ -500,8 +478,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
                 break;
         }
 
-        if (page == 7)
-        {
+        if (page == 7) {
             rot += addedRotate;
         }
 
@@ -518,7 +495,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
                     - 2.0F
                     - guiButtonSurgeryLocation.getWidth() / 2F;
             guiButtonSurgeryLocation.yPos = -upDown * cos * scale * guiButtonSurgeryLocation.x3 * 0.065F
-                    +  upDown * sin * scale * guiButtonSurgeryLocation.z3 * 0.065F
+                    + upDown * sin * scale * guiButtonSurgeryLocation.z3 * 0.065F
                     + yTop + 2 - yOffset
                     + scale * guiButtonSurgeryLocation.y3 * 0.065F
                     + 130 / 2F
@@ -529,13 +506,11 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
     }
 
 
-    public boolean isSlotAccessible(SurgeryContainer.SlotSurgery slot)
-    {
+    public boolean isSlotAccessible(SurgeryContainer.SlotSurgery slot) {
         return page == slot.slot.getSlotNumber();
     }
 
-    protected void updateSurgerySlotsVisibility(boolean show)
-    {
+    protected void updateSurgerySlotsVisibility(boolean show) {
         Iterator<Slot> iteratorSlots = this.menu.slots.iterator();
 
         Slot slot = iteratorSlots.next();
@@ -552,8 +527,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
         }
     }
 
-    private static PageConfiguration interpolate(float amountDone, PageConfiguration start, PageConfiguration end)
-    {
+    private static PageConfiguration interpolate(float amountDone, PageConfiguration start, PageConfiguration end) {
         return new PageConfiguration(
                 ease(Math.min(1.0F, amountDone), start.rotation, end.rotation),
                 ease(Math.min(1.0F, amountDone), start.x, end.x),
@@ -567,8 +541,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
     }
 
     // http://stackoverflow.com/a/8317722/1754640
-    private static float ease(float percent, float startValue, float endValue)
-    {
+    private static float ease(float percent, float startValue, float endValue) {
         endValue -= startValue;
         float total = 100;
         float elapsed = percent * total;
@@ -578,13 +551,12 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
         return -endValue / 2 * ((--elapsed) * (elapsed - 2) - 1) + startValue;
     }
 
-    private float ticksExisted()
-    {
+    private float ticksExisted() {
         return Minecraft.getInstance().player != null ? Minecraft.getInstance().player.tickCount : 0;
     }
 
 
-    private class GuiButtonSurgeryLocation extends Button implements IIdButton{
+    private class GuiButtonSurgeryLocation extends Button implements IIdButton {
         private static final int buttonSize = 16;
         private float x3;
         private float y3;
@@ -631,7 +603,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
         }
     }
 
-    private class GuiButtonSurgery extends Button implements IIdButton{
+    private class GuiButtonSurgery extends Button implements IIdButton {
         private final int buttonId;
 
         public GuiButtonSurgery(int buttonId, int x, int y, int imageWidth, int ySize) {
@@ -666,7 +638,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
         }
     }
 
-    private class InterfaceButton extends Button implements IIdButton{
+    private class InterfaceButton extends Button implements IIdButton {
         private final Type type;
         private final int buttonId;
 
@@ -739,7 +711,12 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
 
     }
 
-    private interface IIdButton{
+    private interface IIdButton {
         public int getId();
+    }
+
+    @Override
+    protected void renderTooltip(MatrixStack p_230459_1_, int p_230459_2_, int p_230459_3_) {
+        super.renderTooltip(p_230459_1_, p_230459_2_, p_230459_3_);
     }
 }

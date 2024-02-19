@@ -12,6 +12,7 @@ import com.rena.cybercraft.common.util.LibConstants;
 import com.rena.cybercraft.core.init.ItemInit;
 import com.rena.cybercraft.common.events.CommonEvents;
 import com.rena.cybercraft.common.events.EssentialsMissingHandler;
+import com.rena.cybercraft.core.init.TileEntityTypeInit;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -45,8 +46,8 @@ public class TileEntitySurgery extends TileEntity implements ITickableTileEntity
     public int cooldownTicks = 0;
     public boolean missingPower = false;
 
-    public TileEntitySurgery(TileEntityType<?> tileEntity) {
-        super(tileEntity);
+    public TileEntitySurgery() {
+        super(TileEntityTypeInit.SURGERY.get());
     }
 
     public boolean isUsableByPlayer(PlayerEntity entityPlayer) {

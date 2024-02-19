@@ -4,7 +4,7 @@
       "model": "cybercraft:block/surgery_bottom",
       "y": 90
     },
-    "facing=east,half=lower,open=open": {
+    "facing=east,half=lower,open=true": {
       "model": "cybercraft:block/surgery_bottom",
       "y": 90
     },
@@ -12,7 +12,7 @@
       "model": "cybercraft:block/surgery_top",
       "y": 90
     },
-    "facing=east,half=upper,open=open": {
+    "facing=east,half=upper,open=true": {
       "model": "cybercraft:block/surgery_top",
       "y": 90
     },

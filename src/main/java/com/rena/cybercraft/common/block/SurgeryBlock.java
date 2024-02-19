@@ -19,6 +19,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -43,7 +44,7 @@ public class SurgeryBlock extends Block {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return null; //new TileEntitySurgery();
+        return new TileEntitySurgery();
     }
 
     @Override
@@ -90,5 +91,9 @@ public class SurgeryBlock extends Block {
         }
     }
 
-
+    @Override
+    public void appendHoverText(ItemStack p_190948_1_, @Nullable IBlockReader p_190948_2_, List<ITextComponent> p_190948_3_, ITooltipFlag p_190948_4_) {
+        p_190948_3_.add(new TranslationTextComponent("cybercraft.tooltip.surgery.0"));
+        p_190948_3_.add(new TranslationTextComponent("cybercraft.tooltip.surgery.1"));
+    }
 }

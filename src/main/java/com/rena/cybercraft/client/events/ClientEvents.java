@@ -4,6 +4,7 @@ import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.api.item.ICybercraft;
 import com.rena.cybercraft.client.renderer.entity.CyberZombieRenderer;
 import com.rena.cybercraft.client.renderer.tileentity.TileEntityScannerRender;
+import com.rena.cybercraft.client.renderer.tileentity.TileEntitySurgeryChamberRender;
 import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.entity.CyberZombieEntity;
 import com.rena.cybercraft.common.item.BlueprintItem;
@@ -56,6 +57,7 @@ public class ClientEvents {
 
     private static void registerTERenders(){
         ClientRegistry.bindTileEntityRenderer(TileEntityTypeInit.SCANNER_TE.get(), TileEntityScannerRender::new);
+        ClientRegistry.bindTileEntityRenderer(TileEntityTypeInit.SURGERY_CHAMBER.get(), TileEntitySurgeryChamberRender::new);
     }
 
 }

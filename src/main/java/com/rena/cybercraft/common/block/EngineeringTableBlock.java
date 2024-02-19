@@ -52,7 +52,7 @@ public class EngineeringTableBlock extends RotatableBlock {
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
-        if (state.getValue(TOP) == Half.TOP){
+        if (state.getValue(TOP) == Half.TOP) {
             return SHAPE;
         }
         return VoxelShapes.block();
@@ -65,16 +65,16 @@ public class EngineeringTableBlock extends RotatableBlock {
 
     @Override
     public boolean canSurvive(BlockState state, IWorldReader world, BlockPos pos) {
-        return  world.isEmptyBlock(pos.above());
+        return world.isEmptyBlock(pos.above());
     }
 
     @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos) {
-        if (!world.isClientSide()){
-            if (state.getValue(TOP) == Half.TOP){
+        if (!world.isClientSide()) {
+            if (state.getValue(TOP) == Half.TOP) {
                 if (world.isEmptyBlock(pos.below()))
                     return Blocks.AIR.defaultBlockState();
-            }else{
+            } else {
                 if (world.isEmptyBlock(pos.above()))
                     return Blocks.AIR.defaultBlockState();
             }
@@ -84,13 +84,13 @@ public class EngineeringTableBlock extends RotatableBlock {
 
     @Override
     public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean bool) {
-        if (!world.isClientSide){
-            if (!state.is(newState.getBlock())){
-                if (state.getValue(TOP) == Half.BOTTOM){
+        if (!world.isClientSide) {
+            if (!state.is(newState.getBlock())) {
+                if (state.getValue(TOP) == Half.BOTTOM) {
                     TileEntityEngineeringTable te = WorldUtil.getTileEntity(TileEntityEngineeringTable.class, world, pos);
                     InventoryHelper.dropContents(world, pos, te);
                     world.destroyBlock(pos.above(), true);
-                }else if (state.getValue(TOP) == Half.TOP){
+                } else if (state.getValue(TOP) == Half.TOP) {
                     world.destroyBlock(pos.below(), true);
                 }
             }
@@ -110,19 +110,19 @@ public class EngineeringTableBlock extends RotatableBlock {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        if(state.getValue(TOP) == Half.BOTTOM)
+        if (state.getValue(TOP) == Half.BOTTOM)
             return new TileEntityEngineeringTable();
         return new DummyTileEntity(TileEntityTypeInit.ENGINEERING_TABLE.get(), BlockPos::below);
     }
 
     @Override
     public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-        if (!world.isClientSide){
+        if (!world.isClientSide) {
             BlockPos tePos = pos;
             if (state.getValue(TOP) == Half.TOP)
                 tePos = tePos.below();
             TileEntityEngineeringTable te = WorldUtil.getTileEntity(TileEntityEngineeringTable.class, world, tePos);
-            if (te != null){
+            if (te != null) {
                 NetworkHooks.openGui((ServerPlayerEntity) player, te, tePos);
                 return ActionResultType.CONSUME;
             }
