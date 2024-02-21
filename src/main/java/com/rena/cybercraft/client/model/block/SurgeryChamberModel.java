@@ -10,6 +10,7 @@ public class SurgeryChamberModel extends Model {
 
     public ModelRenderer left;
     public ModelRenderer right;
+
     public SurgeryChamberModel() {
         super(RenderType::entitySolid);
         this.texWidth = 14;
@@ -26,7 +27,8 @@ public class SurgeryChamberModel extends Model {
     public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder builder, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         this.left.render(matrixStack, builder, packedLight, packedOverlay);
     }
-    public void renderRight(MatrixStack matrixStack, IVertexBuilder builder, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
+
+    public void renderRight(MatrixStack matrixStack, IVertexBuilder builder, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         this.right.render(matrixStack, builder, packedLight, packedOverlay);
     }
 }

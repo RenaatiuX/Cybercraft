@@ -122,10 +122,10 @@ public class CyberZombieEntity extends ZombieEntity {
             cybercraft.deserializeNBT(tagCompound.getCompound("ware"));
         }
     }
+
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (capability == CybercraftAPI.CYBERCRAFT_CAPABILITY)
-        {
+        if (capability == CybercraftAPI.CYBERCRAFT_CAPABILITY) {
             return LazyOptional.of(() -> cybercraft).cast();
         }
         return super.getCapability(capability, facing);

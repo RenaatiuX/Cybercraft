@@ -1,6 +1,7 @@
 package com.rena.cybercraft.client.screens.hud;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.api.hud.HudElementBase;
@@ -84,7 +85,7 @@ public class MissingPowerDisplay extends HudElementBase {
                     mstack.pushPose();
                     mstack.translate(isRightAnchored ? xOffset : -xOffset, 0.0F, 0.0F);
 
-                    //fontRenderer.draw("!", xPosition + 14, yPosition + 8, 0xFF0000);
+                    fontRenderer.draw(mstack, "!", xPosition + 14, yPosition + 8, 0xFF0000);
 
                     //RenderHelper.enableStandardItemLighting();
                     renderItem.renderAndDecorateItem(stack, xPosition, yPosition);

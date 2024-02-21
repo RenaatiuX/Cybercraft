@@ -10,22 +10,19 @@ public class CybercraftUpdateEvent extends EntityEvent {
     private final LivingEntity livingEntity;
     private final ICybercraftUserData cybercraftUserData;
 
-    public CybercraftUpdateEvent(@Nonnull LivingEntity livingEntity, @Nonnull ICybercraftUserData cybercraftUserData)
-    {
+    public CybercraftUpdateEvent(@Nonnull LivingEntity livingEntity, @Nonnull ICybercraftUserData cybercraftUserData) {
         super(livingEntity);
         this.livingEntity = livingEntity;
         this.cybercraftUserData = cybercraftUserData;
     }
 
     @Nonnull
-    public LivingEntity getEntityLiving()
-    {
+    public LivingEntity getEntityLiving() {
         return livingEntity;
     }
 
     @Nonnull
-    public ICybercraftUserData getCybercrafteUserData()
-    {
+    public ICybercraftUserData getCybercrafteUserData() {
         return cybercraftUserData;
     }
 }

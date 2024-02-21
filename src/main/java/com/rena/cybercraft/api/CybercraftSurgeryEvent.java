@@ -17,13 +17,11 @@ public class CybercraftSurgeryEvent extends EntityEvent {
      * Cancel to prevent any changes
      */
     @Cancelable
-    public static class Pre extends CybercraftSurgeryEvent
-    {
+    public static class Pre extends CybercraftSurgeryEvent {
         public ItemStackHandler inventoryActual;
         public ItemStackHandler inventoryTarget;
 
-        public Pre(LivingEntity livingEntity, ItemStackHandler inventoryActual, ItemStackHandler inventoryTarget)
-        {
+        public Pre(LivingEntity livingEntity, ItemStackHandler inventoryActual, ItemStackHandler inventoryTarget) {
             super(livingEntity);
 
             this.inventoryActual = new ItemStackHandler(120);
@@ -33,13 +31,11 @@ public class CybercraftSurgeryEvent extends EntityEvent {
 
         }
 
-        public ItemStackHandler getActualCybercraft()
-        {
+        public ItemStackHandler getActualCybercraft() {
             return inventoryActual;
         }
 
-        public ItemStackHandler getTargetCybercraft()
-        {
+        public ItemStackHandler getTargetCybercraft() {
             return inventoryTarget;
         }
     }
@@ -47,10 +43,8 @@ public class CybercraftSurgeryEvent extends EntityEvent {
     /**
      * Fired when the Surgery Chamber finishes the process of altering an entities installed Cybercraft
      */
-    public static class Post extends CybercraftSurgeryEvent
-    {
-        public Post(LivingEntity livingEntity)
-        {
+    public static class Post extends CybercraftSurgeryEvent {
+        public Post(LivingEntity livingEntity) {
             super(livingEntity);
         }
     }

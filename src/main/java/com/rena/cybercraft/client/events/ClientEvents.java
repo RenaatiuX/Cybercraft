@@ -42,9 +42,9 @@ public class ClientEvents {
 
         RenderingRegistry.registerEntityRenderingHandler(EntityTypeInit.CYBER_ZOMBIE.get(), CyberZombieRenderer::new);
 
-        if(CybercraftConfig.C_OTHER.enableClothes.get()){
+        if (CybercraftConfig.C_OTHER.enableClothes.get()) {
             Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> tintIndex > 0 ? -1 :
-                    ((CybercraftArmorItem)stack.getItem()).getColor(stack), ItemInit.TRENCHCOAT.get());
+                    ((CybercraftArmorItem) stack.getItem()).getColor(stack), ItemInit.TRENCHCOAT.get());
         }
 
         registerBlockRenders();
@@ -55,7 +55,7 @@ public class ClientEvents {
         RenderTypeLookup.setRenderLayer(BlockInit.RADIO.get(), RenderType.cutout());
     }
 
-    private static void registerTERenders(){
+    private static void registerTERenders() {
         ClientRegistry.bindTileEntityRenderer(TileEntityTypeInit.SCANNER_TE.get(), TileEntityScannerRender::new);
         ClientRegistry.bindTileEntityRenderer(TileEntityTypeInit.SURGERY_CHAMBER.get(), TileEntitySurgeryChamberRender::new);
     }

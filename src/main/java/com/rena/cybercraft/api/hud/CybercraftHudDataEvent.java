@@ -9,18 +9,15 @@ public class CybercraftHudDataEvent extends Event {
 
     private List<IHudElement> elements = new ArrayList<>();
 
-    public CybercraftHudDataEvent()
-    {
+    public CybercraftHudDataEvent() {
         super();
     }
 
-    public List<IHudElement> getElements()
-    {
+    public List<IHudElement> getElements() {
         return elements;
     }
 
-    public void addElement(IHudElement element)
-    {
+    public void addElement(IHudElement element) {
         elements.add(element);
     }
 

@@ -11,8 +11,7 @@ public class ModelBox extends Model {
 
     public ModelRenderer box;
 
-    public ModelBox()
-    {
+    public ModelBox() {
         super(RenderType::entitySolid);
         texWidth = 48;
         texHeight = 21;

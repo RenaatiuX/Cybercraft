@@ -14,34 +14,38 @@ import java.util.Map;
 public interface ICybercraft {
 
     EnumSlot getSlot(ItemStack stack);
+
     int installedStackSize(ItemStack stack);
+
     boolean isIncompatible(ItemStack stack, ItemStack comparison);
+
     boolean isEssential(ItemStack stack);
+
     List<ITextComponent> getInfo(ItemStack stack);
+
     int getCapacity(ItemStack wareStack);
+
     NonNullList<Item> requiredInstalledItems();
 
 
     Quality getQuality();
 
     Item withQuality(Quality quality);
+
     boolean canHoldQuality(Quality quality);
 
-    class Quality
-    {
+    class Quality {
         private static Map<String, Quality> mapping = new HashMap<>();
         public static List<Quality> qualities = new ArrayList<>();
         private String unlocalizedName;
         private String nameModifier;
         private String spriteSuffix;
 
-        public Quality(String unlocalizedName)
-        {
+        public Quality(String unlocalizedName) {
             this(unlocalizedName, null, null);
         }
 
-        public Quality(String unlocalizedName, String nameModifier, String spriteSuffix)
-        {
+        public Quality(String unlocalizedName, String nameModifier, String spriteSuffix) {
             this.unlocalizedName = unlocalizedName;
             this.nameModifier = nameModifier;
             this.spriteSuffix = spriteSuffix;
@@ -49,34 +53,28 @@ public interface ICybercraft {
             qualities.add(this);
         }
 
-        public String getUnlocalizedName()
-        {
+        public String getUnlocalizedName() {
             return unlocalizedName;
         }
 
-        public static Quality getQualityFromString(String name)
-        {
-            if (mapping.containsKey(name))
-            {
+        public static Quality getQualityFromString(String name) {
+            if (mapping.containsKey(name)) {
                 return mapping.get(name);
             }
             return null;
         }
 
-        public String getNameModifier()
-        {
+        public String getNameModifier() {
             return nameModifier;
         }
 
-        public String getSpriteSuffix()
-        {
+        public String getSpriteSuffix() {
             return spriteSuffix;
         }
     }
 
     // @TODO rename to BodyRegion since it's more a type/category than an actual inventory slot
-    enum EnumSlot
-    {
+    enum EnumSlot {
         EYES(12, "eyes"),
         CRANIUM(11, "cranium"),
         HEART(14, "heart"),
@@ -95,61 +93,51 @@ public interface ICybercraft {
         private final boolean sidedSlot;
         private final boolean hasEssential;
 
-        EnumSlot(int slot, String name, boolean sidedSlot, boolean hasEssential)
-        {
+        EnumSlot(int slot, String name, boolean sidedSlot, boolean hasEssential) {
             this.slotNumber = slot;
             this.name = name;
             this.sidedSlot = sidedSlot;
             this.hasEssential = hasEssential;
         }
 
-        EnumSlot(int slot, String name)
-        {
+        EnumSlot(int slot, String name) {
             this(slot, name, false, true);
         }
 
-        public int getSlotNumber()
-        {
+        public int getSlotNumber() {
             return slotNumber;
         }
 
-        public static EnumSlot getSlotByPage(int page)
-        {
-            for (EnumSlot slot : values())
-            {
-                if (slot.getSlotNumber() == page)
-                {
+        public static EnumSlot getSlotByPage(int page) {
+            for (EnumSlot slot : values()) {
+                if (slot.getSlotNumber() == page) {
                     return slot;
                 }
             }
             return null;
         }
 
-        public String getName()
-        {
+        public String getName() {
             return name;
         }
 
-        public boolean isSided()
-        {
+        public boolean isSided() {
             return sidedSlot;
         }
 
-        public boolean hasEssential()
-        {
+        public boolean hasEssential() {
             return hasEssential;
         }
     }
 
     void onAdded(LivingEntity livingEntity, ItemStack stack);
+
     void onRemoved(LivingEntity livingEntity, ItemStack stack);
 
-    interface ISidedLimb
-    {
+    interface ISidedLimb {
         EnumSide getSide(ItemStack stack);
 
-        enum EnumSide
-        {
+        enum EnumSide {
             LEFT,
             RIGHT;
         }

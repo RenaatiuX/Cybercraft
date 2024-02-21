@@ -4,8 +4,7 @@ import net.minecraft.item.ItemStack;
 
 public interface ICybercraftTabItem {
 
-    enum EnumCategory
-    {
+    enum EnumCategory {
         BLOCKS,
         BODYPARTS,
         EYES,

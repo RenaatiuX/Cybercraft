@@ -16,8 +16,7 @@ public class BeaconLargeModel extends Model {
 
     public ModelRenderer[] crossbars;
 
-    public BeaconLargeModel()
-    {
+    public BeaconLargeModel() {
         super(RenderType::entitySolid);
         texWidth = 128;
         texHeight = 256;
@@ -56,8 +55,7 @@ public class BeaconLargeModel extends Model {
         float z;
         float progress = 10F + progressChg;
         float pi4 = (float) Math.PI / 4F;
-        for (int i = 0; i < num; i++)
-        {
+        for (int i = 0; i < num; i++) {
             x = (float) Math.ceil(.3F + -wPercent * progress * pi4);
             z = -1.6F + -wPercent * progress * (pi4 - .1F);
 
@@ -99,22 +97,18 @@ public class BeaconLargeModel extends Model {
         bar3.render(matrixStack, vertexBuilder, f1, f2, f3, f4, f5, scale);
         bar4.render(matrixStack, vertexBuilder, f1, f2, f3, f4, f5, scale);
 
-        for (ModelRenderer bar : crossbars)
-        {
-            if (bar != null)
-            {
+        for (ModelRenderer bar : crossbars) {
+            if (bar != null) {
                 bar.render(matrixStack, vertexBuilder, f1, f2, f3, f4, f5, scale);
             }
         }
     }
 
     public void renderBase(MatrixStack matrixStack, IVertexBuilder vertexBuilder, int f, int f1, float f3, float f4, float f5, float scale) {
-
-            base.render(matrixStack, vertexBuilder, f, f1, f3, f4, f5, scale);
+        base.render(matrixStack, vertexBuilder, f, f1, f3, f4, f5, scale);
     }
 
-    public void setupAnim(ModelRenderer modelRenderer, float x, float y, float z)
-    {
+    public void setupAnim(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.xRot = x;
         modelRenderer.yRot = y;
         modelRenderer.zRot = z;

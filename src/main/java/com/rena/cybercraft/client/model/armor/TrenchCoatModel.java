@@ -8,6 +8,7 @@ public class TrenchCoatModel extends BipedModel<LivingEntity> {
 
     public ModelRenderer bottomThing;
     private BipedModel modelBaseParent;
+
     public TrenchCoatModel(float modelSize) {
         super(modelSize);
         bottomThing = new ModelRenderer(this, 16, 0);
@@ -15,8 +16,7 @@ public class TrenchCoatModel extends BipedModel<LivingEntity> {
         bottomThing.setPos(0, 12.0F, 0.0F);
     }
 
-    public void setDefaultModel(BipedModel modelBiped)
-    {
+    public void setDefaultModel(BipedModel modelBiped) {
         modelBaseParent = modelBiped;
     }
 

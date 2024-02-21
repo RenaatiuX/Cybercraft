@@ -2,12 +2,12 @@ package com.rena.cybercraft.api;
 
 public interface IEnergy {
 
-    long givePower (long power, boolean simulated);
+    long givePower(long power, boolean simulated);
 
-    long getStoredPower ();
+    long getStoredPower();
 
-    long getCapacity ();
+    long getCapacity();
 
-    long takePower (long power, boolean simulated);
+    long takePower(long power, boolean simulated);
 
 }
