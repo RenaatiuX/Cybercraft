@@ -5,14 +5,12 @@ import net.minecraft.entity.player.PlayerEntity;
 
 public interface IHudElement {
 
-    enum EnumAnchorHorizontal
-    {
+    enum EnumAnchorHorizontal {
         LEFT,
         RIGHT;
     }
 
-    enum EnumAnchorVertical
-    {
+    enum EnumAnchorVertical {
         TOP,
         BOTTOM;
     }
@@ -22,21 +20,29 @@ public interface IHudElement {
     public boolean canMove();
 
     public void setX(int x);
+
     public void setY(int y);
+
     public int getX();
+
     public int getY();
 
     public int getWidth();
+
     public int getHeight();
 
     public boolean canHide();
+
     public void setHidden(boolean hidden);
+
     public boolean isHidden();
 
     public EnumAnchorHorizontal getHorizontalAnchor();
+
     public void setHorizontalAnchor(EnumAnchorHorizontal anchor);
 
     public EnumAnchorVertical getVerticalAnchor();
+
     public void setVerticalAnchor(EnumAnchorVertical anchor);
 
     public void reset();
@@ -44,6 +50,7 @@ public interface IHudElement {
     public String getUniqueName();
 
     public void save(IHudSaveData data);
+
     public void load(IHudSaveData data);
 
 }

@@ -25,15 +25,21 @@ public class BlockInit {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Cybercraft.MOD_ID);
     public static final BlockDeferredRegister CUSTOM = new BlockDeferredRegister(Cybercraft.MOD_ID);
 
-    public static final RegistryObject<ScannerBlock> SCANNER_BLOCK = BLOCKS.register("scanner", ScannerBlock::new);
-    public static final RegistryObject<ChargerBlock> CHARGER_BLOCK = BLOCKS.register("charger", ChargerBlock::new);
-    public static final RegistryObject<BlueprintArchiveBlock> BLUEPRINT_ARCHIVE_BLOCK = BLOCKS.register("blueprint_archive", BlueprintArchiveBlock::new);
-    public static final RegistryObject<EngineeringTableBlock> ENGINEERING_TABLE = BLOCKS.register("engineering_table", EngineeringTableBlock::new);
-    public static final DoubleRegistryObject<ComponentBoxBlock, ItemComponentBox> COMPONENT_BOX = CUSTOM.register("component_box", ComponentBoxBlock::new, block -> new ItemComponentBox(block));
+    public static final RegistryObject<ScannerBlock> SCANNER_BLOCK = BLOCKS.register("scanner",
+            ScannerBlock::new);
+    public static final RegistryObject<ChargerBlock> CHARGER_BLOCK = BLOCKS.register("charger",
+            ChargerBlock::new);
+    public static final RegistryObject<BlueprintArchiveBlock> BLUEPRINT_ARCHIVE_BLOCK = BLOCKS.register("blueprint_archive",
+            BlueprintArchiveBlock::new);
+    public static final RegistryObject<EngineeringTableBlock> ENGINEERING_TABLE = BLOCKS.register("engineering_table",
+            EngineeringTableBlock::new);
+    public static final DoubleRegistryObject<ComponentBoxBlock, ItemComponentBox> COMPONENT_BOX = CUSTOM.register("component_box",
+            ComponentBoxBlock::new, ItemComponentBox::new);
     public static final RegistryObject<BeaconBlock> RADIO = BLOCKS.register("beacon", BeaconBlock::new);
     public static final RegistryObject<BeaconPostBlock> RADIO_POST = BLOCKS.register("radio_post", BeaconPostBlock::new);
     public static final RegistryObject<SurgeryBlock> SURGERY = BLOCKS.register("surgery", SurgeryBlock::new);
-    public static final RegistryObject<SurgeryChamberBlock> SURGERY_CHAMBER_BLOCK = BLOCKS.register("surgery_chamber", SurgeryChamberBlock::new);
+    public static final RegistryObject<SurgeryChamberBlock> SURGERY_CHAMBER_BLOCK = BLOCKS.register("surgery_chamber",
+            SurgeryChamberBlock::new);
 
     @SubscribeEvent
     public static final void registerBlockItems(RegistryEvent.Register<Item> event){

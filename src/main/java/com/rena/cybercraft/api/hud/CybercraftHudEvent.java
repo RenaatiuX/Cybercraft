@@ -12,35 +12,29 @@ public class CybercraftHudEvent extends Event {
     private boolean hudjackAvailable;
     private MatrixStack scaledResolution;
 
-    public CybercraftHudEvent(MatrixStack scaledResolution, boolean hudjackAvailable)
-    {
+    public CybercraftHudEvent(MatrixStack scaledResolution, boolean hudjackAvailable) {
         super();
         this.scaledResolution = scaledResolution;
         this.hudjackAvailable = hudjackAvailable;
     }
 
-    public MatrixStack getResolution()
-    {
+    public MatrixStack getResolution() {
         return scaledResolution;
     }
 
-    public boolean isHudjackAvailable()
-    {
+    public boolean isHudjackAvailable() {
         return hudjackAvailable;
     }
 
-    public void setHudjackAvailable(boolean hudjackAvailable)
-    {
+    public void setHudjackAvailable(boolean hudjackAvailable) {
         this.hudjackAvailable = hudjackAvailable;
     }
 
-    public List<IHudElement> getElements()
-    {
+    public List<IHudElement> getElements() {
         return elements;
     }
 
-    public void addElement(IHudElement element)
-    {
+    public void addElement(IHudElement element) {
         elements.add(element);
     }
 

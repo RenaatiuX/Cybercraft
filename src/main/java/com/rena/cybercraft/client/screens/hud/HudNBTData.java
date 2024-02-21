@@ -50,4 +50,8 @@ public class HudNBTData implements IHudSaveData {
     public float getFloat(String key) {
         return nbt.getFloat(key);
     }
+
+    public CompoundNBT getNbt() {
+        return nbt;
+    }
 }

@@ -14,24 +14,19 @@ public enum ArmorClass {
     LIGHT(),
     HEAVY;
 
-    public static boolean isWearingLightOrNone(LivingEntity entityLivingBase)
-    {
+    public static boolean isWearingLightOrNone(LivingEntity entityLivingBase) {
         return get(entityLivingBase) != HEAVY;
     }
 
-    public static ArmorClass get(@Nonnull LivingEntity entityLivingBase)
-    {
+    public static ArmorClass get(@Nonnull LivingEntity entityLivingBase) {
         boolean hasNoArmor = true;
 
-        for (ItemStack stack : entityLivingBase.getArmorSlots())
-        {
+        for (ItemStack stack : entityLivingBase.getArmorSlots()) {
             if (stack.isEmpty()) continue;
             hasNoArmor = false;
 
-            if (stack.getItem() instanceof ArmorItem)
-            {
-                if (((ArmorItem) stack.getItem()).getMaterial().getDefenseForSlot(EquipmentSlotType.CHEST) > 4)
-                {
+            if (stack.getItem() instanceof ArmorItem) {
+                if (((ArmorItem) stack.getItem()).getMaterial().getDefenseForSlot(EquipmentSlotType.CHEST) > 4) {
                     return HEAVY;
                 }
             }

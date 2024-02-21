@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 
-public abstract class HudElementBase implements IHudElement{
+public abstract class HudElementBase implements IHudElement {
 
     private int defaultX = 0;
     private int defaultY = 0;
@@ -20,22 +20,18 @@ public abstract class HudElementBase implements IHudElement{
     private EnumAnchorHorizontal hAnchor = EnumAnchorHorizontal.LEFT;
     private EnumAnchorVertical vAnchor = EnumAnchorVertical.TOP;
 
-    public HudElementBase(String name)
-    {
+    public HudElementBase(String name) {
         this.name = name;
     }
 
     @Override
-    public void render(PlayerEntity entityPlayer, MatrixStack stack, boolean isHUDjackAvailable, boolean isConfigOpen, float partialTicks)
-    {
+    public void render(PlayerEntity entityPlayer, MatrixStack stack, boolean isHUDjackAvailable, boolean isConfigOpen, float partialTicks) {
         int x = getX();
         int y = getY();
-        if (getHorizontalAnchor() == EnumAnchorHorizontal.RIGHT)
-        {
+        if (getHorizontalAnchor() == EnumAnchorHorizontal.RIGHT) {
             x = Minecraft.getInstance().screen.width - x - getWidth();
         }
-        if (getVerticalAnchor() == EnumAnchorVertical.BOTTOM)
-        {
+        if (getVerticalAnchor() == EnumAnchorVertical.BOTTOM) {
             y = Minecraft.getInstance().screen.height - y - getHeight();
         }
 
@@ -44,127 +40,106 @@ public abstract class HudElementBase implements IHudElement{
 
     public abstract void renderElement(int x, int y, PlayerEntity entityPlayer, MatrixStack stack, boolean hudjackAvailable, boolean isConfigOpen, float partialTicks);
 
-    public void setDefaultX(int x)
-    {
+    public void setDefaultX(int x) {
         this.defaultX = x;
         setX(x);
     }
 
-    public void setDefaultY(int y)
-    {
+    public void setDefaultY(int y) {
         this.defaultY = y;
         setY(y);
     }
 
     @Override
-    public boolean canMove()
-    {
+    public boolean canMove() {
         return true;
     }
 
     @Override
-    public void setX(int x)
-    {
+    public void setX(int x) {
         this.x = x;
     }
 
     @Override
-    public void setY(int y)
-    {
+    public void setY(int y) {
         this.y = y;
     }
 
     @Override
-    public int getWidth()
-    {
+    public int getWidth() {
         return width;
     }
 
     @Override
-    public int getHeight()
-    {
+    public int getHeight() {
         return height;
     }
 
     @Override
-    public boolean canHide()
-    {
+    public boolean canHide() {
         return true;
     }
 
     @Override
-    public void setHidden(boolean hidden)
-    {
+    public void setHidden(boolean hidden) {
         this.hidden = hidden;
     }
 
     @Override
-    public boolean isHidden()
-    {
+    public boolean isHidden() {
         return hidden;
     }
 
     @Override
-    public int getX()
-    {
+    public int getX() {
         return x;
     }
 
     @Override
-    public int getY()
-    {
+    public int getY() {
         return y;
     }
 
     @Override
-    public EnumAnchorHorizontal getHorizontalAnchor()
-    {
+    public EnumAnchorHorizontal getHorizontalAnchor() {
         return hAnchor;
     }
 
-    public void setDefaultHorizontalAnchor(EnumAnchorHorizontal anchor)
-    {
+    public void setDefaultHorizontalAnchor(EnumAnchorHorizontal anchor) {
         defaultHAnchor = anchor;
         setHorizontalAnchor(anchor);
     }
 
     @Override
-    public void setHorizontalAnchor(EnumAnchorHorizontal anchor)
-    {
+    public void setHorizontalAnchor(EnumAnchorHorizontal anchor) {
         hAnchor = anchor;
     }
 
     @Override
-    public EnumAnchorVertical getVerticalAnchor()
-    {
+    public EnumAnchorVertical getVerticalAnchor() {
         return vAnchor;
     }
 
-    public void setDefaultVerticalAnchor(EnumAnchorVertical anchor)
-    {
+    public void setDefaultVerticalAnchor(EnumAnchorVertical anchor) {
         defaultVAnchor = anchor;
         setVerticalAnchor(anchor);
     }
 
     @Override
-    public void setVerticalAnchor(EnumAnchorVertical anchor)
-    {
+    public void setVerticalAnchor(EnumAnchorVertical anchor) {
         vAnchor = anchor;
     }
 
-    public void setWidth(int w)
-    {
+    public void setWidth(int w) {
         width = w;
     }
 
-    public void setHeight(int h)
-    {
+    public void setHeight(int h) {
         height = h;
     }
 
     @Override
-    public void reset()
-    {
+    public void reset() {
         x = defaultX;
         y = defaultY;
         vAnchor = defaultVAnchor;
@@ -172,14 +147,12 @@ public abstract class HudElementBase implements IHudElement{
     }
 
     @Override
-    public String getUniqueName()
-    {
+    public String getUniqueName() {
         return name;
     }
 
     @Override
-    public void save(IHudSaveData data)
-    {
+    public void save(IHudSaveData data) {
         data.setInteger("x", x);
         data.setInteger("y", y);
         data.setBoolean("top", vAnchor == EnumAnchorVertical.TOP);
@@ -187,8 +160,7 @@ public abstract class HudElementBase implements IHudElement{
     }
 
     @Override
-    public void load(IHudSaveData data)
-    {
+    public void load(IHudSaveData data) {
         x = data.getInteger("x");
         y = data.getInteger("y");
         vAnchor = data.getBoolean("top") ? EnumAnchorVertical.TOP : EnumAnchorVertical.BOTTOM;

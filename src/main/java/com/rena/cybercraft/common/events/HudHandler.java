@@ -1,18 +1,31 @@
 package com.rena.cybercraft.common.events;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.rena.cybercraft.Cybercraft;
+import com.rena.cybercraft.api.CybercraftAPI;
+import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.api.hud.CybercraftHudDataEvent;
 import com.rena.cybercraft.api.hud.CybercraftHudEvent;
 import com.rena.cybercraft.api.hud.IHudElement;
 import com.rena.cybercraft.api.hud.NotificationInstance;
+import com.rena.cybercraft.api.item.IHudjack;
 import com.rena.cybercraft.client.screens.hud.MissingPowerDisplay;
 import com.rena.cybercraft.client.screens.hud.NotificationDisplay;
 import com.rena.cybercraft.client.screens.hud.PowerDisplay;
+import com.rena.cybercraft.common.config.CybercraftConfig;
+import com.rena.cybercraft.core.init.ItemInit;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -21,51 +34,44 @@ public class HudHandler {
 
     public static final HudHandler INSTANCE = new HudHandler();
 
-    private static class NotificationStack<T> extends Stack<T>
-    {
+    // http://stackoverflow.com/a/16206356/1754640
+    private static class NotificationStack<T> extends Stack<T> {
         private int maxSize;
 
-        public NotificationStack(int size)
-        {
+        public NotificationStack(int size) {
             super();
             this.maxSize = size;
         }
 
         @Override
-        public T push(T object)
-        {
-            while (this.size() >= maxSize)
-            {
+        public T push(T object) {
+            while (this.size() >= maxSize) {
                 this.remove(0);
             }
             return super.push(object);
         }
     }
 
-    public static void addNotification(NotificationInstance notification)
-    {
+    public static void addNotification(NotificationInstance notification) {
         notifications.push(notification);
     }
 
-    public static final ResourceLocation HUD_TEXTURE = new ResourceLocation(Cybercraft.MOD_ID + ":textures/gui/hud.png");
+    public static final ResourceLocation HUD_TEXTURE = new ResourceLocation(Cybercraft.MOD_ID, "textures/gui/hud.png");
     public static Stack<NotificationInstance> notifications = new NotificationStack<>(5);
 
     private static PowerDisplay powerDisplay = new PowerDisplay();
     private static MissingPowerDisplay missingPowerDisplay = new MissingPowerDisplay();
     private static NotificationDisplay notificationDisplay = new NotificationDisplay();
 
-    static
-    {
+    static {
         notificationDisplay.setHorizontalAnchor(IHudElement.EnumAnchorHorizontal.LEFT);
         notificationDisplay.setVerticalAnchor(IHudElement.EnumAnchorVertical.BOTTOM);
     }
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public void addHudElements(CybercraftHudEvent event)
-    {
-        if (event.isHudjackAvailable())
-        {
+    public void addHudElements(CybercraftHudEvent event) {
+        if (event.isHudjackAvailable()) {
             event.addElement(powerDisplay);
             event.addElement(missingPowerDisplay);
             event.addElement(notificationDisplay);
@@ -74,8 +80,7 @@ public class HudHandler {
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public void saveHudElements(CybercraftHudDataEvent event)
-    {
+    public void saveHudElements(CybercraftHudDataEvent event) {
         event.addElement(powerDisplay);
         event.addElement(missingPowerDisplay);
         event.addElement(notificationDisplay);
@@ -96,34 +101,32 @@ public class HudHandler {
     private double lastLastVelY = 0;
     private double lastLastVelZ = 0;
 
-
-    /*@OnlyIn(Dist.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public void onDrawScreenPost(TickEvent.RenderTickEvent event)
-    {
-        if (event.phase != TickEvent.Phase.END) return;
+    public void onRender(@Nonnull RenderGameOverlayEvent.Pre event) {
+        if (event.getType() == RenderGameOverlayEvent.ElementType.CHAT) {
+            drawHUD(event.getMatrixStack(), event.getPartialTicks());
+        }
+    }
 
-        Minecraft mc = Minecraft.getInstance();
-        ServerPlayerEntity entityPlayerSP = mc.player;
-        if (entityPlayerSP == null) return;
+    private void drawHUD(MatrixStack matrixStack, float partialTick) {
+        Minecraft minecraft = Minecraft.getInstance();
+        ClientPlayerEntity clientPlayer = minecraft.player;
+        if (clientPlayer == null) return;
+        if (clientPlayer.tickCount != cache_tickExisted) {
+            cache_tickExisted = clientPlayer.tickCount;
+            ICybercraftUserData cybercraftUserData = CybercraftAPI.getCapabilityOrNull(clientPlayer);
+            if (cybercraftUserData == null) return;
 
-        MatrixStack matrixStack = new MatrixStack(Minecraft.getInstance());
-
-        if (entityPlayerSP.tickCount != cache_tickExisted) {
-            cache_tickExisted = entityPlayerSP.tickCount;
-
-            ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityPlayerSP);
-            if (cyberwareUserData == null) return;
-
-            cache_floatingFactor = 0.0D;
+            cache_floatingFactor = 0.0F;
             boolean isHUDjackAvailable = false;
 
-            List<ItemStack> listHUDjackItems = cyberwareUserData.getHudjackItems();
+            List<ItemStack> listHUDjackItems = cybercraftUserData.getHudjackItems();
             for (ItemStack stack : listHUDjackItems) {
                 if (((IHudjack) CybercraftAPI.getCybercraft(stack)).isActive(stack)) {
                     isHUDjackAvailable = true;
                     if (CybercraftConfig.C_HUD.enableFloat.get()) {
-                        if (CybercraftAPI.getCybercraft(stack) == ItemInit.CYBER_EYES.get()) {
+                        if (CybercraftAPI.getCybercraft(stack) == ItemInit.EYES_UPGRADES_HUDLENS.get()) {
                             cache_floatingFactor = CybercraftConfig.C_HUD.hudlensFloat.get();
                         } else {
                             cache_floatingFactor = CybercraftConfig.C_HUD.hudjackFloat.get();
@@ -137,68 +140,14 @@ public class HudHandler {
             MinecraftForge.EVENT_BUS.post(hudEvent);
             cache_hudElements = hudEvent.getElements();
             cache_isHUDjackAvailable = hudEvent.isHudjackAvailable();
-            cache_promptToOpenMenu = cyberwareUserData.getActiveItems().size() > 0
-                    && !cyberwareUserData.hasOpenedRadialMenu();
-            cache_hudColorHex = cyberwareUserData.getHudColorHex();
+            cache_promptToOpenMenu = !cybercraftUserData.getActiveItems().isEmpty()
+                    && !cybercraftUserData.hasOpenedRadialMenu();
+            cache_hudColorHex = cybercraftUserData.getHudColorHex();
         }
 
         matrixStack.pushPose();
-
         double accelLastY = lastVelY - lastLastVelY;
-        double accelY = entityPlayerSP.motionY - lastVelY;
-        double accelPitch = accelLastY + (accelY - accelLastY) * (event.renderTickTime + entityPlayerSP.tickCount - lastTickExisted) / 2F;
-
-        double pitchCameraMove = cache_floatingFactor * ((entityPlayerSP.prevRenderArmPitch + (entityPlayerSP.renderArmPitch - entityPlayerSP.prevRenderArmPitch) * event.renderTickTime) - entityPlayerSP.xRot);
-        double yawCameraMove   = cache_floatingFactor * ((entityPlayerSP.prevRenderArmYaw   + (entityPlayerSP.renderArmYaw   - entityPlayerSP.prevRenderArmYaw  ) * event.renderTickTime) - entityPlayerSP.yRot  );
-
-        matrixStack.translate(yawCameraMove, pitchCameraMove + accelPitch * 50F * cache_floatingFactor, 0);
-
-        if (entityPlayerSP.tickCount > lastTickExisted + 1)
-        {
-            lastTickExisted = entityPlayerSP.tickCount;
-            lastLastVelX = lastVelX;
-            lastLastVelY = lastVelY;
-            lastLastVelZ = lastVelZ;
-            lastVelX = entityPlayerSP.motionX;
-            lastVelY = entityPlayerSP.motionY;
-            lastVelZ = entityPlayerSP.motionZ;
-        }
-
-        for (IHudElement hudElement : cache_hudElements)
-        {
-            if (hudElement.getHeight() + GuiHudConfiguration.getAbsoluteY(matrixStack, hudElement) <= 3)
-            {
-                GuiHudConfiguration.setYFromAbsolute(matrixStack, hudElement, 0 - hudElement.getHeight() + 4);
-            }
-
-            if (GuiHudConfiguration.getAbsoluteY(matrixStack, hudElement) >= matrixStack.getScaledHeight() - 3)
-            {
-                GuiHudConfiguration.setYFromAbsolute(matrixStack, hudElement, matrixStack.getScaledHeight() - 4);
-            }
-
-            if (hudElement.getWidth() + GuiHudConfiguration.getAbsoluteX(matrixStack, hudElement) <= 3)
-            {
-                GuiHudConfiguration.setXFromAbsolute(matrixStack, hudElement, 0 - hudElement.getWidth() + 4);
-            }
-
-            if (GuiHudConfiguration.getAbsoluteX(matrixStack, hudElement) >= matrixStack.getScaledWidth() - 3)
-            {
-                GuiHudConfiguration.setXFromAbsolute(matrixStack, hudElement, matrixStack.getScaledWidth() - 4);
-            }
-
-            hudElement.render(entityPlayerSP, matrixStack, cache_isHUDjackAvailable, mc.currentScreen instanceof GuiHudConfiguration, event.renderTickTime);
-        }
-
-        // Display a prompt to the user to open the radial menu if they haven't yet
-        if (cache_promptToOpenMenu)
-        {
-            String textOpenMenu = I18n.get("cybercraft.gui.open_menu", KeyBinds.menu.getName());
-            FontRenderer fontRenderer = mc.font;
-            fontRenderer.drawInBatch(textOpenMenu, matrixStack.getScaledWidth() - fontRenderer.width(textOpenMenu) - 5, 5, cache_hudColorHex);
-        }
-
-        matrixStack.popPose();
-    }*/
-
-
+        double accelY = clientPlayer.getY() - lastVelY;
+        double accelPitch = accelLastY + (accelY - accelLastY) * (partialTick + clientPlayer.tickCount - lastTickExisted) / 2F;
+    }
 }
