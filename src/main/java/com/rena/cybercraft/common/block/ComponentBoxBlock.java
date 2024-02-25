@@ -51,12 +51,12 @@ public class ComponentBoxBlock extends ShapedBlock {
 
     @Override
     public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        if (!world.isClientSide()){
+        if (!world.isClientSide()) {
             TileEntityComponentBox te = WorldUtil.getTileEntity(TileEntityComponentBox.class, world, pos);
-            if (te != null){
+            if (te != null) {
                 stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
                     if (handler instanceof ItemStackHandler)
-                    te.loadForgeItems(((ItemStackHandler)handler).serializeNBT());
+                        te.loadForgeItems(((ItemStackHandler) handler).serializeNBT());
                 });
             }
         }
@@ -64,9 +64,9 @@ public class ComponentBoxBlock extends ShapedBlock {
 
     @Override
     public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-        if (!world.isClientSide()){
+        if (!world.isClientSide()) {
             TileEntityComponentBox te = WorldUtil.getTileEntity(TileEntityComponentBox.class, world, pos);
-            if (te != null){
+            if (te != null) {
                 NetworkHooks.openGui((ServerPlayerEntity) player, te, pos);
                 return ActionResultType.CONSUME;
             }
@@ -76,9 +76,9 @@ public class ComponentBoxBlock extends ShapedBlock {
 
     @Override
     public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean bool) {
-        if (!world.isClientSide()){
-            if (state.is(newState.getBlock())){
-                TileEntityComponentBox te = WorldUtil.getTileEntity(TileEntityComponentBox.class, world,pos);
+        if (!world.isClientSide()) {
+            if (state.is(newState.getBlock())) {
+                TileEntityComponentBox te = WorldUtil.getTileEntity(TileEntityComponentBox.class, world, pos);
                 CompoundNBT nbt = te.serializeNBT();
                 ItemStack stack = new ItemStack(state.getBlock().asItem(), 1, nbt);
                 InventoryHelper.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);

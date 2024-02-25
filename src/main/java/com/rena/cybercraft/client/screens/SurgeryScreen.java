@@ -95,6 +95,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
 
     private PageConfiguration[] configs = new PageConfiguration[25];
     private int parent;
+    List<SurgeryContainer.SlotSurgery> visibleSlots = new ArrayList<>();
 
     public SurgeryScreen(SurgeryContainer p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
         super(p_i51105_1_, p_i51105_2_, p_i51105_3_);
@@ -175,7 +176,9 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
         //RenderSystem.color4f(1f, 1f, 1f, 1f);
         Minecraft.getInstance().getTextureManager().bind(SURGERY_GUI_TEXTURES);
         this.blit(stack, 0, 0, 0, 0, 176, 222);
+        renderSlotItems(stack);
         renderTolerance(stack);
+        renderPlayerName(stack);
         SkeletonEntity skeleton = new SkeletonEntity(EntityType.SKELETON, this.menu.getSurgery().getLevel());
         ScreenUtils.renderEntityInScreen(stack, imageWidth / 2, imageHeight / 2, 50, skeleton);
         stack.popPose();
@@ -185,7 +188,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
     protected void renderTolerance(MatrixStack stack) {
         int maxTolerance = MathHelper.floor(Minecraft.getInstance().player.getAttributeValue(AttributeInit.TOLERANCE_ATTRIBUTE.get()));
         int tolerance = this.menu.getSurgery().essence;
-        StringTextComponent essence = new StringTextComponent(maxTolerance + "/" + tolerance);
+        StringTextComponent essence = new StringTextComponent(tolerance + "/" + maxTolerance);
         font.draw(stack, essence, 18, 6, 0x1DA9C1);
         int criticalEssence = CybercraftConfig.C_ESSENCE.criticalEssence.get();
         int height = 49;
@@ -195,14 +198,29 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
         int x = 3;
         int y = 5;
         Minecraft.getInstance().getTextureManager().bind(SURGERY_GUI_TEXTURES);
+        RenderSystem.enableBlend();
         if (greyHeight > 0)
             blit(stack, x, y, 211, 61, 9, greyHeight);
         if (toleranceHeight > 0)
             blit(stack, x, y + greyHeight, 176, 61, 9, toleranceHeight);
         if (criticalToleranceHeight > 0)
             blit(stack, x, y + greyHeight + toleranceHeight, 220, 61, 9, criticalToleranceHeight);
+        RenderSystem.disableBlend();
+    }
 
+    protected void renderPlayerName(MatrixStack stack) {
+        String name = "_" + Minecraft.getInstance().player.getName().getString().toUpperCase();
+        font.draw(stack, name, (float) imageWidth / 2 - font.width(name), 115, 0x1DA9C1);
+    }
 
+    protected void renderSlotItems(MatrixStack stack) {
+        int xLeft = (this.width - this.imageWidth) / 2;
+        int yTop = (this.height - this.imageHeight) / 2;
+        Minecraft.getInstance().getTextureManager().bind(SURGERY_GUI_TEXTURES);
+        for (SurgeryContainer.SlotSurgery pos : visibleSlots) {
+            this.blit(stack, xLeft + pos.x - 1, yTop + pos.y - 1, 176, 43, 18, 18);        // Blue slot
+            this.blit(stack, xLeft + pos.x - 1, yTop + pos.y - 1 - 26, 176, 18, 18, 25);    // Red 'slot'
+        }
     }
 
     @Override
@@ -547,6 +565,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
     }
 
     protected void updateSurgerySlotsVisibility(boolean show) {
+        visibleSlots.clear();
         Iterator<Slot> iteratorSlots = this.menu.slots.iterator();
 
         Slot slot = iteratorSlots.next();
@@ -555,6 +574,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
 
             if (show && isSlotAccessible(slotSurgery)) {
                 slotSurgery.setVisible(true);
+                visibleSlots.add(slotSurgery);
             } else {
                 slotSurgery.setVisible(false);
             }

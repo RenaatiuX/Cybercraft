@@ -22,7 +22,7 @@ public class CybercraftItemBlock extends BlockItem implements ICybercraftTabItem
         super(block, properties);
     }
 
-    public CybercraftItemBlock(Block block, Properties properties, String ... tooltip) {
+    public CybercraftItemBlock(Block block, Properties properties, String... tooltip) {
         super(block, properties);
         this.tt = tooltip;
     }
@@ -34,10 +34,8 @@ public class CybercraftItemBlock extends BlockItem implements ICybercraftTabItem
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> text, ITooltipFlag tooltip) {
-        if (this.tt != null)
-        {
-            for (String str : tt)
-            {
+        if (this.tt != null) {
+            for (String str : tt) {
                 text.add(new TranslationTextComponent(I18n.get(str)).withStyle(TextFormatting.GRAY));
             }
         }

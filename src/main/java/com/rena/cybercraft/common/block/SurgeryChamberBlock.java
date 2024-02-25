@@ -88,7 +88,11 @@ public class SurgeryChamberBlock extends Block {
             }
         }
         return shape;
+    }
 
+    @Override
+    public VoxelShape getInteractionShape(BlockState p_199600_1_, IBlockReader p_199600_2_, BlockPos p_199600_3_) {
+        return super.getInteractionShape(p_199600_1_, p_199600_2_, p_199600_3_);
     }
 
     @Override
