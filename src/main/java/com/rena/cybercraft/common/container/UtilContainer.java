@@ -28,6 +28,10 @@ public abstract class UtilContainer extends Container {
         this.playerInventory = inv;
     }
 
+    public PlayerInventory getPlayerInventory() {
+        return playerInventory;
+    }
+
     protected int addHorizontalSlots(IInventory handler, int Index, int x, int y, int amount,
                                      int distanceBetweenSlots) {
         for (int i = 0; i < amount; i++) {

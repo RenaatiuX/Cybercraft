@@ -12,22 +12,27 @@ import com.rena.cybercraft.common.container.slot.SurgerySlot;
 import com.rena.cybercraft.common.tileentities.TileEntitySurgery;
 import com.rena.cybercraft.common.util.LibConstants;
 import com.rena.cybercraft.common.util.NNLUtil;
+import com.rena.cybercraft.core.init.AttributeInit;
 import com.rena.cybercraft.core.network.CCNetwork;
 import com.rena.cybercraft.core.network.SurgeryRemovePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.monster.SkeletonEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -164,9 +169,18 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
 
     @Override
     protected void renderBg(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
-        RenderSystem.color4f(0f, 0f, 0f, 0f);
-        Minecraft.getInstance().textureManager.bind(SURGERY_GUI_TEXTURES);
-        this.blit(stack, leftPos, topPos, 0, 0, 176, 222);
+        RenderSystem.color4f(1f, 1f, 1f, 1f);
+        Minecraft.getInstance().getTextureManager().bind(SURGERY_GUI_TEXTURES);
+        blit(stack, leftPos, topPos, 0, 0, 176, 222, 256, 256);
+        SkeletonEntity skeleton = new SkeletonEntity(EntityType.SKELETON, this.menu.getSurgery().getLevel());
+        ScreenUtils.renderEntityInScreen(stack, leftPos + imageWidth / 2, topPos + imageHeight / 2, 50, skeleton);
+    }
+
+    protected void renderTolerance(){
+        int maxTolerance = MathHelper.floor(Minecraft.getInstance().player.getAttributeValue(AttributeInit.TOLERANCE_ATTRIBUTE.get()));
+        int tolerance = this.menu.getSurgery().
+
+
     }
 
     @Override

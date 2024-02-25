@@ -6,6 +6,7 @@ import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.tileentities.TileEntityScanner;
 import com.rena.cybercraft.common.tileentities.TileEntitySurgery;
 import com.rena.cybercraft.common.util.WorldUtil;
+import com.rena.cybercraft.core.init.AttributeInit;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
@@ -59,11 +60,11 @@ public class SurgeryBlock extends Block {
             if(te != null && player instanceof ServerPlayerEntity){
 
                 //Ensure the Base Tolerance Attribute has been updated for any Config Changes
-                player.getAttribute(CybercraftAPI.TOLERANCE_ATTR).setBaseValue(CybercraftConfig.C_ESSENCE.essence.get());
+                player.getAttribute(AttributeInit.TOLERANCE_ATTRIBUTE.get()).setBaseValue(CybercraftConfig.C_ESSENCE.essence.get());
 
                 ICybercraftUserData cybercraftUserData = CybercraftAPI.getCapabilityOrNull(player);
                 te.updatePlayerSlots(player, cybercraftUserData);
-                //NetworkHooks.openGui((ServerPlayerEntity) player, te, pos);
+                NetworkHooks.openGui((ServerPlayerEntity) player, te, pos);
                 return ActionResultType.CONSUME;
             }
         }

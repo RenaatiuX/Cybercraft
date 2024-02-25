@@ -2,12 +2,10 @@ package com.rena.cybercraft;
 
 import com.rena.cybercraft.client.renderer.tileentity.PostBeaconTileEntityRenderer;
 import com.rena.cybercraft.client.renderer.tileentity.TileEntityEngineeringRender;
-import com.rena.cybercraft.client.screens.BlueprintArchiveScreen;
-import com.rena.cybercraft.client.screens.ComponentBoxScreen;
-import com.rena.cybercraft.client.screens.EngineeringTableScreen;
-import com.rena.cybercraft.client.screens.ScannerScreen;
+import com.rena.cybercraft.client.screens.*;
 import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.entity.CyberZombieEntity;
+import com.rena.cybercraft.common.events.CybercraftDataHandler;
 import com.rena.cybercraft.common.item.CybercraftSpawnEgg;
 import com.rena.cybercraft.common.util.CybercraftTab;
 import com.rena.cybercraft.core.init.*;
@@ -59,6 +57,7 @@ public class Cybercraft {
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CybercraftConfig.init(new ForgeConfigSpec.Builder()));
         modEventBus.addGenericListener(IRecipeSerializer.class, RecipeInit::registerRecipes);
+        modEventBus.addListener(CybercraftDataHandler::entityAttributeModification);
 
         ItemInit.ITEMS.register(modEventBus);
         BlockInit.BLOCKS.register(modEventBus);
@@ -68,6 +67,7 @@ public class Cybercraft {
 
         TileEntityTypeInit.TES.register(modEventBus);
         ContainerInit.CONTAINERS.register(modEventBus);
+        AttributeInit.ATTRIBUTES.register(modEventBus);
 
         ModLoadingContext context = ModLoadingContext.get();
         //Our listener for setup, it will pick up on anything put into setup and notify Forge of it
@@ -94,6 +94,7 @@ public class Cybercraft {
             ScreenManager.register(ContainerInit.BLUEPRINT_ARCHIVE_CONTAINER.get(), BlueprintArchiveScreen::new);
             ScreenManager.register(ContainerInit.ITEM_COMPONENT_BOX_CONTAINER.get(), ComponentBoxScreen::new);
             ScreenManager.register(ContainerInit.ENGINEERING_TABLE_CONTAINER.get(), EngineeringTableScreen::new);
+            ScreenManager.register(ContainerInit.SURGERY_CONTAINER.get(), SurgeryScreen::new);
 
             RenderTypeLookup.setRenderLayer(BlockInit.SCANNER_BLOCK.get(), RenderType.translucent());
 

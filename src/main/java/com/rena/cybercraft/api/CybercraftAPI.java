@@ -61,11 +61,6 @@ public final class CybercraftAPI {
     @CapabilityInject(ICybercraftUserData.class)
     public static final Capability<ICybercraftUserData> CYBERCRAFT_CAPABILITY = null;
 
-    /**
-     * Maximum Tolerance, per-player
-     */
-    public static final Attribute TOLERANCE_ATTR = new RangedAttribute("cybercraft.tolerance", CybercraftConfig.C_ESSENCE.essence.get(), 0.0F, Double.MAX_VALUE).setRegistryName("tolerance").setSyncable(true);
-
     public static Map<ItemStack, ICybercraft> linkedWare = new HashMap<>();
 
     public final static SimpleChannel PACKET_HANDLER = CCNetwork.PACKET_HANDLER;

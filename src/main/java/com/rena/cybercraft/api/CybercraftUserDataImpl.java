@@ -9,6 +9,7 @@ import com.rena.cybercraft.api.item.IMenuItem;
 import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.util.LibConstants;
 import com.rena.cybercraft.common.util.NNLUtil;
+import com.rena.cybercraft.core.init.AttributeInit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -672,7 +673,7 @@ public class CybercraftUserDataImpl implements ICybercraftUserData {
 
     @Override
     public int getMaxTolerance(@Nonnull LivingEntity entityLivingBase) {
-        return (int) entityLivingBase.getAttribute(CybercraftAPI.TOLERANCE_ATTR).getValue();
+        return (int) entityLivingBase.getAttribute(AttributeInit.TOLERANCE_ATTRIBUTE.get()).getValue();
     }
 
     @Override

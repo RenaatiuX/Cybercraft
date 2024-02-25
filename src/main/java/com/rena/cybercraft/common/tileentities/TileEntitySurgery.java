@@ -7,6 +7,7 @@ import com.rena.cybercraft.api.ICybercraftUserData;
 import com.rena.cybercraft.api.item.ICybercraft;
 import com.rena.cybercraft.common.block.SurgeryChamberBlock;
 import com.rena.cybercraft.common.config.CybercraftConfig;
+import com.rena.cybercraft.common.container.SurgeryContainer;
 import com.rena.cybercraft.common.item.CybercraftItem;
 import com.rena.cybercraft.common.util.LibConstants;
 import com.rena.cybercraft.core.init.ItemInit;
@@ -17,6 +18,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -26,13 +30,16 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class TileEntitySurgery extends TileEntity implements ITickableTileEntity {
+public class TileEntitySurgery extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
     public ItemStackHandler slotsPlayer = new ItemStackHandler(ICybercraft.EnumSlot.values().length * LibConstants.WARE_PER_SLOT);
     public ItemStackHandler slots = new ItemStackHandler(ICybercraft.EnumSlot.values().length * LibConstants.WARE_PER_SLOT);
@@ -550,4 +557,14 @@ public class TileEntitySurgery extends TileEntity implements ITickableTileEntity
         this.missingPower = hasConsume && !hasProduce;
     }
 
+    @Override
+    public ITextComponent getDisplayName() {
+        return new TranslationTextComponent(this.getBlockState().getBlock().getDescriptionId());
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory playerInv, PlayerEntity player) {
+        return new SurgeryContainer(id, playerInv, this);
+    }
 }

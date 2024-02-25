@@ -1,12 +1,14 @@
 package com.rena.cybercraft.common.events;
 
+import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.CybercraftUserDataImpl;
 import com.rena.cybercraft.api.ICybercraftUserData;
+import com.rena.cybercraft.core.init.AttributeInit;
 import com.rena.cybercraft.core.network.CCNetwork;
 import com.rena.cybercraft.core.network.CybercraftSyncPacket;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -14,25 +16,19 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
+@Mod.EventBusSubscriber(modid = Cybercraft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CybercraftDataHandler {
-
-    public static final CybercraftDataHandler INSTANCE = new CybercraftDataHandler();
     public static final String KEEP_WARE_GAMERULE = "cybercraft_keepCyberware";
     public static final String DROP_WARE_GAMERULE = "cybercraft_dropCyberware";
 
-    @SubscribeEvent
-    public void onEntityConstructed(EntityEvent.EntityConstructing event)
-    {
-        if (event.getEntity() instanceof LivingEntity)
-        {
-            LivingEntity entityLivingBase = (LivingEntity) event.getEntity();
-            entityLivingBase.getAttributes().getInstance(CybercraftAPI.TOLERANCE_ATTR);
-        }
+    public static void entityAttributeModification(EntityAttributeModificationEvent event) {
+        event.add(EntityType.PLAYER, AttributeInit.TOLERANCE_ATTRIBUTE.get());
     }
 
     /*@SubscribeEvent
@@ -50,10 +46,8 @@ public class CybercraftDataHandler {
     }*/
 
     @SubscribeEvent
-    public void attachCybercraftData(AttachCapabilitiesEvent<Entity> event)
-    {
-        if (event.getObject() instanceof PlayerEntity)
-        {
+    public void attachCybercraftData(AttachCapabilitiesEvent<Entity> event) {
+        if (event.getObject() instanceof PlayerEntity) {
             event.addCapability(CybercraftUserDataImpl.Provider.NAME, new CybercraftUserDataImpl.Provider());
         }
     }
@@ -144,8 +138,7 @@ public class CybercraftDataHandler {
         }
     }*/
 
-    private boolean shouldDropWare(DamageSource source)
-    {
+    private boolean shouldDropWare(DamageSource source) {
         if (source == EssentialsMissingHandler.noessence) return true;
         if (source == EssentialsMissingHandler.heartless) return true;
         if (source == EssentialsMissingHandler.brainless) return true;
@@ -339,15 +332,12 @@ public class CybercraftDataHandler {
         CybercraftAPI.updateData(cyberZombie);
     }*/
 
-    private static boolean contains(NonNullList<ItemStack> nnlHaystack, ItemStack needle)
-    {
-        for (ItemStack check : nnlHaystack)
-        {
-            if ( !check.isEmpty()
+    private static boolean contains(NonNullList<ItemStack> nnlHaystack, ItemStack needle) {
+        for (ItemStack check : nnlHaystack) {
+            if (!check.isEmpty()
                     && !needle.isEmpty()
                     && check.getItem() == needle.getItem()
-                    && check.getDamageValue() == needle.getDamageValue() )
-            {
+                    && check.getDamageValue() == needle.getDamageValue()) {
                 return true;
             }
         }
@@ -382,16 +372,12 @@ public class CybercraftDataHandler {
     }*/
 
     @SubscribeEvent
-    public void syncCyberwareData(EntityJoinWorldEvent event)
-    {
-        if (!event.getWorld().isClientSide)
-        {
+    public void syncCyberwareData(EntityJoinWorldEvent event) {
+        if (!event.getWorld().isClientSide) {
             Entity entity = event.getEntity();
-            if (entity instanceof PlayerEntity)
-            {
+            if (entity instanceof PlayerEntity) {
                 ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entity);
-                if (cyberwareUserData != null)
-                {
+                if (cyberwareUserData != null) {
                     CompoundNBT tagCompound = cyberwareUserData.serializeNBT();
                     CCNetwork.sendTo(new CybercraftSyncPacket(tagCompound, entity.getId()), (ServerPlayerEntity) entity);
                 }
@@ -400,16 +386,13 @@ public class CybercraftDataHandler {
     }
 
     @SubscribeEvent
-    public void startTrackingEvent(PlayerEvent.StartTracking event)
-    {
+    public void startTrackingEvent(PlayerEvent.StartTracking event) {
         PlayerEntity entityPlayer = event.getPlayer();
         Entity entityTarget = event.getTarget();
 
-        if (!entityTarget.level.isClientSide)
-        {
+        if (!entityTarget.level.isClientSide) {
             ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(entityTarget);
-            if (cyberwareUserData != null)
-            {
+            if (cyberwareUserData != null) {
                 CompoundNBT tagCompound = cyberwareUserData.serializeNBT();
                 CCNetwork.sendTo(new CybercraftSyncPacket(tagCompound, entityTarget.getId()), (ServerPlayerEntity) entityPlayer);
             }

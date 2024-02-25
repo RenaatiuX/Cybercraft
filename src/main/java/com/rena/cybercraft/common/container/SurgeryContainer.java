@@ -38,19 +38,16 @@ public class SurgeryContainer extends UtilContainer {
     }
 
     public void init(){
-        addPlayerInventory(8, 139);
+        addPlayerInventory(8, 140);
 
 
         int indexContainerSlot = 0;
-        for (ICybercraft.EnumSlot slot : ICybercraft.EnumSlot.values())
-        {
-            for (int indexCyberwareSlot = 0; indexCyberwareSlot < 8; indexCyberwareSlot++)
-            {
+        for (ICybercraft.EnumSlot slot : ICybercraft.EnumSlot.values()) {
+            for (int indexCyberwareSlot = 0; indexCyberwareSlot < 8; indexCyberwareSlot++) {
                 addSlot(new SlotSurgery(surgery.slots, surgery.slotsPlayer, indexContainerSlot, 9 + 20 * indexCyberwareSlot, 109, slot));
                 indexContainerSlot++;
             }
-            for (int indexCyberwareSlot = 0; indexCyberwareSlot < LibConstants.WARE_PER_SLOT - 8; indexCyberwareSlot++)
-            {
+            for (int indexCyberwareSlot = 0; indexCyberwareSlot < LibConstants.WARE_PER_SLOT - 8; indexCyberwareSlot++) {
                 addSlot(new SlotSurgery(surgery.slots, surgery.slotsPlayer, indexContainerSlot, Integer.MIN_VALUE, Integer.MIN_VALUE, slot));
                 indexContainerSlot++;
             }
@@ -71,41 +68,28 @@ public class SurgeryContainer extends UtilContainer {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = slots.get(index);
 
-        if ( slot != null
-                && slot.hasItem() )
-        {
+        if ( slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 
-            if (!(slot instanceof SurgerySlot))
-            {
-                if ( index >= 3
-                        && index < 30 )
-                {
-                    if (!moveItemStackTo(itemstack1, 30, 39, false))
-                    {
+            if (!(slot instanceof SurgerySlot)) {
+                if ( index >= 3 && index < 30 ) {
+                    if (!moveItemStackTo(itemstack1, 30, 39, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
-                else if ( index >= 30
-                        && index < 39
-                        && !moveItemStackTo(itemstack1, 3, 30, false) )
-                {
+                else if (index >= 30 && index < 39 && !moveItemStackTo(itemstack1, 3, 30, false) ) {
                     return ItemStack.EMPTY;
                 }
             }
 
-            if (itemstack1.getCount() == 0)
-            {
+            if (itemstack1.getCount() == 0) {
                 slot.set(ItemStack.EMPTY);
-            }
-            else
-            {
+            } else {
                 slot.setChanged();
             }
 
-            if (itemstack1.getCount() == itemstack.getCount())
-            {
+            if (itemstack1.getCount() == itemstack.getCount()) {
                 return ItemStack.EMPTY;
             }
 
@@ -123,8 +107,7 @@ public class SurgeryContainer extends UtilContainer {
         private IItemHandler playerItems;
         private boolean visible = false;
 
-        public SlotSurgery(IItemHandler itemHandler, IItemHandler playerItems, int index, int xPosition, int yPosition, ICybercraft.EnumSlot slot)
-        {
+        public SlotSurgery(IItemHandler itemHandler, IItemHandler playerItems, int index, int xPosition, int yPosition, ICybercraft.EnumSlot slot) {
             super(itemHandler, index, xPosition, yPosition);
 
             savedXPosition = xPosition;
@@ -185,16 +168,14 @@ public class SurgeryContainer extends UtilContainer {
             return this.visible;
         }
 
-        /*
-		@Override
-		public void onPickupFromSlot(EntityPlayer entityPlayer, ItemStack stack)
-	    {
-			super.onPickupFromSlot(entityPlayer, stack);
-			surgery.markDirty();
-			surgery.updateEssential(slot);
-			surgery.updateEssence();
-	    }
-	    */
+        @Override
+        public ItemStack onTake(PlayerEntity player, ItemStack stack) {
+            ItemStack result = super.onTake(player, stack);
+            surgery.setChanged();
+            surgery.updateEssential(slot);
+            surgery.updateEssence();
+            return result;
+        }
 
         @Override
         public boolean mayPlace(@Nonnull ItemStack stack) {
@@ -215,8 +196,7 @@ public class SurgeryContainer extends UtilContainer {
             }
 
 
-            return !doesItemConflict(stack)
-                    && areRequirementsFulfilled(stack);
+            return !doesItemConflict(stack) && areRequirementsFulfilled(stack);
         }
 
         public boolean doesItemConflict(@Nonnull ItemStack stack)
