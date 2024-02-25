@@ -7,6 +7,7 @@ import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.item.ICybercraft;
 import com.rena.cybercraft.client.model.block.ModelBox;
+import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.container.SurgeryContainer;
 import com.rena.cybercraft.common.container.slot.SurgerySlot;
 import com.rena.cybercraft.common.tileentities.TileEntitySurgery;
@@ -169,16 +170,37 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
 
     @Override
     protected void renderBg(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
-        RenderSystem.color4f(1f, 1f, 1f, 1f);
+        stack.pushPose();
+        stack.translate(leftPos, topPos, 0);
+        //RenderSystem.color4f(1f, 1f, 1f, 1f);
         Minecraft.getInstance().getTextureManager().bind(SURGERY_GUI_TEXTURES);
-        blit(stack, leftPos, topPos, 0, 0, 176, 222, 256, 256);
+        this.blit(stack, 0, 0, 0, 0, 176, 222);
+        renderTolerance(stack);
         SkeletonEntity skeleton = new SkeletonEntity(EntityType.SKELETON, this.menu.getSurgery().getLevel());
-        ScreenUtils.renderEntityInScreen(stack, leftPos + imageWidth / 2, topPos + imageHeight / 2, 50, skeleton);
+        ScreenUtils.renderEntityInScreen(stack, imageWidth / 2, imageHeight / 2, 50, skeleton);
+        stack.popPose();
+
     }
 
-    protected void renderTolerance(){
+    protected void renderTolerance(MatrixStack stack) {
         int maxTolerance = MathHelper.floor(Minecraft.getInstance().player.getAttributeValue(AttributeInit.TOLERANCE_ATTRIBUTE.get()));
-        int tolerance = this.menu.getSurgery().
+        int tolerance = this.menu.getSurgery().essence;
+        StringTextComponent essence = new StringTextComponent(maxTolerance + "/" + tolerance);
+        font.draw(stack, essence, 18, 6, 0x1DA9C1);
+        int criticalEssence = CybercraftConfig.C_ESSENCE.criticalEssence.get();
+        int height = 49;
+        int criticalToleranceHeight = MathHelper.floor((float) height * (float) criticalEssence / (float) maxTolerance);
+        int toleranceHeight = MathHelper.floor((float) height * (float) tolerance / (float) maxTolerance) - criticalToleranceHeight;
+        int greyHeight = height - toleranceHeight - criticalToleranceHeight;
+        int x = 3;
+        int y = 5;
+        Minecraft.getInstance().getTextureManager().bind(SURGERY_GUI_TEXTURES);
+        if (greyHeight > 0)
+            blit(stack, x, y, 211, 61, 9, greyHeight);
+        if (toleranceHeight > 0)
+            blit(stack, x, y + greyHeight, 176, 61, 9, toleranceHeight);
+        if (criticalToleranceHeight > 0)
+            blit(stack, x, y + greyHeight + toleranceHeight, 220, 61, 9, criticalToleranceHeight);
 
 
     }
