@@ -6,27 +6,30 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.rena.cybercraft.Cybercraft;
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.item.ICybercraft;
+import com.rena.cybercraft.client.ClientUtils;
 import com.rena.cybercraft.client.model.block.ModelBox;
 import com.rena.cybercraft.common.config.CybercraftConfig;
 import com.rena.cybercraft.common.container.SurgeryContainer;
-import com.rena.cybercraft.common.container.slot.SurgerySlot;
 import com.rena.cybercraft.common.tileentities.TileEntitySurgery;
 import com.rena.cybercraft.common.util.LibConstants;
 import com.rena.cybercraft.common.util.NNLUtil;
 import com.rena.cybercraft.core.init.AttributeInit;
 import com.rena.cybercraft.core.network.CCNetwork;
 import com.rena.cybercraft.core.network.SurgeryRemovePacket;
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.SkeletonEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.Slot;
@@ -34,10 +37,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
+import net.minecraftforge.items.ItemStackHandler;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GLX;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -47,7 +55,6 @@ import java.util.List;
 
 public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
 
-
     public static final ResourceLocation SURGERY_GUI_TEXTURES = Cybercraft.modLoc("textures/gui/surgery.png");
     public static final ResourceLocation GREY_TEXTURE = Cybercraft.modLoc("textures/gui/greypx.png");
     public static final ResourceLocation BLUE_TEXTURE = Cybercraft.modLoc("textures/gui/bluepx.png");
@@ -55,7 +62,6 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
     private TileEntitySurgery surgery;
     private Entity skeleton;
     private ModelBox box;
-
     private GuiButtonSurgery[] bodyIcons = new GuiButtonSurgery[7];
     private InterfaceButton back;
     private InterfaceButton index;
@@ -169,6 +175,9 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
         updateSurgerySlotsVisibility(true);
     }
 
+    private static ItemStackHandler lastLastInv = new ItemStackHandler(120);
+    private static ItemStackHandler lastInv = new ItemStackHandler(120);
+
     @Override
     protected void renderBg(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
         stack.pushPose();
@@ -176,13 +185,36 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
         //RenderSystem.color4f(1f, 1f, 1f, 1f);
         Minecraft.getInstance().getTextureManager().bind(SURGERY_GUI_TEXTURES);
         this.blit(stack, 0, 0, 0, 0, 176, 222);
-        renderSlotItems(stack);
+        drawSlots(stack);
         renderTolerance(stack);
         renderPlayerName(stack);
         SkeletonEntity skeleton = new SkeletonEntity(EntityType.SKELETON, this.menu.getSurgery().getLevel());
         ScreenUtils.renderEntityInScreen(stack, imageWidth / 2, imageHeight / 2, 50, skeleton);
         stack.popPose();
 
+    }
+
+    protected void drawSlots(MatrixStack stack) {
+        RenderSystem.enableBlend();
+        Minecraft.getInstance().getTextureManager().bind(SURGERY_GUI_TEXTURES);
+        if (surgery.wrongSlot != -1) {
+            float trans = 1.0F - ((ticksExisted() + partialTicks) - surgery.ticksWrong) / 10F;
+            if (trans > 0) {
+                RenderSystem.color4f(1.0F, 1.0F, 1.0F, trans);
+                Slot slot = this.menu.slots.get(surgery.wrongSlot);
+                this.blit(stack, this.leftPos + slot.x - 5, this.topPos + slot.y - 5, 185, 61, 26, 26);
+            } else {
+                surgery.wrongSlot = -1;
+            }
+        }
+
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 0.5F);
+
+        // Draw the less-transparent slot borders
+        for (SurgeryContainer.SlotSurgery pos : visibleSlots) {
+            this.blit(stack, this.leftPos + pos.x - 1, this.topPos + pos.y - 1, 176, 43, 18, 18);        // Blue slot
+            this.blit(stack, this.leftPos + pos.x - 1, this.topPos + pos.y - 1 - 26, 176, 18, 18, 25);    // Red 'slot'
+        }
     }
 
     protected void renderTolerance(MatrixStack stack) {
@@ -211,20 +243,6 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
     protected void renderPlayerName(MatrixStack stack) {
         String name = "_" + Minecraft.getInstance().player.getName().getString().toUpperCase();
         font.draw(stack, name, (float) imageWidth / 2 - font.width(name), 115, 0x1DA9C1);
-    }
-
-    protected void renderSlotItems(MatrixStack stack) {
-        int xLeft = (this.width - this.imageWidth) / 2;
-        int yTop = (this.height - this.imageHeight) / 2;
-        Minecraft.getInstance().getTextureManager().bind(SURGERY_GUI_TEXTURES);
-        for (SurgeryContainer.SlotSurgery pos : visibleSlots) {
-            this.blit(stack, xLeft + pos.x - 1, yTop + pos.y - 1, 176, 43, 18, 18);        // Blue slot
-            this.blit(stack, xLeft + pos.x - 1, yTop + pos.y - 1 - 26, 176, 18, 18, 25);    // Red 'slot'
-        }
-    }
-
-    @Override
-    protected void renderLabels(MatrixStack p_230451_1_, int p_230451_2_, int p_230451_3_) {
     }
 
     protected void renderHoverTooltip(MatrixStack matrixStack, ItemStack stack, double mouseX, double mouseY, int extras) {
@@ -359,8 +377,6 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
                     ease = current = configs[0].copy();
                 }
             }
-
-
         }
 
         // INDEX
@@ -509,8 +525,6 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
         if (page == 0) {
             index.visible = true;
         }
-        int xLeft = (width - imageWidth) / 2;
-        int yTop = (height - imageHeight) / 2;
 
         GuiButtonSurgeryLocation[] list = new GuiButtonSurgeryLocation[0];
 
@@ -542,7 +556,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
         float upDown = page == 7 ? (float) Math.sin(Math.toRadians(10)) : 0;
 
         for (GuiButtonSurgeryLocation guiButtonSurgeryLocation : list) {
-            guiButtonSurgeryLocation.xPos = xLeft
+            guiButtonSurgeryLocation.xPos = this.leftPos
                     + sin * scale * guiButtonSurgeryLocation.x3 * 0.065F
                     + cos * scale * guiButtonSurgeryLocation.z3 * 0.065F
                     + this.imageWidth / 2F
@@ -550,7 +564,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
                     - guiButtonSurgeryLocation.getWidth() / 2F;
             guiButtonSurgeryLocation.yPos = -upDown * cos * scale * guiButtonSurgeryLocation.x3 * 0.065F
                     + upDown * sin * scale * guiButtonSurgeryLocation.z3 * 0.065F
-                    + yTop + 2 - yOffset
+                    + this.topPos + 2 - yOffset
                     + scale * guiButtonSurgeryLocation.y3 * 0.065F
                     + 130 / 2F
                     - guiButtonSurgeryLocation.getHeight() / 2F;
@@ -560,7 +574,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
     }
 
 
-    public boolean isSlotAccessible(SurgeryContainer.SlotSurgery slot) {
+    public boolean isSlotAccessible(@Nonnull SurgeryContainer.SlotSurgery slot) {
         return page == slot.slot.getSlotNumber();
     }
 
@@ -571,12 +585,15 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
         Slot slot = iteratorSlots.next();
         while (slot instanceof SurgeryContainer.SlotSurgery) {
             SurgeryContainer.SlotSurgery slotSurgery = (SurgeryContainer.SlotSurgery) slot;
-
             if (show && isSlotAccessible(slotSurgery)) {
-                slotSurgery.setVisible(true);
+                //slotSurgery.setVisible(true);
+                slotSurgery.x = slotSurgery.savedXPosition;
+                slotSurgery.y = slotSurgery.savedYPosition;
                 visibleSlots.add(slotSurgery);
             } else {
-                slotSurgery.setVisible(false);
+                slotSurgery.x = Integer.MIN_VALUE;
+                slotSurgery.y = Integer.MIN_VALUE;
+                //slotSurgery.setVisible(false);
             }
 
             slot = iteratorSlots.next();
@@ -637,7 +654,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
             }
             if (visible) {
                 stack.pushPose();
-                GlStateManager._enableBlend();
+                RenderSystem.enableBlend();
 
                 float trans = 0.4F;
                 if (this.isHovered()) {
@@ -647,6 +664,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
 
 
                 Minecraft.getInstance().getTextureManager().bind(SURGERY_GUI_TEXTURES);
+                stack.translate(xPos, yPos, 0);
                 this.blit(stack, 0, 0, 194, 0, width, height);
 
                 stack.popPose();
@@ -769,10 +787,5 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
 
     private interface IIdButton {
         public int getId();
-    }
-
-    @Override
-    protected void renderTooltip(MatrixStack p_230459_1_, int p_230459_2_, int p_230459_3_) {
-        super.renderTooltip(p_230459_1_, p_230459_2_, p_230459_3_);
     }
 }

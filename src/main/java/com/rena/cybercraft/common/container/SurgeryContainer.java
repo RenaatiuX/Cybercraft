@@ -2,7 +2,6 @@ package com.rena.cybercraft.common.container;
 
 import com.rena.cybercraft.api.CybercraftAPI;
 import com.rena.cybercraft.api.item.ICybercraft;
-import com.rena.cybercraft.common.container.slot.SurgerySlot;
 import com.rena.cybercraft.common.tileentities.TileEntitySurgery;
 import com.rena.cybercraft.common.util.LibConstants;
 import com.rena.cybercraft.core.init.ContainerInit;
@@ -21,6 +20,7 @@ import javax.annotation.Nonnull;
 public class SurgeryContainer extends UtilContainer {
 
     private final TileEntitySurgery surgery;
+
     public SurgeryContainer(int id, PlayerInventory playerinv, TileEntitySurgery surgery) {
         super(ContainerInit.SURGERY_CONTAINER.get(), id, playerinv);
         this.surgery = surgery;
@@ -29,15 +29,16 @@ public class SurgeryContainer extends UtilContainer {
 
     /**
      * just client side
+     *
      * @param id
      * @param playerInventory
-     * @param buffer dont forget to write the block pos of the tileentity on the buffer in NetworkHooks
+     * @param buffer          dont forget to write the block pos of the tileentity on the buffer in NetworkHooks
      */
     public SurgeryContainer(int id, PlayerInventory playerInventory, PacketBuffer buffer) {
         this(id, playerInventory, getClientTileEntity(playerInventory, buffer));
     }
 
-    public void init(){
+    public void init() {
         addPlayerInventory(8, 140);
 
 
@@ -68,17 +69,16 @@ public class SurgeryContainer extends UtilContainer {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = slots.get(index);
 
-        if ( slot != null && slot.hasItem()) {
+        if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 
-            if (!(slot instanceof SurgerySlot)) {
-                if ( index >= 3 && index < 30 ) {
+            if (!(slot instanceof SlotSurgery)) {
+                if (index >= 3 && index < 30) {
                     if (!moveItemStackTo(itemstack1, 30, 39, false)) {
                         return ItemStack.EMPTY;
                     }
-                }
-                else if (index >= 30 && index < 39 && !moveItemStackTo(itemstack1, 3, 30, false) ) {
+                } else if (index >= 30 && index < 39 && !moveItemStackTo(itemstack1, 3, 30, false)) {
                     return ItemStack.EMPTY;
                 }
             }
@@ -103,40 +103,36 @@ public class SurgeryContainer extends UtilContainer {
         public final int savedXPosition;
         public final int savedYPosition;
         public final ICybercraft.EnumSlot slot;
-        private final int index;
+        private final int indexSurgery;
         private IItemHandler playerItems;
         private boolean visible = false;
 
-        public SlotSurgery(IItemHandler itemHandler, IItemHandler playerItems, int index, int xPosition, int yPosition, ICybercraft.EnumSlot slot) {
-            super(itemHandler, index, xPosition, yPosition);
-
+        public SlotSurgery(IItemHandler itemHandler, IItemHandler playerItems, int indexSurgery, int xPosition, int yPosition, ICybercraft.EnumSlot slot) {
+            super(itemHandler, indexSurgery, xPosition, yPosition);
             savedXPosition = xPosition;
             savedYPosition = yPosition;
             this.slot = slot;
-            this.index = index;
+            this.indexSurgery = indexSurgery;
             this.playerItems = playerItems;
         }
 
-        public ItemStack getPlayerStack()
-        {
-            return playerItems.getStackInSlot(this.index);
+        public ItemStack getPlayerStack() {
+            return playerItems.getStackInSlot(indexSurgery);
         }
 
-        public boolean slotDiscarded()
-        {
-            return surgery.discardSlots[this.index];
+        public boolean slotDiscarded() {
+            return surgery.discardSlots[indexSurgery];
         }
 
-        public void setDiscarded(boolean dis)
-        {
-            surgery.discardSlots[this.index] = dis;
+        public void setDiscarded(boolean dis) {
+            surgery.discardSlots[this.getSlotIndex()] = dis;
             surgery.updateEssential(slot);
             surgery.updateEssence();
         }
 
         @Override
         public boolean mayPickup(PlayerEntity playerIn) {
-            return surgery.canDisableItem(this.getItem(), slot, index % LibConstants.WARE_PER_SLOT);
+            return surgery.canDisableItem(this.getItem(), slot, indexSurgery % LibConstants.WARE_PER_SLOT);
         }
 
 
@@ -150,7 +146,7 @@ public class SurgeryContainer extends UtilContainer {
         @Override
         public void set(@Nonnull ItemStack stack) {
             if (mayPlace(stack)) {
-                surgery.disableDependants(getPlayerStack(), slot, index % LibConstants.WARE_PER_SLOT);
+                surgery.disableDependants(getPlayerStack(), slot, indexSurgery % LibConstants.WARE_PER_SLOT);
                 super.set(stack);
             }
             surgery.setChanged();
@@ -158,7 +154,7 @@ public class SurgeryContainer extends UtilContainer {
             surgery.updateEssence();
         }
 
-        public void setVisible(boolean visible){
+        public void setVisible(boolean visible) {
             this.visible = visible;
         }
 
@@ -168,29 +164,27 @@ public class SurgeryContainer extends UtilContainer {
             return this.visible;
         }
 
-        @Override
+        /*@Override
         public ItemStack onTake(PlayerEntity player, ItemStack stack) {
             ItemStack result = super.onTake(player, stack);
             surgery.setChanged();
             surgery.updateEssential(slot);
             surgery.updateEssence();
             return result;
-        }
+        }*/
 
         @Override
         public boolean mayPlace(@Nonnull ItemStack stack) {
             ItemStack playerStack = getPlayerStack();
-            if ( !getPlayerStack().isEmpty()
-                    && !surgery.canDisableItem(playerStack, slot, index % LibConstants.WARE_PER_SLOT) )
-            {
+            if (!getPlayerStack().isEmpty()
+                    && !surgery.canDisableItem(playerStack, slot, indexSurgery % LibConstants.WARE_PER_SLOT)) {
                 return false;
             }
-            if ( !( !stack.isEmpty() && CybercraftAPI.isCybercraft(stack) && CybercraftAPI.getCybercraft(stack).getSlot(stack) == slot )) {
+            if (!(!stack.isEmpty() && CybercraftAPI.isCybercraft(stack) && CybercraftAPI.getCybercraft(stack).getSlot(stack) == slot)) {
                 return false;
             }
 
-            if (CybercraftAPI.areCybercraftStacksEqual(stack, playerStack))
-            {
+            if (CybercraftAPI.areCybercraftStacksEqual(stack, playerStack)) {
                 int stackSize = CybercraftAPI.getCybercraft(stack).installedStackSize(stack);
                 if (playerStack.getCount() == stackSize) return false;
             }
@@ -199,20 +193,18 @@ public class SurgeryContainer extends UtilContainer {
             return !doesItemConflict(stack) && areRequirementsFulfilled(stack);
         }
 
-        public boolean doesItemConflict(@Nonnull ItemStack stack)
-        {
-            return surgery.doesItemConflict(stack, slot, index % LibConstants.WARE_PER_SLOT);
+        public boolean doesItemConflict(@Nonnull ItemStack stack) {
+            return surgery.doesItemConflict(stack, slot, indexSurgery % LibConstants.WARE_PER_SLOT);
         }
 
-        public boolean areRequirementsFulfilled(@Nonnull ItemStack stack)
-        {
-            return surgery.areRequirementsFulfilled(stack, slot, index % LibConstants.WARE_PER_SLOT);
+        public boolean areRequirementsFulfilled(@Nonnull ItemStack stack) {
+            return surgery.areRequirementsFulfilled(stack, slot, indexSurgery % LibConstants.WARE_PER_SLOT);
         }
 
 
         @Override
         public int getMaxStackSize(@Nonnull ItemStack stack) {
-            if ( stack.isEmpty() || !CybercraftAPI.isCybercraft(stack) ) {
+            if (stack.isEmpty() || !CybercraftAPI.isCybercraft(stack)) {
                 return 1;
             }
             ItemStack playerStack = getPlayerStack();
