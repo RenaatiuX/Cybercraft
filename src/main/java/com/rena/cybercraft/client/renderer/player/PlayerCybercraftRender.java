@@ -20,6 +20,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nonnull;
+
 public class PlayerCybercraftRender extends PlayerRenderer {
 
     public boolean doMuscles = false;
@@ -31,6 +33,7 @@ public class PlayerCybercraftRender extends PlayerRenderer {
     private static final ResourceLocation CYBER_PART_RUSTY = new ResourceLocation(Cybercraft.MOD_ID, "textures/models/player_rusty_robot.png");
 
     private static ClawsModel CLAWS = new ClawsModel(0.0F);
+
     public PlayerCybercraftRender(EntityRendererManager entity, boolean arms) {
         super(entity, arms);
     }
@@ -41,9 +44,8 @@ public class PlayerCybercraftRender extends PlayerRenderer {
                 doMuscles ? MUSCLES : super.getTextureLocation(entity);
     }
 
-    public void setMainModel(PlayerModel modelPlayer)
-    {
-        model = modelPlayer;
+    public void setMainModel(PlayerModel modelPlayer) {
+        this.model = modelPlayer;
     }
 
     @Override
@@ -51,9 +53,8 @@ public class PlayerCybercraftRender extends PlayerRenderer {
         Minecraft.getInstance().getTextureManager().bind(CYBER_PART);
         super.renderRightHand(matrixStack, buffer, combinedLight, player);
 
-        if ( Minecraft.getInstance().options.mainHand != HandSide.RIGHT
-                || !player.getMainHandItem().isEmpty() )
-        {
+        if (Minecraft.getInstance().options.mainHand != HandSide.RIGHT
+                || !player.getMainHandItem().isEmpty()) {
             return;
         }
 
@@ -61,10 +62,9 @@ public class PlayerCybercraftRender extends PlayerRenderer {
         if (cyberwareUserData == null) return;
 
         ItemStack itemStackClaws = cyberwareUserData.getCybercraft(ItemInit.HAND_UPGRADES_CLAWS.get());
-        if ( !itemStackClaws.isEmpty()
+        if (!itemStackClaws.isEmpty()
                 && cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMB_ARM_RIGHT.get())
-                && EnableDisableHelper.isEnabled(itemStackClaws) )
-        {
+                && EnableDisableHelper.isEnabled(itemStackClaws)) {
             matrixStack.pushPose();
 
             float percent = ((Minecraft.getInstance().player.tickCount + Minecraft.getInstance().getFrameTime() - HandUpgradeItem.clawsTime) / 4F);
@@ -85,9 +85,8 @@ public class PlayerCybercraftRender extends PlayerRenderer {
         Minecraft.getInstance().getTextureManager().bind(CYBER_PART);
         super.renderLeftHand(matrixStack, buffer, combinedLight, player);
 
-        if ( Minecraft.getInstance().options.mainHand != HandSide.LEFT
-                || !player.getMainHandItem().isEmpty() )
-        {
+        if (Minecraft.getInstance().options.mainHand != HandSide.LEFT
+                || !player.getMainHandItem().isEmpty()) {
             return;
         }
 
@@ -95,10 +94,9 @@ public class PlayerCybercraftRender extends PlayerRenderer {
         if (cyberwareUserData == null) return;
 
         ItemStack itemStackClaws = cyberwareUserData.getCybercraft(ItemInit.HAND_UPGRADES_CLAWS.get());
-        if ( !itemStackClaws.isEmpty()
+        if (!itemStackClaws.isEmpty()
                 && cyberwareUserData.isCybercraftInstalled(ItemInit.CYBER_LIMB_ARM_LEFT.get())
-                && EnableDisableHelper.isEnabled(itemStackClaws))
-        {
+                && EnableDisableHelper.isEnabled(itemStackClaws)) {
             matrixStack.pushPose();
 
             float percent = ((Minecraft.getInstance().player.tickCount + Minecraft.getInstance().getFrameTime() - HandUpgradeItem.clawsTime) / 4F);
@@ -109,8 +107,19 @@ public class PlayerCybercraftRender extends PlayerRenderer {
             CLAWS.claw1.zRot = 0.07F;
             CLAWS.claw1.xRot = 0.00F;
             CLAWS.claw1.setPos(-5.0F, -5.0F + (7F * percent), 0.0F);
-            CLAWS.claw1.render(matrixStack, buffer.getBuffer(RenderType.entityCutout(getTextureLocation(player))) , combinedLight, OverlayTexture.NO_OVERLAY);
+            CLAWS.claw1.render(matrixStack, buffer.getBuffer(RenderType.entityCutout(getTextureLocation(player))), combinedLight, OverlayTexture.NO_OVERLAY);
             matrixStack.popPose();
+        }
+    }
+
+    private void setModelVisibilities(@Nonnull AbstractClientPlayerEntity clientPlayer) {
+        PlayerModel<AbstractClientPlayerEntity> playerModel = getModel();
+        if (clientPlayer.isSpectator()) {
+            playerModel.setAllVisible(false);
+            playerModel.head.visible = true;
+            playerModel.hat.visible = true;
+        } else {
+
         }
     }
 }
