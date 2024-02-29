@@ -26,6 +26,7 @@ import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.SkeletonEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ClickType;
@@ -53,7 +54,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
     public static final ResourceLocation BLUE_TEXTURE = Cybercraft.modLoc("textures/gui/bluepx.png");
 
     private TileEntitySurgery surgery;
-    private Entity skeleton;
+    private LivingEntity skeleton;
     private ModelBox box;
 
     private GuiButtonSurgery[] bodyIcons = new GuiButtonSurgery[7];
@@ -107,6 +108,11 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
         this.imageWidth = 176;
         this.imageHeight = 222;
         super.init();
+        this.skeleton = new SkeletonEntity(EntityType.SKELETON, this.menu.getSurgery().getLevel());
+        skeleton.xRot = 0;
+        skeleton.xRotO = 0;
+        skeleton.yHeadRot = 0;
+        skeleton.yHeadRotO = 0;
         configs[0] = new PageConfiguration(0, 0, 0, 50, 35, 35, -50, 10);
         configs[1] = new PageConfiguration(50, 0, 210, 150, 0, 0, -150, 0);
         configs[2] = new PageConfiguration(15, 0, 100, 130, 0, 0, -150, 0);
@@ -173,7 +179,7 @@ public class SurgeryScreen extends ContainerScreen<SurgeryContainer> {
     protected void renderBg(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
         stack.pushPose();
         stack.translate(leftPos, topPos, 0);
-        //RenderSystem.color4f(1f, 1f, 1f, 1f);
+        RenderSystem.color4f(1f, 1f, 1f, 1f);
         Minecraft.getInstance().getTextureManager().bind(SURGERY_GUI_TEXTURES);
         this.blit(stack, 0, 0, 0, 0, 176, 222);
         renderSlotItems(stack);
