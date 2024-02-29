@@ -12,7 +12,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -58,7 +57,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
     }
 
     @Override
-    public int installedStackSize(ItemStack stack) {
+    public int maxInstalledStackSize(ItemStack stack) {
         return 1;
     }
 
@@ -177,12 +176,12 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 
-        if (installedStackSize(stack) > 1) {
-            list.add(new TranslationTextComponent("tooltip.cybercraft.max_install", installedStackSize(stack)).withStyle(TextFormatting.BLUE));
+        if (maxInstalledStackSize(stack) > 1) {
+            list.add(new TranslationTextComponent("tooltip.cybercraft.max_install", maxInstalledStackSize(stack)).withStyle(TextFormatting.BLUE));
         }
         boolean hasPowerConsumption = false;
         IFormattableTextComponent toAddPowerConsumption = StringTextComponent.EMPTY.copy();
-        for (int i = 0; i < installedStackSize(stack); i++) {
+        for (int i = 0; i < maxInstalledStackSize(stack); i++) {
             ItemStack temp = stack.copy();
             temp.setCount(i + 1);
             int cost = this.getPowerConsumption(temp);
@@ -201,7 +200,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
 
         boolean hasPowerProduction = false;
         IFormattableTextComponent toAddPowerProduction = StringTextComponent.EMPTY.copy();
-        for (int i = 0; i < installedStackSize(stack); i++) {
+        for (int i = 0; i < maxInstalledStackSize(stack); i++) {
             ItemStack temp = stack.copy();
             temp.setCount(i + 1);
             int cost = this.getPowerProduction(temp);
@@ -224,7 +223,7 @@ public class CybercraftItem extends CybercraftBaseItem implements ICybercraft, I
         boolean hasEssenceCost = false;
         boolean essenceCostNegative = true;
         IFormattableTextComponent toAddEssence = StringTextComponent.EMPTY.copy();
-        for (int i = 0; i < installedStackSize(stack); i++) {
+        for (int i = 0; i < maxInstalledStackSize(stack); i++) {
             ItemStack temp = stack.copy();
             temp.setCount(i + 1);
             int cost = this.getEssenceCost(temp);

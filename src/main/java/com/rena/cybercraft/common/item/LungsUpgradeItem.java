@@ -146,7 +146,7 @@ public class LungsUpgradeItem extends CybercraftItem{
     }
 
     @Override
-    public int installedStackSize(ItemStack stack)
+    public int maxInstalledStackSize(ItemStack stack)
     {
         return stack.getItem() == ItemInit.LUNGS_HYPEROXYGENATION.get() ? 3 : 1;
     }

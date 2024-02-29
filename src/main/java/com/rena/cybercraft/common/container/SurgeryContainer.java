@@ -164,14 +164,14 @@ public class SurgeryContainer extends UtilContainer {
             return this.visible;
         }
 
-        /*@Override
+        @Override
         public ItemStack onTake(PlayerEntity player, ItemStack stack) {
             ItemStack result = super.onTake(player, stack);
             surgery.setChanged();
             surgery.updateEssential(slot);
             surgery.updateEssence();
             return result;
-        }*/
+        }
 
         @Override
         public boolean mayPlace(@Nonnull ItemStack stack) {
@@ -180,12 +180,12 @@ public class SurgeryContainer extends UtilContainer {
                     && !surgery.canDisableItem(playerStack, slot, indexSurgery % LibConstants.WARE_PER_SLOT)) {
                 return false;
             }
-            if (!(!stack.isEmpty() && CybercraftAPI.isCybercraft(stack) && CybercraftAPI.getCybercraft(stack).getSlot(stack) == slot)) {
+            if (stack.isEmpty() || !CybercraftAPI.isCybercraft(stack) || CybercraftAPI.getCybercraft(stack).getSlot(stack) != slot) {
                 return false;
             }
 
             if (CybercraftAPI.areCybercraftStacksEqual(stack, playerStack)) {
-                int stackSize = CybercraftAPI.getCybercraft(stack).installedStackSize(stack);
+                int stackSize = CybercraftAPI.getCybercraft(stack).maxInstalledStackSize(stack);
                 if (playerStack.getCount() == stackSize) return false;
             }
 
@@ -208,7 +208,7 @@ public class SurgeryContainer extends UtilContainer {
                 return 1;
             }
             ItemStack playerStack = getPlayerStack();
-            int stackSize = CybercraftAPI.getCybercraft(stack).installedStackSize(stack);
+            int stackSize = CybercraftAPI.getCybercraft(stack).maxInstalledStackSize(stack);
             if (CybercraftAPI.areCybercraftStacksEqual(playerStack, stack)) {
                 return stackSize - playerStack.getCount();
             }

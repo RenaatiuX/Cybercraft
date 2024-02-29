@@ -109,7 +109,7 @@ public class BoneUpgradeItem extends CybercraftItem {
     }
 
     @Override
-    public int installedStackSize(ItemStack stack) {
+    public int maxInstalledStackSize(ItemStack stack) {
         return stack.getItem() == ItemInit.BONES_UPGRADES_BONELACING.get() ? MAX_STACK_SIZE_LACING
                 : stack.getItem() == ItemInit.BONES_UPGRADES_BATTERY.get() ? 4 : 1;
     }

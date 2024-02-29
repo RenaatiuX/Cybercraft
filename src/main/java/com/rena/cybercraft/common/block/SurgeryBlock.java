@@ -66,6 +66,7 @@ public class SurgeryBlock extends Block {
                 te.updatePlayerSlots(player, cybercraftUserData);
                 NetworkHooks.openGui((ServerPlayerEntity) player, te, pos);
                 return ActionResultType.CONSUME;
+
             }
         }
         return ActionResultType.SUCCESS;

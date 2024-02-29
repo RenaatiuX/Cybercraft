@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public class CybercraftUserDataImpl implements ICybercraftUserData {
 
@@ -196,12 +197,8 @@ public class CybercraftUserDataImpl implements ICybercraftUserData {
         return usePower(stack, amount, true);
     }
 
-    private int ComputeSum(@Nonnull Map<ItemStack, Integer> map) {
-        int total = 0;
-        for (ItemStack key : map.keySet()) {
-            total += map.get(key);
-        }
-        return total;
+    private int computeSum(@Nonnull Map<ItemStack, Integer> map) {
+        return map.values().stream().mapToInt(i -> i).sum();
     }
 
     private void subtractFromBufferLast(int amount) {
@@ -219,15 +216,13 @@ public class CybercraftUserDataImpl implements ICybercraftUserData {
         if (isImmune) return true;
 
         if (!canGiveOut) {
-            if (Minecraft.getInstance().player.level.isClientSide()) {
-                setOutOfPower(stack);
-            }
+            setOutOfPower(stack);
             return false;
         }
 
         power_consumption += amount;
 
-        int sumPowerBufferLast = ComputeSum(power_lastBuffer);
+        int sumPowerBufferLast = computeSum(power_lastBuffer);
         int amountAvailable = power_stored + sumPowerBufferLast;
 
         int amountAvailableSpecial = 0;
@@ -261,9 +256,7 @@ public class CybercraftUserDataImpl implements ICybercraftUserData {
         }
 
         if (amountAvailable < amount) {
-            if (Minecraft.getInstance().player.level.isClientSide()) {
-                setOutOfPower(stack);
-            }
+            setOutOfPower(stack);
             if (isPassive) {
                 canGiveOut = false;
             }
@@ -276,7 +269,6 @@ public class CybercraftUserDataImpl implements ICybercraftUserData {
         return true;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void setOutOfPower(ItemStack stack) {
         PlayerEntity entityPlayer = Minecraft.getInstance().player;
         if (entityPlayer != null
@@ -627,7 +619,7 @@ public class CybercraftUserDataImpl implements ICybercraftUserData {
                 entryBuffer.setValue(amountBuffer - amountTaken);
             }
         }
-        power_stored = Math.min(power_capacity, power_stored + ComputeSum(map));
+        power_stored = Math.min(power_capacity, power_stored + computeSum(map));
     }
 
     @Override

@@ -312,7 +312,7 @@ public final class CybercraftAPI {
     @Nullable
     public static ICybercraftUserData getCapabilityOrNull(@Nullable Entity targetEntity) {
         if (targetEntity == null) return null;
-        return targetEntity.getCapability(CYBERCRAFT_CAPABILITY, Direction.EAST).orElse(null);
+        return targetEntity.getCapability(CYBERCRAFT_CAPABILITY).orElse(null);
     }
 
     /**

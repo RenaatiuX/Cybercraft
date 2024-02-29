@@ -187,7 +187,7 @@ public class LowerOrgansUpgradeItem extends CybercraftItem implements IMenuItem 
     }
 
     @Override
-    public int installedStackSize(ItemStack stack)
+    public int maxInstalledStackSize(ItemStack stack)
     {
         return stack.getItem() == ItemInit.LOWER_ORGANS_UPGRADES_BATTERY.get() ? 4 : 1;
     }

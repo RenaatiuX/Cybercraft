@@ -26,7 +26,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -58,8 +57,7 @@ public class TileEntitySurgery extends TileEntity implements ITickableTileEntity
     }
 
     public boolean isUsableByPlayer(PlayerEntity entityPlayer) {
-        return this.level.getBlockEntity(worldPosition) == this
-                && entityPlayer.distanceToSqr(getBlockPos().getX() + 0.5D, getBlockPos().getY() + 0.5D, getBlockPos().getZ() + 0.5D) <= 64.0D;
+        return this.level.getBlockEntity(worldPosition) == this && entityPlayer.distanceToSqr(getBlockPos().getX() + 0.5D, getBlockPos().getY() + 0.5D, getBlockPos().getZ() + 0.5D) <= 64.0D;
     }
 
     public void updatePlayerSlots(LivingEntity entityLivingBase, ICybercraftUserData cyberwareUserData) {
@@ -98,8 +96,7 @@ public class TileEntitySurgery extends TileEntity implements ITickableTileEntity
                         int index = slot.ordinal() * LibConstants.WARE_PER_SLOT + indexSlot;
 
                         ItemStack stack = slots.getStackInSlot(index);
-                        if (!stack.isEmpty()
-                                && !areRequirementsFulfilled(stack, slot, indexSlot)) {
+                        if (!stack.isEmpty() && !areRequirementsFulfilled(stack, slot, indexSlot)) {
                             addItemStack(entityLivingBase, stack);
                             slots.setStackInSlot(index, ItemStack.EMPTY);
                             needToCheck = true;
@@ -130,20 +127,22 @@ public class TileEntitySurgery extends TileEntity implements ITickableTileEntity
 
                     ItemStack otherStack = !slotStack.isEmpty() ? slotStack : (discardSlots[index] ? ItemStack.EMPTY : playerStack);
 
-                    // Automatically incompatible with the same item/damage. Doesn't use areCyberwareStacksEqual because items conflict even if different grades.
-                    if (!otherStack.isEmpty() && (otherStack.getItem() == stack.getItem() && otherStack.getDamageValue() == stack.getDamageValue())) {
-                        setWrongSlot(index);
-                        return true;
-                    }
+                    if (!otherStack.isEmpty()) {
+                        // Automatically incompatible with the same item/damage. Doesn't use areCyberwareStacksEqual because items conflict even if different grades.
+                        if (otherStack.getItem() == stack.getItem() && otherStack.getDamageValue() == stack.getDamageValue()) {
+                            setWrongSlot(index);
+                            return true;
+                        }
 
-                    // Incompatible if either stack doesn't like the other one
-                    if (!otherStack.isEmpty() && CybercraftAPI.getCybercraft(otherStack).isIncompatible(otherStack, stack)) {
-                        setWrongSlot(index);
-                        return true;
-                    }
-                    if (!otherStack.isEmpty() && CybercraftAPI.getCybercraft(stack).isIncompatible(stack, otherStack)) {
-                        setWrongSlot(index);
-                        return true;
+                        // Incompatible if either stack doesn't like the other one
+                        if (CybercraftAPI.getCybercraft(otherStack).isIncompatible(otherStack, stack)) {
+                            setWrongSlot(index);
+                            return true;
+                        }
+                        if (CybercraftAPI.getCybercraft(stack).isIncompatible(stack, otherStack)) {
+                            setWrongSlot(index);
+                            return true;
+                        }
                     }
                 }
             }
@@ -196,7 +195,7 @@ public class TileEntitySurgery extends TileEntity implements ITickableTileEntity
 
             }
             if (!found) {
-                Cybercraft.LOGGER.error(String.format("Can't find required %s for %s in %s:%d",
+                Cybercraft.LOGGER.debug(String.format("Can't find required %s for %s in %s:%d",
                         stack, slot, indexSlotToCheck));
             }
         }
@@ -344,9 +343,7 @@ public class TileEntitySurgery extends TileEntity implements ITickableTileEntity
     public void tick() {
         if (inProgress && progressTicks < 80) {
             ICybercraftUserData cyberwareUserData = CybercraftAPI.getCapabilityOrNull(targetEntity);
-            if (targetEntity != null
-                    && !targetEntity.isAlive()
-                    && cyberwareUserData != null) {
+            if (targetEntity != null && !targetEntity.isAlive() && cyberwareUserData != null) {
                 BlockPos pos = getBlockPos();
 
                 if (progressTicks > 20 && progressTicks < 60) {
@@ -418,7 +415,7 @@ public class TileEntitySurgery extends TileEntity implements ITickableTileEntity
                 if (!itemStackSurgery.isEmpty()) {
                     ItemStack itemStackToSet = itemStackSurgery.copy();
                     if (CybercraftAPI.areCybercraftStacksEqual(itemStackToSet, itemStackPlayer)) {
-                        int maxSize = CybercraftAPI.getCybercraft(itemStackToSet).installedStackSize(itemStackToSet);
+                        int maxSize = CybercraftAPI.getCybercraft(itemStackToSet).maxInstalledStackSize(itemStackToSet);
 
                         if (itemStackToSet.getCount() < maxSize) {
                             int numToShift = Math.min(maxSize - itemStackToSet.getCount(), itemStackPlayer.getCount());
@@ -529,11 +526,8 @@ public class TileEntitySurgery extends TileEntity implements ITickableTileEntity
 
                 if (!stack.isEmpty()) {
                     ItemStack ret = stack.copy();
-                    if (!slotStack.isEmpty()
-                            && !ret.isEmpty()
-                            && !playerStack.isEmpty()
-                            && CybercraftAPI.areCybercraftStacksEqual(playerStack, ret)) {
-                        int maxSize = CybercraftAPI.getCybercraft(ret).installedStackSize(ret);
+                    if (!slotStack.isEmpty() && !ret.isEmpty() && !playerStack.isEmpty() && CybercraftAPI.areCybercraftStacksEqual(playerStack, ret)) {
+                        int maxSize = CybercraftAPI.getCybercraft(ret).maxInstalledStackSize(ret);
 
                         if (ret.getCount() < maxSize) {
                             int numToShift = Math.min(maxSize - ret.getCount(), playerStack.getCount());

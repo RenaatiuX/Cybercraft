@@ -46,7 +46,7 @@ public class VanillaWares {
         }
 
         @Override
-        public int installedStackSize(ItemStack stack)
+        public int maxInstalledStackSize(ItemStack stack)
         {
             return 1;
         }

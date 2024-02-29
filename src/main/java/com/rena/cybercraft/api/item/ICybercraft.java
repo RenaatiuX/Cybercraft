@@ -15,7 +15,7 @@ public interface ICybercraft {
 
     EnumSlot getSlot(ItemStack stack);
 
-    int installedStackSize(ItemStack stack);
+    int maxInstalledStackSize(ItemStack stack);
 
     boolean isIncompatible(ItemStack stack, ItemStack comparison);
 

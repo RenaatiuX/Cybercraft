@@ -82,7 +82,7 @@ public class MuscleUpgradeItem extends CybercraftItem implements IMenuItem {
     }
 
     @Override
-    public int installedStackSize(ItemStack stack)
+    public int maxInstalledStackSize(ItemStack stack)
     {
         return stack.getItem() == ItemInit.MUSCLE_REFLEXES.get() ? 3 : 1;
     }
